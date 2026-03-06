@@ -1,1002 +1,1404 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6G Smart Slice Allocation Control System</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --success: #2ecc71;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-            --sidebar-width: 250px;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7fa;
-            color: #333;
-            display: flex;
-            min-height: 100vh;
-        }
-        
-        .sidebar {
-            width: var(--sidebar-width);
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1.5rem 1rem;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 100;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .logo h1 {
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-        
-        .logo-icon {
-            font-size: 1.8rem;
-        }
-        
-        .sidebar-menu {
-            list-style: none;
-            flex-grow: 1;
-        }
-        
-        .sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar-menu a {
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.8rem 1rem;
-            border-radius: 6px;
-            transition: all 0.3s;
-        }
-        
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        .sidebar-menu i {
-            width: 20px;
-            text-align: center;
-        }
-        
-        .sidebar-footer {
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .main-content {
-            flex-grow: 1;
-            margin-left: var(--sidebar-width);
-            padding: 1.5rem;
-            width: calc(100% - var(--sidebar-width));
-        }
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            background-color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background-color: var(--light);
-            border-radius: 4px;
-            padding: 0.5rem 1rem;
-            width: 300px;
-        }
-        
-        .search-bar input {
-            background: transparent;
-            border: none;
-            outline: none;
-            padding: 0.5rem;
-            width: 100%;
-        }
-        
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .user-info {
-            text-align: right;
-        }
-        
-        .user-info h4 {
-            font-weight: 500;
-        }
-        
-        .user-info p {
-            font-size: 0.8rem;
-            color: #777;
-        }
-        
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--secondary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card-header h2 {
-            font-size: 1.2rem;
-            color: var(--dark);
-        }
-        
-        .card-header .action {
-            color: var(--secondary);
-            cursor: pointer;
-        }
-        
-        .stat {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #f0f5ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary);
-            font-size: 1.5rem;
-        }
-        
-        .stat-info h3 {
-            font-size: 1.8rem;
-            color: var(--dark);
-        }
-        
-        .stat-info p {
-            color: #777;
-            font-size: 0.9rem;
-        }
-        
-        .chart-container {
-            height: 250px;
-            margin-top: 1rem;
-        }
-        
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        .data-table th, .data-table td {
-            padding: 0.8rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .data-table th {
-            color: #777;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        
-        .status {
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            display: inline-block;
-        }
-        
-        .status-active {
-            background-color: #e6f7ee;
-            color: var(--success);
-        }
-        
-        .status-pending {
-            background-color: #fef5e6;
-            color: var(--warning);
-        }
-        
-        .status-inactive {
-            background-color: #ffe6e6;
-            color: var(--danger);
-        }
-        
-        .vertical-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            background-color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .tab {
-            padding: 0.8rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .tab.active {
-            background-color: var(--secondary);
-            color: white;
-        }
-        
-        .tab:hover:not(.active) {
-            background-color: var(--light);
-        }
-        
-        .slice-configurator {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 1.5rem;
-        }
-        
-        .configurator-header {
-            margin-bottom: 1.5rem;
-        }
-        
-        .configurator-header h2 {
-            font-size: 1.3rem;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-        
-        .configurator-header p {
-            color: #777;
-        }
-        
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .form-group label {
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        
-        .form-group input, .form-group select {
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        
-        .slider-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 5px;
-            border-radius: 5px;
-            background: #d3d3d3;
-            outline: none;
-        }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: var(--secondary);
-            cursor: pointer;
-        }
-        
-        .slider-values {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: #777;
-        }
-        
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background-color: var(--secondary);
-            color: white;
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--secondary);
-            color: var(--secondary);
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-        }
-        
-        .api-console {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .api-endpoints {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .api-endpoint {
-            border: 1px solid #eee;
-            border-radius: 6px;
-            padding: 1rem;
-        }
-        
-        .api-method {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-        
-        .get {
-            background-color: #e6f7ee;
-            color: var(--success);
-        }
-        
-        .post {
-            background-color: #f0f5ff;
-            color: var(--secondary);
-        }
-        
-        .put {
-            background-color: #fef5e6;
-            color: var(--warning);
-        }
-        
-        .delete {
-            background-color: #ffe6e6;
-            color: var(--danger);
-        }
-        
-        .api-url {
-            font-family: monospace;
-            margin-bottom: 0.5rem;
-        }
-        
-        .api-description {
-            font-size: 0.9rem;
-            color: #777;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 70px;
-                padding: 1rem 0.5rem;
-            }
-            
-            .logo h1, .sidebar-menu span, .sidebar-footer {
-                display: none;
-            }
-            
-            .logo {
-                justify-content: center;
-            }
-            
-            .main-content {
-                margin-left: 70px;
-                width: calc(100% - 70px);
-            }
-            
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .search-bar {
-                width: 200px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naturalis Scientia | Monitoring & Evaluation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&family=Inconsolata:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e0b;
+  --bg2: #0f1510;
+  --bg3: #141c15;
+  --surface: #192019;
+  --border: rgba(180,210,160,0.1);
+  --border2: rgba(180,210,160,0.18);
+  --sage: #8aab78;
+  --sage-light: #b4d2a0;
+  --sage-dim: rgba(138,171,120,0.15);
+  --gold: #c9a84c;
+  --gold-dim: rgba(201,168,76,0.12);
+  --text: #e8ede4;
+  --text-mid: rgba(232,237,228,0.6);
+  --text-dim: rgba(232,237,228,0.35);
+  --accent-red: #c46b4a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--sage);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+}
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(138,171,120,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: transform 0.18s ease-out, width 0.3s, height 0.3s;
+}
+body:hover .cursor { opacity: 1; }
+a:hover ~ .cursor, button:hover ~ .cursor { width: 14px; height: 14px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.4rem 3rem;
+  background: rgba(10,14,11,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s;
+}
+nav.scrolled { padding: 0.9rem 3rem; }
+.nav-brand {
+  display: flex; flex-direction: column; gap: 0.1rem; text-decoration: none;
+}
+.nav-brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem; font-weight: 600; letter-spacing: 0.04em;
+  color: var(--text); line-height: 1;
+}
+.nav-brand-sub {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sage); line-height: 1;
+}
+.nav-links { display: flex; gap: 2.2rem; list-style: none; }
+.nav-links a {
+  font-size: 0.78rem; font-weight: 400; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-mid); text-decoration: none;
+  transition: color 0.25s; position: relative; padding-bottom: 2px;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px; background: var(--sage); transform: scaleX(0);
+  transition: transform 0.3s; transform-origin: left;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--bg) !important;
+  background: var(--sage); padding: 0.6rem 1.4rem;
+  text-decoration: none; transition: background 0.25s, transform 0.2s;
+}
+.nav-cta:hover { background: var(--sage-light) !important; transform: translateY(-1px); }
+.nav-cta::after { display: none !important; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.hamburger span { display: block; width: 24px; height: 1px; background: var(--text-mid); transition: all 0.3s; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 0 3rem; padding-top: 100px;
+  position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 75% 50%, rgba(138,171,120,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 50%);
+}
+.hero-grid-overlay {
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image:
+    linear-gradient(var(--sage) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sage) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-content { position: relative; z-index: 2; max-width: 700px; }
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 2.5rem;
+  opacity: 0; animation: fadeUp 0.9s 0.2s forwards;
+}
+.hero-eyebrow-line { width: 40px; height: 1px; background: var(--sage); }
+.hero-eyebrow-text {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--sage);
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.2rem, 7vw, 6.5rem);
+  font-weight: 300; line-height: 1.05; letter-spacing: -0.01em;
+  color: var(--text); margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
+}
+.hero h1 em { font-style: italic; color: var(--sage-light); }
+.hero h1 strong { font-weight: 600; }
+.hero-desc {
+  font-size: 1rem; font-weight: 300; line-height: 1.85;
+  color: var(--text-mid); max-width: 520px; margin-bottom: 3rem;
+  opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+}
+.hero-actions {
+  display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.9s 0.65s forwards;
+}
+.btn-main {
+  background: var(--sage); color: var(--bg);
+  padding: 0.9rem 2.2rem; font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+  transition: background 0.25s, transform 0.2s; display: inline-block;
+}
+.btn-main:hover { background: var(--sage-light); transform: translateY(-2px); }
+.btn-ghost {
+  border: 1px solid var(--border2); color: var(--text-mid);
+  padding: 0.9rem 2.2rem; font-size: 0.78rem; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+  transition: all 0.25s; display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--sage); color: var(--sage); transform: translateY(-2px); }
+
+/* Hero stats */
+.hero-stats {
+  display: flex; gap: 3rem; margin-top: 5rem; padding-top: 3rem;
+  border-top: 1px solid var(--border);
+  opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+  flex-wrap: wrap;
+}
+.hero-stat {}
+.hero-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem; font-weight: 300; line-height: 1;
+  color: var(--text);
+}
+.hero-stat-num sup { font-size: 1.2rem; color: var(--sage); vertical-align: super; }
+.hero-stat-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim); margin-top: 0.4rem;
+}
+
+/* Hero right — animated radial chart */
+.hero-visual {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 42vw; height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; animation: fadeIn 1.2s 1s forwards;
+}
+@media (max-width: 900px) { .hero-visual { display: none; } }
+
+/* ── SCROLLING TICKER ── */
+.ticker-wrap {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1.1rem 0;
+  overflow: hidden;
+  position: relative;
+}
+.ticker-wrap::before, .ticker-wrap::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+}
+.ticker-wrap::before { left: 0; background: linear-gradient(90deg, var(--surface), transparent); }
+.ticker-wrap::after { right: 0; background: linear-gradient(-90deg, var(--surface), transparent); }
+.ticker-label {
+  position: absolute; left: 2rem; top: 50%; transform: translateY(-50%);
+  font-family: 'Inconsolata', monospace; font-size: 0.65rem;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--sage);
+  z-index: 3; background: var(--surface); padding-right: 1rem;
+}
+.ticker-track {
+  display: flex; gap: 0; width: max-content;
+  animation: ticker 40s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+.ticker-item {
+  display: flex; align-items: center; gap: 2rem;
+  padding: 0 2.5rem; white-space: nowrap;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-style: italic; font-weight: 300;
+  color: var(--text-mid);
+  transition: color 0.3s;
+}
+.ticker-item:hover { color: var(--sage-light); cursor: default; }
+.ticker-dot { width: 4px; height: 4px; background: var(--sage); border-radius: 50%; opacity: 0.5; }
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* ── SECTIONS ── */
+section { padding: 7rem 3rem; }
+.s-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sage); display: flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.s-label::before { content: ''; width: 28px; height: 1px; background: var(--sage); }
+.s-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.1;
+  letter-spacing: -0.01em; margin-bottom: 1rem;
+}
+.s-title em { font-style: italic; color: var(--sage-light); }
+
+/* ── SERVICES ── */
+.services { background: var(--bg2); }
+.services-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; margin-bottom: 4rem; }
+.services-desc { font-size: 0.92rem; line-height: 1.85; color: var(--text-mid); font-weight: 300; }
+
+.services-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border);
+}
+.service-card {
+  padding: 2.5rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  transition: background 0.4s;
+  cursor: default;
+}
+.service-card:nth-child(3n) { border-right: none; }
+.service-card:nth-last-child(-n+3) { border-bottom: none; }
+.service-card::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 0; background: var(--sage-dim); transition: height 0.5s;
+}
+.service-card:hover::before { height: 100%; }
+.service-card:hover { background: rgba(138,171,120,0.04); }
+.svc-num {
+  font-family: 'Inconsolata', monospace; font-size: 0.65rem;
+  letter-spacing: 0.15em; color: var(--sage); margin-bottom: 1.5rem;
+}
+.svc-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 600; margin-bottom: 0.9rem; line-height: 1.2;
+}
+.svc-text { font-size: 0.84rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
+
+/* ── INTERACTIVE CHART SECTION ── */
+.data-section { background: var(--bg); position: relative; }
+.data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-top: 4rem; }
+.chart-card {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 2rem;
+}
+.chart-title {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.chart-subtitle { color: var(--text-dim); font-size: 0.6rem; }
+
+/* Radar chart canvas */
+canvas { width: 100% !important; }
+
+/* Sector pills for filtering */
+.sector-filters {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem;
+}
+.sector-pill {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.35rem 0.9rem; border: 1px solid var(--border2);
+  color: var(--text-dim); background: transparent; cursor: pointer;
+  transition: all 0.25s;
+}
+.sector-pill.active { border-color: var(--sage); color: var(--sage); background: var(--sage-dim); }
+.sector-pill:hover { border-color: var(--sage-light); color: var(--sage-light); }
+
+/* ── TEAM ── */
+.team { background: var(--bg2); }
+.team-intro { display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: end; margin-bottom: 5rem; }
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.team-card {
+  background: var(--surface); border: 1px solid var(--border);
+  overflow: hidden; position: relative;
+  transition: transform 0.4s, box-shadow 0.4s;
+}
+.team-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.team-card-header {
+  height: 160px; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.team-avatar-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem; font-weight: 300; font-style: italic;
+  color: rgba(138,171,120,0.35); line-height: 1; user-select: none;
+}
+.team-nationality {
+  position: absolute; top: 1rem; right: 1rem;
+  font-size: 1.3rem; line-height: 1;
+}
+.team-card-body { padding: 1.5rem; }
+.team-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem; font-weight: 600; margin-bottom: 0.2rem;
+}
+.team-role {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 0.9rem;
+}
+.team-bio { font-size: 0.8rem; line-height: 1.7; color: var(--text-mid); font-weight: 300; margin-bottom: 1rem; }
+.team-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+.team-tag {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.6rem; padding: 0.2rem 0.55rem;
+  border: 1px solid var(--border); color: var(--text-dim); letter-spacing: 0.04em;
+}
+.team-linkedin {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.72rem; font-weight: 400; color: var(--sage);
+  text-decoration: none; letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(138,171,120,0.3); padding-bottom: 1px;
+  transition: all 0.2s;
+}
+.team-linkedin:hover { color: var(--sage-light); border-color: var(--sage-light); }
+
+/* ── PROJECTS ── */
+.projects { background: var(--bg); }
+.projects-table-head {
+  display: grid; grid-template-columns: 80px 1fr 120px 140px 100px;
+  padding: 0.7rem 1.5rem;
+  border-bottom: 1px solid var(--border2);
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.63rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim);
+}
+.projects-list { border: 1px solid var(--border); }
+.project-row {
+  display: grid; grid-template-columns: 80px 1fr 120px 140px 100px;
+  padding: 1.3rem 1.5rem; align-items: center;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background 0.25s;
+  position: relative;
+}
+.project-row:last-child { border-bottom: none; }
+.project-row:hover { background: var(--surface); }
+.project-row.expanded { background: var(--surface); }
+.project-year {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.72rem; color: var(--sage); letter-spacing: 0.08em;
+}
+.project-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-weight: 600; line-height: 1.2;
+}
+.project-client {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.68rem; letter-spacing: 0.06em; color: var(--gold);
+}
+.project-country { font-size: 0.8rem; color: var(--text-mid); }
+.project-arrow {
+  text-align: right; color: var(--text-dim); font-size: 0.8rem;
+  transition: transform 0.3s;
+}
+.project-row.expanded .project-arrow { transform: rotate(90deg); color: var(--sage); }
+.project-detail {
+  display: none; grid-column: 1/-1;
+  padding: 1.2rem 0 0.3rem;
+  font-size: 0.83rem; line-height: 1.75; color: var(--text-mid); font-weight: 300;
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+}
+.project-row.expanded .project-detail { display: block; }
+
+/* ── METHODOLOGY ── */
+.methodology { background: var(--bg3); }
+.method-steps {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  border: 1px solid var(--border); margin-top: 4rem;
+}
+.method-step {
+  padding: 2.5rem 2rem; border-right: 1px solid var(--border);
+  position: relative; transition: background 0.3s;
+}
+.method-step:last-child { border-right: none; }
+.method-step:hover { background: var(--surface); }
+.method-step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem; font-weight: 300; font-style: italic;
+  color: rgba(138,171,120,0.08); line-height: 1; margin-bottom: 0.5rem;
+  letter-spacing: -0.04em;
+}
+.method-step h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem; font-weight: 600; margin-bottom: 0.8rem; line-height: 1.2;
+}
+.method-step p { font-size: 0.82rem; line-height: 1.7; color: var(--text-mid); font-weight: 300; }
+.method-connector {
+  position: absolute; top: 50%; right: -1px;
+  width: 2px; height: 30px; background: var(--sage);
+  transform: translateY(-50%); display: none;
+}
+.method-step:hover .method-connector { display: block; }
+
+/* ── CONTACT ── */
+.contact { background: var(--bg2); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; margin-top: 4rem; }
+.contact-info { }
+.c-block { margin-bottom: 2.5rem; }
+.c-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.63rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 0.5rem;
+}
+.c-val { font-size: 0.92rem; color: var(--text-mid); font-weight: 300; }
+.c-val a { color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
+.c-val a:hover { color: var(--sage-light); }
+
+.urgent-bar {
+  display: flex; align-items: flex-start; gap: 1rem;
+  background: rgba(196,107,74,0.08); border: 1px solid rgba(196,107,74,0.25);
+  padding: 1.2rem 1.5rem; margin-top: 2rem;
+}
+.urgent-pulse {
+  width: 8px; height: 8px; background: var(--accent-red); border-radius: 50%;
+  flex-shrink: 0; margin-top: 3px;
+  animation: urgentPulse 1.8s infinite;
+}
+@keyframes urgentPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(196,107,74,0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(196,107,74,0); }
+}
+.urgent-text { font-size: 0.82rem; line-height: 1.6; color: rgba(232,237,228,0.65); font-weight: 300; }
+.urgent-text strong { color: var(--accent-red); font-weight: 500; letter-spacing: 0.05em; }
+.urgent-text a { color: var(--accent-red); text-decoration: none; }
+
+.contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+.f-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.f-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim);
+}
+.f-input, .f-select, .f-textarea {
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 0.8rem 1rem;
+  font-family: 'Jost', sans-serif; font-size: 0.87rem; font-weight: 300;
+  outline: none; transition: border-color 0.25s; border-radius: 0;
+  appearance: none;
+}
+.f-input::placeholder, .f-textarea::placeholder { color: var(--text-dim); }
+.f-input:focus, .f-select:focus, .f-textarea:focus { border-color: var(--sage); }
+.f-select option { background: var(--bg2); }
+.f-textarea { resize: vertical; min-height: 120px; }
+.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.f-urgent {
+  display: flex; align-items: center; gap: 0.8rem;
+  background: rgba(196,107,74,0.05); border: 1px solid rgba(196,107,74,0.2);
+  padding: 0.9rem 1rem; cursor: pointer;
+}
+.f-urgent input { accent-color: var(--accent-red); width: 15px; height: 15px; }
+.f-urgent label { font-size: 0.82rem; color: var(--text-mid); cursor: pointer; font-weight: 300; }
+.f-urgent label strong { color: var(--accent-red); }
+.btn-submit {
+  background: var(--sage); color: var(--bg);
+  padding: 1rem 2.5rem; font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  border: none; cursor: pointer; transition: background 0.25s, transform 0.2s;
+  align-self: flex-start; font-family: 'Jost', sans-serif;
+}
+.btn-submit:hover { background: var(--sage-light); transform: translateY(-2px); }
+
+/* ── FOOTER ── */
+footer {
+  background: #060907; border-top: 1px solid var(--border);
+  padding: 2rem 3rem; display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 300; font-style: italic;
+  color: rgba(232,237,228,0.5);
+}
+footer p { font-size: 0.75rem; color: var(--text-dim); }
+.footer-links { display: flex; gap: 2rem; list-style: none; }
+.footer-links a { font-size: 0.72rem; color: var(--text-dim); text-decoration: none; transition: color 0.2s; letter-spacing: 0.06em; }
+.footer-links a:hover { color: var(--sage); }
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s, transform 0.8s; }
+.reveal.vis { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes counterSpin { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+
+/* ── TEAM BG PATTERNS ── */
+.thdr-1 { background: linear-gradient(135deg, #0f1f12 0%, #1a2e1c 100%); }
+.thdr-2 { background: linear-gradient(135deg, #141a22 0%, #1e2a35 100%); }
+.thdr-3 { background: linear-gradient(135deg, #1a1510 0%, #2a2018 100%); }
+.thdr-4 { background: linear-gradient(135deg, #101822 0%, #162030 100%); }
+.thdr-5 { background: linear-gradient(135deg, #151020 0%, #221830 100%); }
+.thdr-6 { background: linear-gradient(135deg, #1a1010 0%, #2a1818 100%); }
+.thdr-7 { background: linear-gradient(135deg, #0f1a12 0%, #182a1e 100%); }
+.thdr-8 { background: linear-gradient(135deg, #1a1a10 0%, #282818 100%); }
+.thdr-9 { background: linear-gradient(135deg, #101a1a 0%, #182828 100%); }
+
+/* ── MOBILE NAV DRAWER ── */
+.mobile-nav {
+  display: none; position: fixed; top: 0; right: -100%;
+  width: 75%; max-width: 320px; height: 100vh;
+  background: var(--bg2); border-left: 1px solid var(--border);
+  z-index: 300; flex-direction: column; padding: 5rem 2rem 2rem;
+  transition: right 0.4s ease;
+}
+.mobile-nav.open { right: 0; }
+.mobile-nav a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 300; color: var(--text-mid);
+  text-decoration: none; padding: 0.8rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s;
+}
+.mobile-nav a:hover { color: var(--sage-light); }
+.mobile-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7); z-index: 299;
+}
+.mobile-overlay.open { display: block; }
+.close-mobile {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  background: none; border: none; color: var(--text-mid);
+  font-size: 1.5rem; cursor: pointer;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .method-steps { grid-template-columns: repeat(2, 1fr); }
+  .method-step:nth-child(2) { border-right: none; }
+  .method-step { border-bottom: 1px solid var(--border); }
+  .method-step:nth-child(3), .method-step:nth-child(4) { border-bottom: none; }
+  .method-step:nth-child(4) { border-right: none; }
+}
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  nav.scrolled { padding: 0.8rem 1.5rem; }
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .hamburger { display: flex; }
+  section { padding: 5rem 1.5rem; }
+  .hero { padding: 5rem 1.5rem 4rem; }
+  .hero-stats { gap: 1.5rem; }
+  .services-intro { grid-template-columns: 1fr; gap: 1.5rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .service-card { border-right: none !important; }
+  .data-grid { grid-template-columns: 1fr; }
+  .team-intro { grid-template-columns: 1fr; gap: 2rem; }
+  .team-grid { grid-template-columns: 1fr; }
+  .projects-table-head { display: none; }
+  .project-row { grid-template-columns: 70px 1fr 80px; }
+  .project-client { display: none; }
+  .method-steps { grid-template-columns: 1fr; }
+  .method-step { border-right: none !important; border-bottom: 1px solid var(--border) !important; }
+  .method-step:last-child { border-bottom: none !important; }
+  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .f-row { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; gap: 1rem; }
+  .footer-links { justify-content: center; }
+}
+@media (max-width: 600px) {
+  .hero h1 { font-size: 2.8rem; }
+  .hero-stat-num { font-size: 2rem; }
+  .hero-stats { gap: 1.5rem; }
+  .hero-actions { flex-direction: column; align-items: flex-start; }
+  .btn-main, .btn-ghost { width: 100%; text-align: center; }
+  .ticker-label { display: none; }
+}
+</style>
 </head>
 <body>
-    <aside class="sidebar">
-        <div class="logo">
-            <div class="logo-icon"><i class="fas fa-satellite-dish"></i></div>
-            <h1>6G Slice Platform</h1>
-        </div>
-        
-        <ul class="sidebar-menu">
-            <li><a href="#" class="active"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-            <li><a href="#"><i class="fas fa-network-wired"></i> <span>Slice Inventory</span></a></li>
-            <li><a href="#"><i class="fas fa-chart-line"></i> <span>Revenue Analytics</span></a></li>
-            <li><a href="#"><i class="fas fa-code"></i> <span>API Management</span></a></li>
-            <li><a href="#"><i class="fas fa-industry"></i> <span>Customer Verticals</span></a></li>
-            <li><a href="#"><i class="fas fa-sliders-h"></i> <span>Slice Configuration</span></a></li>
-            <li><a href="#"><i class="fas fa-tachometer-alt"></i> <span>Performance</span></a></li>
-            <li><a href="#"><i class="fas fa-money-bill-wave"></i> <span>Billing & Payments</span></a></li>
-            <li><a href="#"><i class="fas fa-shield-alt"></i> <span>Security Policies</span></a></li>
-        </ul>
-        
-        <div class="sidebar-footer">
-            <p>v2.1.0 | 6G Smart Slice</p>
-        </div>
-    </aside>
-    
-    <main class="main-content">
-        <div class="header">
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search slices, APIs, or customers...">
-            </div>
-            
-            <div class="user-menu">
-                <div class="user-info">
-                    <h4>Donika Stavro </h4>
-                    <p>Network Operations</p>
-                </div>
-                <div class="avatar">AM</div>
-            </div>
-        </div>
-        
-        <div class="vertical-tabs">
-            <div class="tab active">All Verticals</div>
-            <div class="tab">Healthcare</div>
-            <div class="tab">Manufacturing</div>
-            <div class="tab">Transportation</div>
-            <div class="tab">Energy</div>
-            <div class="tab">Media & Entertainment</div>
-        </div>
-        
-        <div class="dashboard-grid">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Revenue Overview</h2>
-                    <div class="action"><i class="fas fa-ellipsis-h"></i></div>
-                </div>
-                <div class="stat">
-                    <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
-                    <div class="stat-info">
-                        <h3>$2.8M</h3>
-                        <p>Total Revenue</p>
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="revenueChart"></canvas>
-                </div>
-            </div>
-            
-            <div class="card">
-                <div class="card-header">
-                    <h2>Active Slices</h2>
-                    <div class="action"><i class="fas fa-ellipsis-h"></i></div>
-                </div>
-                <div class="stat">
-                    <div class="stat-icon"><i class="fas fa-link"></i></div>
-                    <div class="stat-info">
-                        <h3>1,243</h3>
-                        <p>Active Network Slices</p>
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="slicesChart"></canvas>
-                </div>
-            </div>
-            
-            <div class="card">
-                <div class="card-header">
-                    <h2>API Performance</h2>
-                    <div class="action"><i class="fas fa-ellipsis-h"></i></div>
-                </div>
-                <div class="stat">
-                    <div class="stat-icon"><i class="fas fa-chart-bar"></i></div>
-                    <div class="stat-info">
-                        <h3>99.92%</h3>
-                        <p>API Availability</p>
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="apiChart"></canvas>
-                </div>
-            </div>
-        </div>
-        
-        <div class="slice-configurator">
-            <div class="configurator-header">
-                <h2>Create New Network Slice</h2>
-                <p>Configure a customized network slice for your customer's specific requirements</p>
-            </div>
-            
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="sliceName">Slice Name</label>
-                    <input type="text" id="sliceName" placeholder="e.g., Emergency-Services-Slice">
-                </div>
-                
-                <div class="form-group">
-                    <label for="customer">Customer</label>
-                    <select id="customer">
-                        <option value="">Select a customer</option>
-                        <option value="city_hospital">City General Hospital</option>
-                        <option value="auto_manufacture">AutoManufacture Inc</option>
-                        <option value="metro_transit">Metro Transit Authority</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="vertical">Industry Vertical</label>
-                    <select id="vertical">
-                        <option value="">Select a vertical</option>
-                        <option value="healthcare">Healthcare</option>
-                        <option value="manufacturing">Manufacturing</option>
-                        <option value="transportation">Transportation</option>
-                        <option value="energy">Energy</option>
-                        <option value="media">Media & Entertainment</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="serviceTier">Service Tier</label>
-                    <select id="serviceTier">
-                        <option value="basic">Basic - Best Effort</option>
-                        <option value="standard">Standard - Guaranteed Bitrate</option>
-                        <option value="premium">Premium - Low Latency</option>
-                        <option value="critical">Critical - Mission Critical</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Bandwidth (Mbps)</label>
-                    <div class="slider-container">
-                        <input type="range" min="10" max="1000" value="100" class="slider" id="bandwidthSlider">
-                        <div class="slider-values">
-                            <span>10 Mbps</span>
-                            <span id="bandwidthValue">100 Mbps</span>
-                            <span>1000 Mbps</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Latency (ms)</label>
-                    <div class="slider-container">
-                        <input type="range" min="1" max="100" value="10" class="slider" id="latencySlider">
-                        <div class="slider-values">
-                            <span>1 ms</span>
-                            <span id="latencyValue">10 ms</span>
-                            <span>100 ms</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Availability (%)</label>
-                    <div class="slider-container">
-                        <input type="range" min="99" max="99.999" step="0.001" value="99.9" class="slider" id="availabilitySlider">
-                        <div class="slider-values">
-                            <span>99%</span>
-                            <span id="availabilityValue">99.9%</span>
-                            <span>99.999%</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Slice Duration</label>
-                    <select id="sliceDuration">
-                        <option value="1h">1 Hour</option>
-                        <option value="4h">4 Hours</option>
-                        <option value="8h">8 Hours</option>
-                        <option value="24h" selected>24 Hours</option>
-                        <option value="7d">7 Days</option>
-                        <option value="30d">30 Days</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="action-buttons">
-                <button class="btn btn-outline">Save as Template</button>
-                <button class="btn btn-primary">Deploy Slice</button>
-            </div>
-        </div>
-        
-        <div class="dashboard-grid">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Vertical Distribution</h2>
-                    <div class="action"><i class="fas fa-ellipsis-h"></i></div>
-                </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Vertical</th>
-                            <th>Slices</th>
-                            <th>Revenue</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Healthcare</td>
-                            <td>412</td>
-                            <td>$1.2M</td>
-                            <td><span class="status status-active">Active</span></td>
-                        </tr>
-                        <tr>
-                            <td>Manufacturing</td>
-                            <td>387</td>
-                            <td>$856K</td>
-                            <td><span class="status status-active">Active</span></td>
-                        </tr>
-                        <tr>
-                            <td>Transportation</td>
-                            <td>215</td>
-                            <td>$512K</td>
-                            <td><span class="status status-active">Active</span></td>
-                        </tr>
-                        <tr>
-                            <td>Energy</td>
-                            <td>129</td>
-                            <td>$184K</td>
-                            <td><span class="status status-pending">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td>Media & Entertainment</td>
-                            <td>98</td>
-                            <td>$98K</td>
-                            <td><span class="status status-active">Active</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="card">
-                <div class="card-header">
-                    <h2>Recent Transactions</h2>
-                    <div class="action"><i class="fas fa-ellipsis-h"></i></div>
-                </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Customer</th>
-                            <th>Service</th>
-                            <th>Amount</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>City General Hospital</td>
-                            <td>Emergency Services Slice</td>
-                            <td>$42,500</td>
-                            <td>Oct 12, 2023</td>
-                        </tr>
-                        <tr>
-                            <td>AutoManufacture Inc</td>
-                            <td>Industrial IoT Slice</td>
-                            <td>$38,200</td>
-                            <td>Oct 11, 2023</td>
-                        </tr>
-                        <tr>
-                            <td>Metro Transit Authority</td>
-                            <td>Connected Vehicle Slice</td>
-                            <td>$35,000</td>
-                            <td>Oct 10, 2023</td>
-                        </tr>
-                        <tr>
-                            <td>DataStream Media</td>
-                            <td>AR/VR Content Slice</td>
-                            <td>$28,750</td>
-                            <td>Oct 9, 2023</td>
-                        </tr>
-                        <tr>
-                            <td>SmartGrid Energy</td>
-                            <td>Critical Infrastructure Slice</td>
-                            <td>$52,300</td>
-                            <td>Oct 8, 2023</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div class="api-console">
-            <div class="card-header">
-                <h2>API Endpoints</h2>
-                <div class="action"><i class="fas fa-ellipsis-h"></i></div>
-            </div>
-            
-            <div class="api-endpoints">
-                <div class="api-endpoint">
-                    <div class="api-method get">GET</div>
-                    <div class="api-url">/api/v1/slices</div>
-                    <div class="api-description">Retrieve all network slices</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <div class="api-method post">POST</div>
-                    <div class="api-url">/api/v1/slices</div>
-                    <div class="api-description">Create a new network slice</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <div class="api-method get">GET</div>
-                    <div class="api-url">/api/v1/slices/{id}</div>
-                    <div class="api-description">Retrieve a specific slice</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <div class="api-method put">PUT</div>
-                    <div class="api-url">/api/v1/slices/{id}</div>
-                    <div class="api-description">Update a network slice</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <div class="api-method delete">DELETE</div>
-                    <div class="api-url">/api/v1/slices/{id}</div>
-                    <div class="api-description">Delete a network slice</div>
-                </div>
-                
-                <div class="api-endpoint">
-                    <div class="api-method get">GET</div>
-                    <div class="api-url">/api/v1/performance</div>
-                    <div class="api-description">Get performance metrics</div>
-                </div>
-            </div>
-        </div>
-    </main>
 
-    <script>
-        // Initialize charts
-        document.addEventListener('DOMContentLoaded', function() {
-            // Revenue Chart
-            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-            const revenueChart = new Chart(revenueCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-                    datasets: [{
-                        label: 'Revenue (in millions $)',
-                        data: [1.8, 2.1, 1.9, 2.3, 2.5, 2.2, 2.6, 2.7, 2.5, 2.8],
-                        borderColor: '#3498db',
-                        tension: 0.3,
-                        fill: true,
-                        backgroundColor: 'rgba(52, 152, 219, 0.1)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                drawBorder: false
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Slices Chart
-            const slicesCtx = document.getElementById('slicesChart').getContext('2d');
-            const slicesChart = new Chart(slicesCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Healthcare', 'Manufacturing', 'Transportation', 'Energy', 'Media'],
-                    datasets: [{
-                        label: 'Active Slices',
-                        data: [412, 387, 215, 129, 98],
-                        backgroundColor: [
-                            'rgba(46, 204, 113, 0.7)',
-                            'rgba(52, 152, 219, 0.7)',
-                            'rgba(155, 89, 182, 0.7)',
-                            'rgba(243, 156, 18, 0.7)',
-                            'rgba(231, 76, 60, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgb(46, 204, 113)',
-                            'rgb(52, 152, 219)',
-                            'rgb(155, 89, 182)',
-                            'rgb(243, 156, 18)',
-                            'rgb(231, 76, 60)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                drawBorder: false
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // API Chart
-            const apiCtx = document.getElementById('apiChart').getContext('2d');
-            const apiChart = new Chart(apiCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Success', 'Errors'],
-                    datasets: [{
-                        data: [99.92, 0.08],
-                        backgroundColor: [
-                            'rgba(46, 204, 113, 0.7)',
-                            'rgba(231, 76, 60, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgb(46, 204, 113)',
-                            'rgb(231, 76, 60)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '70%',
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-            
-            // Slider value updates
-            const bandwidthSlider = document.getElementById('bandwidthSlider');
-            const bandwidthValue = document.getElementById('bandwidthValue');
-            bandwidthSlider.addEventListener('input', function() {
-                bandwidthValue.textContent = this.value + ' Mbps';
-            });
-            
-            const latencySlider = document.getElementById('latencySlider');
-            const latencyValue = document.getElementById('latencyValue');
-            latencySlider.addEventListener('input', function() {
-                latencyValue.textContent = this.value + ' ms';
-            });
-            
-            const availabilitySlider = document.getElementById('availabilitySlider');
-            const availabilityValue = document.getElementById('availabilityValue');
-            availabilitySlider.addEventListener('input', function() {
-                availabilityValue.textContent = this.value + '%';
-            });
-            
-            // Tab functionality
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-        });
-    </script>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileNav()"></div>
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-mobile" onclick="closeMobileNav()">✕</button>
+  <a href="#services" onclick="closeMobileNav()">Services</a>
+  <a href="#data" onclick="closeMobileNav()">Expertise</a>
+  <a href="#team" onclick="closeMobileNav()">Team</a>
+  <a href="#projects" onclick="closeMobileNav()">Projects</a>
+  <a href="#methodology" onclick="closeMobileNav()">Methodology</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-brand">
+    <span class="nav-brand-name">Naturalis Scientia</span>
+    <span class="nav-brand-sub">Monitoring · Evaluation · Learning</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#data">Expertise</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#methodology">Methodology</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <div class="hamburger" onclick="openMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">Evidence · Analysis · Impact</span>
+    </div>
+    <h1>Turning <strong>Complexity</strong><br>into <em>Clarity</em></h1>
+    <p class="hero-desc">An international monitoring and evaluation consultancy serving German development finance and bilateral agencies. We deliver rigorous evidence, precise analysis, and actionable learning across four continents.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-main">Request a Proposal</a>
+      <a href="#projects" class="btn-ghost">View Projects</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">120<sup>+</sup></div>
+        <div class="hero-stat-label">Projects</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">28<sup>+</sup></div>
+        <div class="hero-stat-label">Countries</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">9</div>
+        <div class="hero-stat-label">Senior Experts</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">15<sup>+</sup></div>
+        <div class="hero-stat-label">Years Active</div>
+      </div>
+    </div>
+  </div>
+  <!-- Animated SVG visual -->
+  <div class="hero-visual">
+    <svg id="heroSvg" viewBox="0 0 460 460" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:420px;height:420px;">
+      <defs>
+        <radialGradient id="rg1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#8aab78" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#8aab78" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- Outer rings -->
+      <circle cx="230" cy="230" r="200" stroke="rgba(138,171,120,0.06)" stroke-width="1"/>
+      <circle cx="230" cy="230" r="160" stroke="rgba(138,171,120,0.1)" stroke-width="1"/>
+      <circle cx="230" cy="230" r="120" stroke="rgba(138,171,120,0.14)" stroke-width="1"/>
+      <circle cx="230" cy="230" r="80" stroke="rgba(138,171,120,0.2)" stroke-width="1"/>
+      <!-- Rotating dashed ring -->
+      <circle cx="230" cy="230" r="200" stroke="rgba(138,171,120,0.2)" stroke-width="1" stroke-dasharray="8 16"
+        style="transform-origin:230px 230px; animation: spin 30s linear infinite;"/>
+      <circle cx="230" cy="230" r="120" stroke="rgba(201,168,76,0.15)" stroke-width="1" stroke-dasharray="6 12"
+        style="transform-origin:230px 230px; animation: counterSpin 20s linear infinite;"/>
+      <!-- Cross lines -->
+      <line x1="230" y1="30" x2="230" y2="430" stroke="rgba(138,171,120,0.05)" stroke-width="1"/>
+      <line x1="30" y1="230" x2="430" y2="230" stroke="rgba(138,171,120,0.05)" stroke-width="1"/>
+      <!-- Center glow -->
+      <circle cx="230" cy="230" r="60" fill="url(#rg1)"/>
+      <circle cx="230" cy="230" r="8" fill="#8aab78" opacity="0.9">
+        <animate attributeName="r" values="8;12;8" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.9;0.5;0.9" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Region nodes -->
+      <circle cx="230" cy="70" r="5" fill="#c9a84c" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="3s" repeatCount="indefinite"/></circle>
+      <circle cx="390" cy="180" r="5" fill="#8aab78" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="2.5s" begin="0.5s" repeatCount="indefinite"/></circle>
+      <circle cx="340" cy="360" r="5" fill="#c9a84c" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="3.5s" begin="1s" repeatCount="indefinite"/></circle>
+      <circle cx="120" cy="340" r="5" fill="#8aab78" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="2.8s" begin="0.8s" repeatCount="indefinite"/></circle>
+      <circle cx="80" cy="160" r="5" fill="#c9a84c" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="3.2s" begin="1.5s" repeatCount="indefinite"/></circle>
+      <!-- Connecting lines -->
+      <line x1="230" y1="222" x2="230" y2="75" stroke="rgba(138,171,120,0.2)" stroke-width="1" stroke-dasharray="3 6">
+        <animate attributeName="stroke-dashoffset" values="0;-18" dur="1.5s" repeatCount="indefinite"/>
+      </line>
+      <line x1="230" y1="222" x2="385" y2="183" stroke="rgba(138,171,120,0.18)" stroke-width="1" stroke-dasharray="3 6">
+        <animate attributeName="stroke-dashoffset" values="0;-18" dur="2s" repeatCount="indefinite"/>
+      </line>
+      <line x1="230" y1="238" x2="336" y2="356" stroke="rgba(201,168,76,0.15)" stroke-width="1" stroke-dasharray="3 6">
+        <animate attributeName="stroke-dashoffset" values="0;-18" dur="1.8s" repeatCount="indefinite"/>
+      </line>
+      <line x1="230" y1="238" x2="124" y2="336" stroke="rgba(138,171,120,0.15)" stroke-width="1" stroke-dasharray="3 6">
+        <animate attributeName="stroke-dashoffset" values="0;-18" dur="2.2s" repeatCount="indefinite"/>
+      </line>
+      <line x1="222" y1="230" x2="84" y2="162" stroke="rgba(201,168,76,0.15)" stroke-width="1" stroke-dasharray="3 6">
+        <animate attributeName="stroke-dashoffset" values="0;-18" dur="1.6s" repeatCount="indefinite"/>
+      </line>
+      <!-- Labels -->
+      <text x="218" y="62" fill="rgba(201,168,76,0.7)" font-size="9" font-family="Inconsolata, monospace" letter-spacing="1">DACH</text>
+      <text x="395" y="185" fill="rgba(138,171,120,0.6)" font-size="9" font-family="Inconsolata, monospace" letter-spacing="1">C. ASIA</text>
+      <text x="325" y="375" fill="rgba(201,168,76,0.6)" font-size="9" font-family="Inconsolata, monospace" letter-spacing="1">E. AFRICA</text>
+      <text x="60" y="355" fill="rgba(138,171,120,0.6)" font-size="9" font-family="Inconsolata, monospace" letter-spacing="1">W. AFRICA</text>
+      <text x="30" y="158" fill="rgba(201,168,76,0.6)" font-size="9" font-family="Inconsolata, monospace" letter-spacing="1">LATAM</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ROLLING TICKER - TRUSTED BY -->
+<div class="ticker-wrap">
+  <span class="ticker-label">Trusted by</span>
+  <div class="ticker-track" id="ticker">
+    <!-- Items duplicated for seamless loop -->
+    <div class="ticker-item">KfW Development Bank<div class="ticker-dot"></div></div>
+    <div class="ticker-item">GIZ GmbH<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Deutsche Bundesbank<div class="ticker-dot"></div></div>
+    <div class="ticker-item">BMZ<div class="ticker-dot"></div></div>
+    <div class="ticker-item">SECO Switzerland<div class="ticker-dot"></div></div>
+    <div class="ticker-item">ADA Austria<div class="ticker-dot"></div></div>
+    <div class="ticker-item">EU Delegation<div class="ticker-dot"></div></div>
+    <div class="ticker-item">UNDP<div class="ticker-dot"></div></div>
+    <div class="ticker-item">UN Women<div class="ticker-dot"></div></div>
+    <div class="ticker-item">World Bank Group<div class="ticker-dot"></div></div>
+    <div class="ticker-item">DEG<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Kreditanstalt für Wiederaufbau<div class="ticker-dot"></div></div>
+    <!-- Duplicate -->
+    <div class="ticker-item">KfW Development Bank<div class="ticker-dot"></div></div>
+    <div class="ticker-item">GIZ GmbH<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Deutsche Bundesbank<div class="ticker-dot"></div></div>
+    <div class="ticker-item">BMZ<div class="ticker-dot"></div></div>
+    <div class="ticker-item">SECO Switzerland<div class="ticker-dot"></div></div>
+    <div class="ticker-item">ADA Austria<div class="ticker-dot"></div></div>
+    <div class="ticker-item">EU Delegation<div class="ticker-dot"></div></div>
+    <div class="ticker-item">UNDP<div class="ticker-dot"></div></div>
+    <div class="ticker-item">UN Women<div class="ticker-dot"></div></div>
+    <div class="ticker-item">World Bank Group<div class="ticker-dot"></div></div>
+    <div class="ticker-item">DEG<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Kreditanstalt für Wiederaufbau<div class="ticker-dot"></div></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-intro reveal">
+    <div>
+      <div class="s-label">What We Do</div>
+      <h2 class="s-title">Our Core <em>Services</em></h2>
+    </div>
+    <p class="services-desc">Methodologically rigorous and contextually grounded — our work meets the highest standards of German development cooperation and international evaluation practice.</p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="svc-num">01 ——</div>
+      <h3 class="svc-title">Project Monitoring Systems</h3>
+      <p class="svc-text">Design and operationalisation of MEAL frameworks, indicator matrices, and real-time dashboards aligned with BMZ, KfW, and GIZ standards.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">02 ——</div>
+      <h3 class="svc-title">Programme Evaluations</h3>
+      <p class="svc-text">Independent mid-term and final evaluations applying OECD-DAC criteria — relevance, coherence, effectiveness, efficiency, impact, and sustainability.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">03 ——</div>
+      <h3 class="svc-title">Baseline & Endline Studies</h3>
+      <p class="svc-text">Mixed-methods data collection and statistical analysis establishing robust evidence baselines in fragile and complex country contexts.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">04 ——</div>
+      <h3 class="svc-title">Theory of Change Development</h3>
+      <p class="svc-text">Facilitated co-creation with programme teams to build credible, evidence-based theories of change and logical frameworks.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">05 ——</div>
+      <h3 class="svc-title">Impact Assessments</h3>
+      <p class="svc-text">Rigorous quasi-experimental evaluations using DiD, RDD, and PSM approaches for credible attribution in development programmes.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">06 ——</div>
+      <h3 class="svc-title">Capacity Development</h3>
+      <p class="svc-text">Training partner institutions in M&E best practices, data literacy, and results-based management — delivered in German, English, and French.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE DATA CHARTS -->
+<section class="data-section" id="data">
+  <div class="reveal">
+    <div class="s-label">Sectoral Expertise</div>
+    <h2 class="s-title">Our <em>Analytical</em> Profile</h2>
+  </div>
+  <div class="data-grid reveal">
+    <!-- Radar Chart -->
+    <div class="chart-card">
+      <div class="chart-title">
+        <span>Sectoral Competency Radar</span>
+        <span class="chart-subtitle">Hover to explore</span>
+      </div>
+      <canvas id="radarChart" height="280"></canvas>
+      <div class="sector-filters">
+        <button class="sector-pill active" data-sector="all">All Sectors</button>
+        <button class="sector-pill" data-sector="governance">Governance</button>
+        <button class="sector-pill" data-sector="health">Health & WASH</button>
+        <button class="sector-pill" data-sector="energy">Energy</button>
+        <button class="sector-pill" data-sector="agriculture">Agriculture</button>
+        <button class="sector-pill" data-sector="finance">Private Sector</button>
+      </div>
+    </div>
+    <!-- Bar Chart — Geographic Distribution -->
+    <div class="chart-card">
+      <div class="chart-title">
+        <span>Regional Project Distribution</span>
+        <span class="chart-subtitle">Last 10 years · 120+ engagements</span>
+      </div>
+      <canvas id="barChart" height="280"></canvas>
+    </div>
+  </div>
+  <!-- Timeline chart spanning full width -->
+  <div class="chart-card reveal" style="margin-top:2rem;">
+    <div class="chart-title">
+      <span>Project Volume Over Time</span>
+      <span class="chart-subtitle">2010 – 2025 · Engagements by year</span>
+    </div>
+    <canvas id="lineChart" height="140"></canvas>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team" id="team">
+  <div class="team-intro reveal">
+    <div>
+      <div class="s-label">Our People</div>
+      <h2 class="s-title">Nine Experts,<br><em>One Vision</em></h2>
+    </div>
+    <p class="services-desc">A multinational team of senior professionals combining deep sectoral expertise with regional fluency. Collectively, we work in over ten languages and have lived and worked in more than thirty countries.</p>
+  </div>
+  <div class="team-grid">
+
+    <div class="team-card reveal">
+      <div class="team-card-header thdr-1">
+        <span class="team-avatar-letter">K</span>
+        <span class="team-nationality">🇩🇪</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Dr. Katharina Müller</div>
+        <div class="team-role">Managing Director · Lead Evaluator</div>
+        <p class="team-bio">20+ years directing evaluations for KfW and GIZ across Sub-Saharan Africa and Southeast Asia. PhD Development Economics, Humboldt-Universität Berlin.</p>
+        <div class="team-tags"><span class="team-tag">Impact Evaluation</span><span class="team-tag">DAC Criteria</span><span class="team-tag">DE / EN / FR</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-card-header thdr-2">
+        <span class="team-avatar-letter">J</span>
+        <span class="team-nationality">🇫🇷</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Jean-Pierre Dubois</div>
+        <div class="team-role">Senior M&E Specialist · Francophone Africa</div>
+        <p class="team-bio">15 years evaluating gender-responsive programmes in West and Central Africa for EU and AFD. Expert in social inclusion indicators.</p>
+        <div class="team-tags"><span class="team-tag">Gender M&E</span><span class="team-tag">W. Africa</span><span class="team-tag">FR / DE / EN</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-card-header thdr-3">
+        <span class="team-avatar-letter">A</span>
+        <span class="team-nationality">🇰🇪</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Amina Ndiaye</div>
+        <div class="team-role">Data & Research Lead</div>
+        <p class="team-bio">Quantitative researcher specialising in household surveys, econometric analysis, and GIS-based visualisation. Ex-IFPRI Nairobi, World Bank.</p>
+        <div class="team-tags"><span class="team-tag">Stata / R</span><span class="team-tag">GIS / QGIS</span><span class="team-tag">EN / SW</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal">
+      <div class="team-card-header thdr-4">
+        <span class="team-avatar-letter">T</span>
+        <span class="team-nationality">🇦🇹</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Thomas Hofmann</div>
+        <div class="team-role">Western Balkans & Eastern Europe Specialist</div>
+        <p class="team-bio">Expert in post-conflict M&E, EU accession programming, and rule-of-law evaluations. 12 years in-country experience across the Balkans.</p>
+        <div class="team-tags"><span class="team-tag">Rule of Law</span><span class="team-tag">Balkans</span><span class="team-tag">DE / SR / EN</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-card-header thdr-5">
+        <span class="team-avatar-letter">M</span>
+        <span class="team-nationality">🇨🇴</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">María Rodríguez-Sanz</div>
+        <div class="team-role">Latin America Programme Evaluator</div>
+        <p class="team-bio">Specialised in rural development, food security, and climate adaptation in the Andes and Caribbean. Deep KfW agricultural finance experience.</p>
+        <div class="team-tags"><span class="team-tag">Rural Dev.</span><span class="team-tag">Climate</span><span class="team-tag">ES / EN / DE</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-card-header thdr-6">
+        <span class="team-avatar-letter">A</span>
+        <span class="team-nationality">🇰🇬</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Aizat Kydyralieva</div>
+        <div class="team-role">Central Asia & Governance Specialist</div>
+        <p class="team-bio">Public sector reform and civil society expert in Central Asia. Fluent German speaker — key liaison for DACH-funded portfolios in the region.</p>
+        <div class="team-tags"><span class="team-tag">Governance</span><span class="team-tag">C. Asia</span><span class="team-tag">KY / RU / DE</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal">
+      <div class="team-card-header thdr-7">
+        <span class="team-avatar-letter">R</span>
+        <span class="team-nationality">🇨🇭</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Reto Schweizer</div>
+        <div class="team-role">Health & WASH Evaluation Expert</div>
+        <p class="team-bio">18 years evaluating WASH and health systems strengthening programmes. Extensive SECO and SDC portfolio experience across Asia and Africa.</p>
+        <div class="team-tags"><span class="team-tag">Health Systems</span><span class="team-tag">WASH</span><span class="team-tag">DE / FR / EN</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-card-header thdr-8">
+        <span class="team-avatar-letter">C</span>
+        <span class="team-nationality">🇳🇬</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Chidi Okonkwo</div>
+        <div class="team-role">Private Sector & Financial Systems Evaluator</div>
+        <p class="team-bio">Expert in financial sector development and inclusive finance. Strong track record with DEG portfolio reviews and SME programme evaluations.</p>
+        <div class="team-tags"><span class="team-tag">Inclusive Finance</span><span class="team-tag">SME</span><span class="team-tag">EN / HA / DE</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-card-header thdr-9">
+        <span class="team-avatar-letter">J</span>
+        <span class="team-nationality">🇧🇦</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Jelena Vuković</div>
+        <div class="team-role">Education & Social Protection Specialist</div>
+        <p class="team-bio">Evaluates education reform, TVET, and social safety net programmes across the Balkans, MENA, and East Africa for German and EU funders.</p>
+        <div class="team-tags"><span class="team-tag">Education</span><span class="team-tag">Social Protection</span><span class="team-tag">BS / DE / EN</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="projects">
+  <div class="reveal">
+    <div class="s-label">Track Record</div>
+    <h2 class="s-title">Selected <em>Projects</em></h2>
+    <p style="font-size:0.88rem;color:var(--text-dim);margin-top:0.5rem;font-weight:300;">Click any row to expand details.</p>
+  </div>
+  <div style="margin-top:3rem;" class="reveal">
+    <div class="projects-table-head">
+      <span>Year</span>
+      <span>Assignment</span>
+      <span>Client</span>
+      <span>Country / Region</span>
+      <span></span>
+    </div>
+    <div class="projects-list">
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2023–24</span>
+        <span class="project-name">Final Evaluation — Renewable Energy Access Programme (REAP II)</span>
+        <span class="project-client">KfW</span>
+        <span class="project-country">🇰🇪 Kenya · 🇹🇿 Tanzania</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Mixed-methods final evaluation assessing off-grid solar rollout reaching 2.3M households. Conducted household surveys (n=2,400), stakeholder interviews, and econometric impact modelling aligned to KfW's development effectiveness standards.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2022–23</span>
+        <span class="project-name">Mid-Term Evaluation — EU Integration & Governance Support</span>
+        <span class="project-client">GIZ</span>
+        <span class="project-country">🇷🇸 Serbia · 🇧🇦 Bosnia</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Comprehensive evaluation of GIZ's Western Balkans EU integration portfolio covering rule of law, public administration reform, and anti-corruption programming across five simultaneous bilateral projects.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2022</span>
+        <span class="project-name">Baseline Study — Water Infrastructure & Governance (WIG)</span>
+        <span class="project-client">SECO</span>
+        <span class="project-country">🇺🇿 Uzbekistan · 🇰🇬 Kyrgyzstan</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Comprehensive baseline establishing measurable indicators for a 5-year WASH programme, including institutional capacity mapping and primary data collection in 180 villages using mobile survey tools and community participatory methods.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2021–22</span>
+        <span class="project-name">Impact Assessment — Rural Value Chains Programme</span>
+        <span class="project-client">BMZ</span>
+        <span class="project-country">🇨🇴 Colombia · 🇵🇪 Peru</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Quasi-experimental impact evaluation using Propensity Score Matching assessing income and food security outcomes for 14,000 smallholder farming families in post-conflict Colombia and the Peruvian highlands.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2021</span>
+        <span class="project-name">Programme Evaluation — Vocational Skills & Employment</span>
+        <span class="project-client">ADA Austria</span>
+        <span class="project-country">🇳🇬 Nigeria</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">End-line evaluation of a €12M TVET programme targeting displaced youth in northeast Nigeria, applying contribution analysis to link training outputs to employment and income outcomes among conflict-affected populations.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2020–21</span>
+        <span class="project-name">Portfolio Review — SME Finance & Inclusive Banking</span>
+        <span class="project-client">DEG</span>
+        <span class="project-country">🌍 Sub-Saharan Africa (6 countries)</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Cluster evaluation of DEG's inclusive finance portfolio across six African countries assessing additionality, development outcomes, and financial sustainability — integrating KfW development effectiveness indicators throughout.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2019–20</span>
+        <span class="project-name">Mid-Term Review — MENA Urban Water Reform</span>
+        <span class="project-client">KfW / EU</span>
+        <span class="project-country">🇲🇦 Morocco · 🇹🇳 Tunisia</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Joint KfW-EU evaluation of water utility reform and tariff restructuring in Maghreb cities, covering infrastructure investment performance, governance reform progress, and consumer welfare analysis across three urban centres.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2018–19</span>
+        <span class="project-name">MEAL System Design — Biodiversity & Forest Governance</span>
+        <span class="project-client">GIZ</span>
+        <span class="project-country">🇲🇲 Myanmar · 🇻🇳 Vietnam</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Design and rollout of a bespoke MEAL framework integrating satellite-based deforestation monitoring with community participatory indicators and REDD+ compliant result measurement systems.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section class="methodology" id="methodology">
+  <div class="reveal">
+    <div class="s-label">How We Work</div>
+    <h2 class="s-title">Our <em>Methodology</em></h2>
+  </div>
+  <div class="method-steps reveal">
+    <div class="method-step">
+      <div class="method-step-num">01</div>
+      <h4>Inception & Co-Design</h4>
+      <p>Deep immersion in programme logic, evaluability assessment, and stakeholder mapping. Every engagement begins with a rigorous inception phase before data collection.</p>
+      <div class="method-connector"></div>
+    </div>
+    <div class="method-step">
+      <div class="method-step-num">02</div>
+      <h4>Mixed-Methods Collection</h4>
+      <p>Quantitative surveys, key informant interviews, focus groups, and observational work. Mobile tools (KoBoToolbox, ODK) and triangulated data for robustness.</p>
+      <div class="method-connector"></div>
+    </div>
+    <div class="method-step">
+      <div class="method-step-num">03</div>
+      <h4>Rigorous Analysis</h4>
+      <p>Statistical modelling (Stata, R), qualitative coding (ATLAS.ti), contribution analysis, and process tracing — all subject to internal peer review.</p>
+      <div class="method-connector"></div>
+    </div>
+    <div class="method-step">
+      <div class="method-step-num">04</div>
+      <h4>Learning & Uptake</h4>
+      <p>Results workshops, management response facilitation, and knowledge products tailored for technical and executive audiences — in German and English as standard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="reveal">
+    <div class="s-label">Get In Touch</div>
+    <h2 class="s-title">Start a <em>Conversation</em></h2>
+  </div>
+  <div class="contact-grid reveal">
+    <div class="contact-info">
+      <div class="c-block">
+        <div class="c-label">Head Office</div>
+        <div class="c-val">Unter den Linden 42<br>10117 Berlin, Germany</div>
+      </div>
+      <div class="c-block">
+        <div class="c-label">General Inquiries</div>
+        <div class="c-val"><a href="mailto:info@naturalis-scientia.com">info@naturalis-scientia.com</a></div>
+      </div>
+      <div class="c-block">
+        <div class="c-label">Procurement & Tenders</div>
+        <div class="c-val"><a href="mailto:procurement@naturalis-scientia.com">procurement@naturalis-scientia.com</a></div>
+      </div>
+      <div class="c-block">
+        <div class="c-label">Languages</div>
+        <div class="c-val">German · English · French · Spanish · Russian</div>
+      </div>
+      <div class="c-block">
+        <div class="c-label">Company Registration</div>
+        <div class="c-val">GmbH · HRB 123456 B · Berlin Charlottenburg</div>
+      </div>
+      <div class="urgent-bar">
+        <div class="urgent-pulse"></div>
+        <div class="urgent-text">
+          <strong>Procurement Office:</strong> For urgent tenders or time-critical framework calls, write directly to <a href="mailto:procurement@naturalis-scientia.com">procurement@naturalis-scientia.com</a> — we respond within 4 business hours.
+        </div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="f-row">
+        <div class="f-group"><label class="f-label">First Name</label><input class="f-input" type="text" placeholder="Anna"></div>
+        <div class="f-group"><label class="f-label">Last Name</label><input class="f-input" type="text" placeholder="Schmidt"></div>
+      </div>
+      <div class="f-group"><label class="f-label">Organisation</label><input class="f-input" type="text" placeholder="KfW Development Bank"></div>
+      <div class="f-group"><label class="f-label">Email Address</label><input class="f-input" type="email" placeholder="a.schmidt@organisation.de"></div>
+      <div class="f-group">
+        <label class="f-label">Inquiry Type</label>
+        <select class="f-select">
+          <option value="">Select type…</option>
+          <option>Project Evaluation</option>
+          <option>Monitoring System Design</option>
+          <option>Baseline / Endline Study</option>
+          <option>Impact Assessment</option>
+          <option>Tender / Procurement</option>
+          <option>Partnership Inquiry</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="f-group">
+        <label class="f-label">Message</label>
+        <textarea class="f-textarea" placeholder="Please describe your programme or evaluation needs, including country context, timeline, and specific requirements…"></textarea>
+      </div>
+      <div class="f-urgent">
+        <input type="checkbox" id="urgentBox">
+        <label for="urgentBox"><strong>Urgent Request</strong> — Tender deadline within 72 hours</label>
+      </div>
+      <button class="btn-submit" id="submitBtn" onclick="handleSubmit(event)">Send Inquiry ›</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Naturalis Scientia</div>
+  <p>© 2025 Naturalis Scientia GmbH · Berlin, Germany</p>
+  <ul class="footer-links">
+    <li><a href="#">Imprint</a></li>
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">LinkedIn</a></li>
+  </ul>
+</footer>
+
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+/* ── CURSOR ── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function animRing(){ rx+=(mx-rx)*0.14; ry+=(my-ry)*0.14; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
+document.querySelectorAll('a,button,.project-row,.service-card,.team-card,.sector-pill').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cur.style.width='14px'; cur.style.height='14px'; cur.style.background='#c9a84c'; ring.style.width='50px'; ring.style.height='50px'; });
+  el.addEventListener('mouseleave',()=>{ cur.style.width='8px'; cur.style.height='8px'; cur.style.background='var(--sage)'; ring.style.width='36px'; ring.style.height='36px'; });
+});
+
+/* ── NAV SCROLL ── */
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
+
+/* ── MOBILE NAV ── */
+function openMobileNav(){ document.getElementById('mobileNav').classList.add('open'); document.getElementById('mobileOverlay').classList.add('open'); }
+function closeMobileNav(){ document.getElementById('mobileNav').classList.remove('open'); document.getElementById('mobileOverlay').classList.remove('open'); }
+
+/* ── REVEAL ON SCROLL ── */
+const revEls = document.querySelectorAll('.reveal');
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+revEls.forEach(el => revObs.observe(el));
+
+/* ── PROJECT ROWS ── */
+function toggleProject(row){ row.classList.toggle('expanded'); }
+
+/* ── URGENT FORM ── */
+const urgentBox = document.getElementById('urgentBox');
+const submitBtn = document.getElementById('submitBtn');
+urgentBox.addEventListener('change', function(){
+  if(this.checked){ submitBtn.textContent='Send Urgent Request ›'; submitBtn.style.background='#c46b4a'; submitBtn.style.color='#e8ede4'; }
+  else { submitBtn.textContent='Send Inquiry ›'; submitBtn.style.background=''; submitBtn.style.color=''; }
+});
+function handleSubmit(e){
+  e.preventDefault();
+  submitBtn.textContent='Message Sent ✓';
+  submitBtn.style.background='#4a8a60';
+  submitBtn.style.color='#e8ede4';
+  setTimeout(()=>{ submitBtn.textContent='Send Inquiry ›'; submitBtn.style.background=''; submitBtn.style.color=''; urgentBox.checked=false; }, 3000);
+}
+
+/* ── CHARTS ── */
+const chartDefaults = {
+  font: { family: "'Jost', sans-serif", size: 11 },
+  color: 'rgba(232,237,228,0.45)',
+};
+Chart.defaults.font.family = "'Jost', sans-serif";
+Chart.defaults.color = 'rgba(232,237,228,0.45)';
+
+// ── RADAR CHART ──
+const radarData = {
+  all:        [92, 88, 85, 90, 83, 87, 80],
+  governance: [95, 60, 40, 88, 45, 92, 70],
+  health:     [60, 95, 90, 55, 35, 60, 85],
+  energy:     [50, 45, 40, 92, 35, 55, 45],
+  agriculture:[88, 65, 55, 60, 96, 70, 65],
+  finance:    [70, 45, 40, 65, 78, 82, 55],
+};
+const radarCtx = document.getElementById('radarChart').getContext('2d');
+const radarChart = new Chart(radarCtx, {
+  type: 'radar',
+  data: {
+    labels: ['Quantitative Methods','Qualitative Methods','Surveys & Fieldwork','Results Frameworks','Economic Analysis','Stakeholder Engagement','Capacity Building'],
+    datasets: [{
+      label: 'Competency Score',
+      data: radarData.all,
+      backgroundColor: 'rgba(138,171,120,0.12)',
+      borderColor: 'rgba(138,171,120,0.7)',
+      borderWidth: 1.5,
+      pointBackgroundColor: '#8aab78',
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      r: {
+        min: 0, max: 100,
+        ticks: { display: false, stepSize: 25 },
+        grid: { color: 'rgba(138,171,120,0.1)' },
+        angleLines: { color: 'rgba(138,171,120,0.1)' },
+        pointLabels: { font: { size: 10, family: "'Jost', sans-serif" }, color: 'rgba(232,237,228,0.55)' }
+      }
+    },
+    plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(15,21,16,0.95)', borderColor: 'rgba(138,171,120,0.3)', borderWidth: 1, padding: 10, titleFont: { size: 11 }, bodyFont: { size: 11 } } },
+    animation: { duration: 600, easing: 'easeInOutQuart' }
+  }
+});
+document.querySelectorAll('.sector-pill').forEach(pill => {
+  pill.addEventListener('click', function(){
+    document.querySelectorAll('.sector-pill').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    const s = this.dataset.sector;
+    radarChart.data.datasets[0].data = radarData[s];
+    radarChart.update();
+  });
+});
+
+// ── BAR CHART ──
+const barCtx = document.getElementById('barChart').getContext('2d');
+new Chart(barCtx, {
+  type: 'bar',
+  data: {
+    labels: ['DACH/Europe','East Africa','West Africa','Central Asia','Balkans','Latin America','MENA','SE Asia'],
+    datasets: [{
+      label: 'Projects',
+      data: [28, 24, 18, 16, 14, 12, 8, 6],
+      backgroundColor: [
+        'rgba(138,171,120,0.7)','rgba(138,171,120,0.6)','rgba(138,171,120,0.5)',
+        'rgba(201,168,76,0.6)','rgba(201,168,76,0.5)','rgba(201,168,76,0.4)',
+        'rgba(196,107,74,0.5)','rgba(196,107,74,0.4)'
+      ],
+      borderColor: 'transparent',
+      borderRadius: 1,
+      hoverBackgroundColor: 'rgba(180,210,160,0.85)',
+    }]
+  },
+  options: {
+    responsive: true, indexAxis: 'y',
+    scales: {
+      x: { grid: { color: 'rgba(138,171,120,0.07)' }, border: { display: false }, ticks: { font: { size: 10 } } },
+      y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 } } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { backgroundColor: 'rgba(15,21,16,0.95)', borderColor: 'rgba(138,171,120,0.3)', borderWidth: 1, padding: 10 }
+    },
+    animation: { duration: 900, easing: 'easeOutQuart' }
+  }
+});
+
+// ── LINE CHART ──
+const lineCtx = document.getElementById('lineChart').getContext('2d');
+const years = ['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+const volumes = [3,4,5,5,6,7,8,9,10,11,9,12,14,15,13,8];
+const gradient = lineCtx.createLinearGradient(0, 0, 0, 160);
+gradient.addColorStop(0, 'rgba(138,171,120,0.25)');
+gradient.addColorStop(1, 'rgba(138,171,120,0)');
+new Chart(lineCtx, {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [{
+      label: 'Engagements',
+      data: volumes,
+      borderColor: 'rgba(138,171,120,0.8)',
+      borderWidth: 1.5,
+      backgroundColor: gradient,
+      fill: true,
+      tension: 0.4,
+      pointRadius: 3,
+      pointBackgroundColor: '#8aab78',
+      pointHoverRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { grid: { color: 'rgba(138,171,120,0.06)' }, border: { display: false }, ticks: { font: { size: 10 } } },
+      y: { grid: { color: 'rgba(138,171,120,0.06)' }, border: { display: false }, ticks: { font: { size: 10 }, stepSize: 3 }, min: 0 }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { backgroundColor: 'rgba(15,21,16,0.95)', borderColor: 'rgba(138,171,120,0.3)', borderWidth: 1, padding: 10 }
+    },
+    animation: { duration: 1200, easing: 'easeOutQuart' }
+  }
+});
+</script>
 </body>
 </html>
