@@ -1,1962 +1,1589 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <meta name="description" content="Scientiae-Naturalis — Knowledge Arbitrage, Scientific Conferences, International Journal. Germany." />
-  <meta name="theme-color" content="#0a0f1e" />
-  <title>Scientiae-Naturalis</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientiae Naturalis — High-Stakes Knowledge Arbitrage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0e0e0c;
+  --ink2:#2c2c28;
+  --ink3:#5a5a54;
+  --rule:#d4d2c8;
+  --rule2:#e8e6de;
+  --paper:#f5f3ee;
+  --paper2:#ece9e0;
+  --gold:#a08630;
+  --gold2:#c9a84c;
+  --white:#ffffff;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --mono:'DM Mono',monospace;
+  --display:'Bebas Neue',sans-serif;
+  --slide-dur:600ms;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:18px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
 
-  <!-- Preconnect for fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+/* ── HEADER ──────────────────────────────────────────── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(1.5rem,4vw,4rem);
+  height:64px;
+  background:rgba(245,243,238,0.96);
+  border-bottom:1px solid var(--rule);
+  backdrop-filter:blur(6px);
+}
+.logo{
+  font-family:var(--serif);
+  font-size:1rem;
+  font-weight:600;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--ink);
+  text-decoration:none;
+  line-height:1.1;
+}
+.logo span{
+  display:block;
+  font-weight:300;
+  font-size:0.7rem;
+  letter-spacing:0.2em;
+  color:var(--ink3);
+  font-style:italic;
+}
+nav{
+  display:flex;align-items:center;gap:2rem;
+}
+nav a{
+  font-family:var(--mono);
+  font-size:0.68rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  text-decoration:none;
+  transition:color .2s;
+}
+nav a:hover{color:var(--ink)}
+.nav-cta{
+  font-family:var(--mono);
+  font-size:0.68rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--white);
+  background:var(--ink);
+  padding:0.45rem 1.1rem;
+  text-decoration:none;
+  transition:background .2s;
+}
+.nav-cta:hover{background:var(--gold)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:all .3s}
+@media(max-width:768px){
+  nav.links{
+    display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
+    background:var(--paper);
+    flex-direction:column;align-items:center;justify-content:center;
+    gap:2.5rem;z-index:99;
+  }
+  nav.links.open{display:flex}
+  nav.links a{font-size:1rem}
+  .hamburger{display:flex}
+}
 
-  <style>
-    /* ═══════════════════════════════════════════
-       DESIGN SYSTEM — SCIENTIAE-NATURALIS
-    ═══════════════════════════════════════════ */
-    :root {
-      --ink:       #0a0f1e;
-      --ivory:     #f4f0e8;
-      --gold:      #c8a96e;
-      --gold-light:#e8d4a8;
-      --teal:      #1a6b6b;
-      --teal-light:#2a9d9d;
-      --crimson:   #8b1a2e;
-      --slate:     #2c3e50;
-      --mist:      #e8edf5;
-      --white:     #ffffff;
-      --shadow:    rgba(10,15,30,0.15);
-      --font-display: 'Cormorant Garamond', Georgia, serif;
-      --font-ui:      'Syne', sans-serif;
-      --font-mono:    'DM Mono', monospace;
-      --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-in:   cubic-bezier(0.7, 0, 0.84, 0);
-    }
+/* ── CAROUSEL WRAPPER ─────────────────────────────────── */
+.carousel-outer{
+  margin-top:64px;
+  position:relative;
+  overflow:hidden;
+  background:var(--paper);
+}
+.slides-track{
+  display:flex;
+  transition:transform var(--slide-dur) cubic-bezier(.55,.05,.15,.99);
+  will-change:transform;
+}
+.slide{
+  min-width:100vw;
+  min-height:calc(100vh - 64px);
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
 
-    /* ── RESET ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
-    body {
-      font-family: var(--font-ui);
-      background: var(--ink);
-      color: var(--ivory);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: inherit; text-decoration: none; }
-    img { display: block; max-width: 100%; }
-    button { cursor: pointer; font-family: var(--font-ui); border: none; background: none; }
+/* ── SLIDE NAVIGATION ─────────────────────────────────── */
+.nav-arrows{
+  position:fixed;
+  bottom:2.5rem;right:clamp(1.5rem,4vw,4rem);
+  display:flex;gap:0.6rem;z-index:50;
+}
+.arrow-btn{
+  width:44px;height:44px;
+  border:1px solid var(--rule);
+  background:rgba(245,243,238,0.9);
+  cursor:pointer;
+  font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,border-color .2s;
+  backdrop-filter:blur(4px);
+}
+.arrow-btn:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.slide-dots{
+  position:fixed;
+  bottom:2.7rem;
+  left:50%;transform:translateX(-50%);
+  display:flex;gap:0.5rem;z-index:50;
+  align-items:center;
+}
+.dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--rule);
+  border:none;cursor:pointer;padding:0;
+  transition:background .25s,transform .25s;
+}
+.dot.active{background:var(--ink);transform:scale(1.4)}
+.slide-counter{
+  position:fixed;
+  bottom:2.7rem;left:clamp(1.5rem,4vw,4rem);
+  font-family:var(--mono);
+  font-size:0.62rem;
+  letter-spacing:0.15em;
+  color:var(--ink3);
+  z-index:50;
+}
 
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--ink); }
-    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+/* ── SLIDE 1 — IDENTITY ───────────────────────────────── */
+#slide-1{
+  background:var(--paper);
+  padding:clamp(2rem,4vh,3.5rem) clamp(1.5rem,8vw,8rem) clamp(2rem,4vh,3.5rem);
+  justify-content:flex-start;
+  min-height:calc(100vh - 64px);
+}
+.s1-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem 6rem;
+  align-items:stretch;
+  max-width:1400px;
+  margin:0 auto;
+}
+@media(max-width:900px){.s1-grid{grid-template-columns:1fr;gap:2.5rem}}
+.s1-headline{
+  font-family:var(--display);
+  font-size:clamp(3.5rem,8vw,7rem);
+  line-height:0.92;
+  letter-spacing:0.03em;
+  color:var(--ink);
+  border-left:3px solid var(--gold);
+  padding-left:1.5rem;
+}
+.s1-headline em{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:0.55em;
+  display:block;
+  color:var(--gold);
+  letter-spacing:0.05em;
+  margin-top:0.2em;
+}
+.s1-tagline{
+  font-family:var(--mono);
+  font-size:0.72rem;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:2rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.s1-tagline::before{content:'';display:block;width:2.5rem;height:1px;background:var(--gold)}
+.s1-body{
+  font-size:1.05rem;
+  font-weight:300;
+  color:var(--ink2);
+  line-height:1.75;
+  margin-bottom:1.5rem;
+}
+.s1-sectors{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0.75rem 1.5rem;
+  margin-top:1.5rem;
+}
+.s1-sector{
+  font-family:var(--mono);
+  font-size:0.62rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  padding:0.4rem 0;
+  border-bottom:0.5px solid var(--rule);
+  position:relative;
+}
+.s1-sector::before{
+  content:'';
+  position:absolute;left:0;bottom:-0.5px;
+  width:0;height:1px;
+  background:var(--gold);
+  transition:width .35s ease;
+}
+.s1-sector:hover::before{width:100%}
+.nace-block{
+  margin-top:2.5rem;
+  padding:1.5rem;
+  border:0.5px solid var(--rule);
+  background:var(--paper2);
+}
+.nace-block h4{
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:0.75rem;
+}
+.nace-row{
+  display:flex;align-items:baseline;gap:0.75rem;
+  margin-bottom:0.35rem;
+}
+.nace-code{
+  font-family:var(--mono);
+  font-size:0.68rem;
+  color:var(--ink);
+  font-weight:400;
+  min-width:4.5rem;
+}
+.nace-desc{
+  font-family:var(--mono);
+  font-size:0.6rem;
+  color:var(--ink3);
+  letter-spacing:0.04em;
+}
 
-    /* ═══════════════════════════════════════════
-       GLOBAL NAV
-    ═══════════════════════════════════════════ */
-    #global-nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 clamp(1rem, 4vw, 3rem);
-      height: 60px;
-      background: rgba(10,15,30,0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(200,169,110,0.2);
-      transition: all 0.3s var(--ease-out);
-    }
-    .nav-logo {
-      font-family: var(--font-display);
-      font-size: 1.56rem;
-      font-weight: 300;
-      letter-spacing: 0.08em;
-      color: var(--gold-light);
-    }
-    .nav-logo span { color: var(--teal-light); font-style: italic; }
-    .nav-dots {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .nav-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      border: 1.5px solid var(--gold);
-      background: transparent;
-      cursor: pointer;
-      transition: all 0.3s var(--ease-out);
-    }
-    .nav-dot.active {
-      background: var(--gold);
-      transform: scale(1.3);
-    }
-    .nav-links {
-      display: flex;
-      gap: clamp(0.8rem, 2vw, 1.8rem);
-      font-size: 0.9rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: rgba(244,240,232,0.6);
-    }
-    .nav-links a:hover { color: var(--gold); }
+/* ── HOVER GALLERY (SLIDE 1 RIGHT) ──────────────────────── */
+.gallery-col{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  border-top:1px solid var(--rule);
+}
+.gallery-contact{
+  margin-top:auto;
+  padding:1.5rem 0 0;
+  border-top:1px solid var(--rule);
+}
+.gc-label{
+  font-family:var(--mono);
+  font-size:0.58rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:0.5rem;
+}
+.gc-email{
+  display:block;
+  font-family:var(--serif);
+  font-size:1.05rem;
+  font-style:italic;
+  color:var(--gold);
+  text-decoration:none;
+  margin-bottom:0.4rem;
+  transition:color .2s;
+}
+.gc-email:hover{color:var(--ink)}
+.gc-hq{
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.1em;
+  color:var(--ink3);
+}
+.s1-legal{
+  margin-top:2rem;
+  padding:1.5rem;
+  border:0.5px solid var(--rule);
+  background:var(--ink);
+  position:relative;
+  overflow:hidden;
+}
+.s1-legal::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;
+  width:3px;height:100%;
+  background:var(--gold);
+}
+.s1-legal-name{
+  font-family:var(--display);
+  font-size:1.4rem;
+  letter-spacing:0.06em;
+  color:var(--paper);
+  margin-bottom:0.15rem;
+  padding-left:0.75rem;
+}
+.s1-legal-vat{
+  font-family:var(--mono);
+  font-size:0.58rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--gold2);
+  margin-bottom:1rem;
+  padding-left:0.75rem;
+}
+.s1-legal-body{
+  font-family:var(--serif);
+  font-size:0.88rem;
+  font-weight:300;
+  color:rgba(245,243,238,0.75);
+  line-height:1.7;
+  padding-left:0.75rem;
+}
+.gallery-item{
+  overflow:hidden;
+  border-bottom:0.5px solid var(--rule);
+  cursor:pointer;
+  position:relative;
+}
+.gallery-item-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:1rem 0;
+  transition:padding .3s ease;
+}
+.gallery-item-header h3{
+  font-family:var(--serif);
+  font-size:1.25rem;
+  font-weight:400;
+  color:var(--ink);
+  letter-spacing:0.01em;
+}
+.gallery-item-header .gi-tag{
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--ink3);
+}
+.gallery-body{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .45s cubic-bezier(.4,0,.2,1);
+  font-size:0.88rem;
+  font-weight:300;
+  color:var(--ink2);
+  line-height:1.6;
+}
+.gallery-item:hover .gallery-body,
+.gallery-item.open .gallery-body{
+  max-height:300px;
+}
+.gallery-item:hover .gallery-item-header{padding:1rem 0 0.25rem}
+.gallery-body-inner{
+  padding:0 0 1rem 0;
+}
+.gallery-body-inner p{margin-bottom:0.5rem;font-size:0.85rem}
 
-    @media (max-width: 640px) {
-      .nav-links { display: none; }
-    }
+/* ── SLIDE 2 — SERVICES ───────────────────────────────── */
+#slide-2{
+  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
+  background:var(--white);
+}
+.s2-inner{max-width:1400px;margin:0 auto}
+.slide-label{
+  font-family:var(--mono);
+  font-size:0.62rem;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:1rem;
+}
+.s2-headline{
+  font-family:var(--display);
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  line-height:0.95;
+  letter-spacing:0.04em;
+  color:var(--ink);
+  margin-bottom:2.5rem;
+  border-bottom:1px solid var(--rule);
+  padding-bottom:1.5rem;
+}
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:0;
+  border-top:0.5px solid var(--rule);
+  border-left:0.5px solid var(--rule);
+}
+@media(max-width:700px){.services-grid{grid-template-columns:1fr}}
+.svc-block{
+  border-right:0.5px solid var(--rule);
+  border-bottom:0.5px solid var(--rule);
+  padding:1.5rem 1.75rem;
+  position:relative;
+  overflow:hidden;
+  transition:background .25s;
+  cursor:default;
+}
+.svc-block::after{
+  content:'';
+  position:absolute;
+  left:0;top:0;
+  width:3px;height:0;
+  background:var(--gold);
+  transition:height .35s ease;
+}
+.svc-block:hover::after{height:100%}
+.svc-block:hover{background:var(--paper)}
+.svc-code{
+  font-family:var(--mono);
+  font-size:0.58rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:0.5rem;
+}
+.svc-block h3{
+  font-family:var(--serif);
+  font-size:1.05rem;
+  font-weight:500;
+  color:var(--ink);
+  margin-bottom:0.6rem;
+  line-height:1.3;
+}
+.svc-block ul{
+  list-style:none;
+  padding:0;
+}
+.svc-block ul li{
+  font-family:var(--mono);
+  font-size:0.62rem;
+  letter-spacing:0.06em;
+  color:var(--ink3);
+  padding:0.18rem 0;
+  border-bottom:0.5px dotted var(--rule);
+}
+.svc-block ul li:last-child{border:none}
+.svc-block ul li::before{
+  content:'— ';
+  color:var(--gold2);
+}
 
-    /* ═══════════════════════════════════════════
-       CAROUSEL SHELL
-    ═══════════════════════════════════════════ */
-    #carousel-shell {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-    }
-    #slides-track {
-      display: flex;
-      width: 300%;
-      transition: transform 0.85s var(--ease-out);
-      will-change: transform;
-    }
-    .slide {
-      width: 33.333%;
-      min-height: 100vh;
-      position: relative;
-      overflow: hidden;
-    }
+/* ── SLIDE 3 — ORGANISATION ───────────────────────────── */
+#slide-3{
+  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
+  background:var(--paper);
+}
+.s3-inner{max-width:1400px;margin:0 auto}
+.s3-headline{
+  font-family:var(--display);
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  line-height:0.95;
+  letter-spacing:0.04em;
+  color:var(--ink);
+  margin-bottom:0.5rem;
+}
+.s3-sub{
+  font-family:var(--mono);
+  font-size:0.65rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:2.5rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid var(--rule);
+}
+.divisions-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:0;
+  border-top:0.5px solid var(--rule);
+  border-left:0.5px solid var(--rule);
+}
+@media(max-width:600px){.divisions-grid{grid-template-columns:1fr}}
+.div-card{
+  border-right:0.5px solid var(--rule);
+  border-bottom:0.5px solid var(--rule);
+  padding:1.25rem 1.5rem;
+  transition:background .2s;
+}
+.div-card:hover{background:var(--paper2)}
+.div-code{
+  font-family:var(--display);
+  font-size:1.15rem;
+  letter-spacing:0.04em;
+  color:var(--gold);
+  display:block;
+  margin-bottom:0.3rem;
+  line-height:1;
+}
+.div-name{
+  font-family:var(--serif);
+  font-size:0.88rem;
+  font-weight:400;
+  color:var(--ink);
+  line-height:1.35;
+}
+.regional-section{
+  margin-top:2.5rem;
+  padding:1.5rem;
+  background:var(--ink);
+  color:var(--paper);
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:1rem 2rem;
+}
+.regional-section .r-label{
+  font-family:var(--mono);
+  font-size:0.58rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--gold2);
+  margin-bottom:0.25rem;
+  display:block;
+}
+.regional-section .r-name{
+  font-family:var(--serif);
+  font-size:0.95rem;
+  color:var(--paper);
+  font-weight:300;
+}
 
-    /* ── CAROUSEL ARROWS ── */
-    .carousel-arrow {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 900;
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(200,169,110,0.4);
-      background: rgba(10,15,30,0.7);
-      color: var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      transition: all 0.3s var(--ease-out);
-      backdrop-filter: blur(6px);
-    }
-    .carousel-arrow:hover {
-      border-color: var(--gold);
-      background: rgba(200,169,110,0.15);
-    }
-    .carousel-arrow.prev { left: 12px; }
-    .carousel-arrow.next { right: 12px; }
-    .carousel-arrow.hidden { opacity: 0; pointer-events: none; }
+/* ── CONTACT FOOTER ───────────────────────────────────── */
+footer{
+  background:var(--ink);
+  color:var(--paper);
+  padding:clamp(3rem,6vw,5rem) clamp(1.5rem,8vw,8rem);
+  display:flex;
+  flex-direction:column;
+  gap:2rem;
+}
+.footer-inner{
+  max-width:1400px;
+  margin:0 auto;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3rem 6rem;
+  align-items:end;
+}
+@media(max-width:700px){.footer-inner{grid-template-columns:1fr;gap:2rem}}
+.footer-brand{
+  font-family:var(--serif);
+  font-size:1.1rem;
+  font-weight:600;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--paper);
+  margin-bottom:0.75rem;
+}
+.footer-tagline{
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--gold2);
+  margin-bottom:1.25rem;
+}
+.footer-body{
+  font-size:0.9rem;
+  font-weight:300;
+  color:var(--paper2);
+  line-height:1.7;
+}
+.footer-body a{
+  color:var(--gold2);
+  text-decoration:none;
+}
+.footer-body a:hover{text-decoration:underline}
+.footer-hq{
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:rgba(245,243,238,0.4);
+  line-height:1.8;
+}
+.footer-hq strong{
+  display:block;
+  color:var(--gold2);
+  font-size:0.62rem;
+  margin-bottom:0.4rem;
+  letter-spacing:0.2em;
+}
+.footer-bottom{
+  max-width:1400px;
+  margin:0 auto;
+  width:100%;
+  padding-top:1.5rem;
+  border-top:0.5px solid rgba(245,243,238,0.15);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+  flex-wrap:wrap;
+}
+.footer-bottom p{
+  font-family:var(--mono);
+  font-size:0.58rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:rgba(245,243,238,0.35);
+}
 
-    /* ── SLIDE COUNTER ── */
-    #slide-counter {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 900;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      color: rgba(200,169,110,0.6);
-      background: rgba(10,15,30,0.7);
-      padding: 4px 12px;
-      border-radius: 20px;
-      backdrop-filter: blur(6px);
-    }
+/* ── SLIDE 4 — NACE LAYER MATRIX ──────────────────────── */
+#slide-4{
+  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
+  background:var(--ink);
+  color:var(--paper);
+}
+.s4-inner{max-width:1400px;margin:0 auto}
+.s4-headline{
+  font-family:var(--display);
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  line-height:0.95;
+  letter-spacing:0.04em;
+  color:var(--paper);
+  margin-bottom:0.5rem;
+}
+.s4-sub{
+  font-family:var(--mono);
+  font-size:0.62rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--gold2);
+  margin-bottom:2.5rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid rgba(245,243,238,0.12);
+}
+.matrix-table{
+  width:100%;
+  border-collapse:collapse;
+  font-family:var(--serif);
+}
+.matrix-table thead tr{
+  border-bottom:1px solid rgba(245,243,238,0.2);
+}
+.matrix-table thead th{
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--gold2);
+  text-align:left;
+  padding:0.75rem 1.25rem 0.75rem 0;
+  font-weight:400;
+}
+.matrix-table thead th:first-child{
+  min-width:200px;
+}
+.matrix-table tbody tr{
+  border-bottom:0.5px solid rgba(245,243,238,0.08);
+  transition:background .2s;
+}
+.matrix-table tbody tr:hover{
+  background:rgba(245,243,238,0.05);
+}
+.matrix-table td{
+  padding:0.9rem 1.25rem 0.9rem 0;
+  vertical-align:middle;
+  font-size:0.95rem;
+  font-weight:300;
+  color:var(--paper2);
+  line-height:1.4;
+}
+.matrix-table td:first-child{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:1rem;
+  color:var(--paper);
+  font-weight:400;
+}
+.nace-pill{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.1em;
+  color:var(--gold);
+  border:0.5px solid var(--gold);
+  padding:0.15rem 0.5rem;
+  white-space:nowrap;
+}
+.row-num{
+  font-family:var(--mono);
+  font-size:0.55rem;
+  letter-spacing:0.15em;
+  color:rgba(245,243,238,0.25);
+  margin-right:1rem;
+  display:inline-block;
+  min-width:1.5rem;
+}
 
-    /* ═══════════════════════════════════════════
-       SLIDE 1 — ENTERPRISE / KNOWLEDGE ARBITRAGE
-    ═══════════════════════════════════════════ */
-    #slide-1 {
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 50%, rgba(26,107,107,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 80% 20%, rgba(200,169,110,0.08) 0%, transparent 60%),
-        linear-gradient(160deg, #070c1a 0%, #0a0f1e 40%, #0d1428 100%);
-    }
-
-    /* GRID BACKGROUND */
-    #slide-1::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(200,169,110,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(200,169,110,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 30%, transparent 80%);
-    }
-
-    .s1-inner {
-      position: relative;
-      z-index: 2;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 80px clamp(1.5rem, 8vw, 10rem) 80px;
-    }
-
-    /* Hero */
-    .s1-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--teal-light);
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .s1-eyebrow::before {
-      content: '';
-      display: block;
-      width: 32px; height: 1px;
-      background: var(--teal-light);
-    }
-    .s1-headline {
-      font-family: var(--font-display);
-      font-size: clamp(2.8rem, 7vw, 6rem);
-      font-weight: 300;
-      line-height: 1.0;
-      color: var(--ivory);
-      margin-bottom: 0.3rem;
-    }
-    .s1-headline em {
-      color: var(--gold);
-      font-style: italic;
-      display: block;
-    }
-    .s1-subhead {
-      font-family: var(--font-display);
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      font-weight: 300;
-      font-style: italic;
-      color: rgba(244,240,232,0.5);
-      margin-bottom: 3rem;
-      max-width: 520px;
-    }
-    .s1-descriptor {
-      font-size: 0.8rem;
-      line-height: 1.8;
-      color: rgba(244,240,232,0.65);
-      max-width: 480px;
-      margin-bottom: 3.5rem;
-    }
-
-    /* NACE codes block */
-    .nace-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1px;
-      background: rgba(200,169,110,0.15);
-      border: 1px solid rgba(200,169,110,0.15);
-      margin-bottom: 4rem;
-      max-width: 780px;
-    }
-    .nace-card {
-      background: rgba(10,15,30,0.9);
-      padding: 1.4rem 1.6rem;
-      transition: background 0.3s;
-      cursor: default;
-    }
-    .nace-card:hover { background: rgba(26,107,107,0.18); }
-    .nace-code {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--teal-light);
-      letter-spacing: 0.15em;
-      margin-bottom: 0.5rem;
-    }
-    .nace-title {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--gold-light);
-      margin-bottom: 0.4rem;
-      letter-spacing: 0.03em;
-    }
-    .nace-desc {
-      font-size: 0.7rem;
-      color: rgba(244,240,232,0.5);
-      line-height: 1.6;
-    }
-
-    /* Services hover gallery */
-    .services-label {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(200,169,110,0.5);
-      margin-bottom: 1rem;
-    }
-    .hover-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1px;
-      background: rgba(200,169,110,0.1);
-      border: 1px solid rgba(200,169,110,0.1);
-      max-width: 960px;
-    }
-    .hg-item {
-      background: rgba(7,12,26,0.95);
-      padding: 1.6rem 1.4rem;
-      position: relative;
-      overflow: hidden;
-      cursor: default;
-      transition: all 0.4s var(--ease-out);
-    }
-    .hg-item::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 100%; height: 2px;
-      background: linear-gradient(90deg, var(--teal), var(--gold));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s var(--ease-out);
-    }
-    .hg-item:hover { background: rgba(26,107,107,0.12); }
-    .hg-item:hover::before { transform: scaleX(1); }
-    .hg-num {
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      color: var(--teal-light);
-      letter-spacing: 0.15em;
-      margin-bottom: 0.8rem;
-      display: block;
-    }
-    .hg-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--ivory);
-      margin-bottom: 0.5rem;
-    }
-    .hg-body {
-      font-size: 0.8rem;
-      color: rgba(244,240,232,0.5);
-      line-height: 1.6;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s var(--ease-out), opacity 0.3s;
-      opacity: 0;
-    }
-    .hg-item:hover .hg-body {
-      max-height: 120px;
-      opacity: 1;
-    }
-
-    /* CTA */
-    .s1-cta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 3.5rem;
-      align-items: center;
-    }
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0.75rem 2rem;
-      background: var(--gold);
-      color: var(--ink);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      transition: all 0.3s var(--ease-out);
-    }
-    .btn-primary:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(200,169,110,0.25);
-    }
-    .btn-ghost {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0.75rem 2rem;
-      border: 1.5px solid rgba(200,169,110,0.4);
-      color: var(--gold-light);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      transition: all 0.3s var(--ease-out);
-    }
-    .btn-ghost:hover {
-      border-color: var(--gold);
-      background: rgba(200,169,110,0.08);
-    }
-
-    /* Address/contact footer of slide */
-    .s1-foot {
-      margin-top: auto;
-      padding-top: 3rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      align-items: flex-end;
-      border-top: 1px solid rgba(200,169,110,0.12);
-    }
-    .s1-foot-item { font-size: 0.68rem; color: rgba(244,240,232,0.4); line-height: 1.6; }
-    .s1-foot-item strong { color: var(--gold); display: block; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 2px; }
-
-    /* ═══════════════════════════════════════════
-       SLIDE 2 — CONFERENCE
-    ═══════════════════════════════════════════ */
-    #slide-2 {
-      background:
-        radial-gradient(ellipse 100% 50% at 50% 0%, rgba(139,26,46,0.1) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 0% 80%, rgba(26,107,107,0.08) 0%, transparent 50%),
-        linear-gradient(180deg, #050810 0%, #08101e 50%, #060e1a 100%);
-    }
-    #slide-2::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle 1px at center, rgba(200,169,110,0.12) 1px, transparent 0);
-      background-size: 40px 40px;
-      mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, black 20%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .s2-inner {
-      position: relative;
-      z-index: 2;
-      min-height: 100vh;
-      padding: 80px clamp(1.5rem, 6vw, 8rem) 80px;
-    }
-
-    /* Conf header */
-    .conf-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid rgba(139,26,46,0.5);
-      background: rgba(139,26,46,0.1);
-      padding: 4px 14px;
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #e07080;
-      margin-bottom: 1.5rem;
-    }
-    .conf-badge::before {
-      content: '●';
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-    .conf-title {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 5.5vw, 4.5rem);
-      font-weight: 300;
-      line-height: 1.05;
-      color: var(--ivory);
-      margin-bottom: 0.4rem;
-      max-width: 800px;
-    }
-    .conf-title em { color: var(--crimson); font-style: italic; }
-    .conf-subtitle {
-      font-family: var(--font-display);
-      font-size: clamp(0.9rem, 2vw, 1.25rem);
-      font-style: italic;
-      color: rgba(244,240,232,0.45);
-      margin-bottom: 2rem;
-    }
-    .conf-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      margin-bottom: 3rem;
-    }
-    .conf-meta-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      color: rgba(244,240,232,0.7);
-    }
-    .conf-meta-item .icon {
-      width: 28px; height: 28px;
-      border: 1px solid rgba(200,169,110,0.3);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.7rem;
-      color: var(--gold);
-    }
-
-    /* Tabs */
-    .conf-tabs {
-      display: flex;
-      gap: 0;
-      border-bottom: 1px solid rgba(200,169,110,0.15);
-      margin-bottom: 2.5rem;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .conf-tabs::-webkit-scrollbar { display: none; }
-    .tab-btn {
-      padding: 0.7rem 1.2rem;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(244,240,232,0.4);
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      white-space: nowrap;
-      transition: all 0.3s;
-    }
-    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
-    .tab-btn:hover:not(.active) { color: rgba(244,240,232,0.7); }
-
-    .tab-panel { display: none; animation: fadeIn 0.4s var(--ease-out); }
-    .tab-panel.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-
-    /* Program panel */
-    .theme-list { display: grid; gap: 1px; background: rgba(200,169,110,0.1); border: 1px solid rgba(200,169,110,0.1); }
-    .theme-item {
-      background: rgba(5,8,16,0.95);
-      padding: 1.4rem 1.8rem;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 1.4rem;
-      align-items: start;
-      transition: background 0.3s;
-      cursor: default;
-    }
-    .theme-item:hover { background: rgba(139,26,46,0.08); }
-    .theme-num {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      color: var(--crimson);
-      letter-spacing: 0.1em;
-      padding-top: 3px;
-      white-space: nowrap;
-    }
-    .theme-text h4 {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--ivory);
-      margin-bottom: 0.3rem;
-      letter-spacing: 0.03em;
-    }
-    .theme-text p { font-size: 0.68rem; color: rgba(244,240,232,0.5); line-height: 1.6; }
-
-    /* Advisory committee */
-    .advisory-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1px;
-      background: rgba(200,169,110,0.1);
-      border: 1px solid rgba(200,169,110,0.1);
-    }
-    .scientist-card {
-      background: rgba(5,8,16,0.95);
-      padding: 1.2rem 1.4rem;
-      transition: background 0.3s;
-      cursor: default;
-    }
-    .scientist-card:hover { background: rgba(26,107,107,0.1); }
-    .sci-name {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--ivory);
-      margin-bottom: 0.3rem;
-      letter-spacing: 0.02em;
-    }
-    .sci-inst {
-      font-size: 0.62rem;
-      color: rgba(244,240,232,0.45);
-      line-height: 1.5;
-      margin-bottom: 0.4rem;
-    }
-    .sci-orcid {
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      color: var(--teal-light);
-      letter-spacing: 0.05em;
-    }
-    .sci-orcid a { text-decoration: none; color: inherit; }
-    .sci-orcid a:hover { color: var(--gold); }
-
-    /* Registration panel */
-    .reg-types {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1px;
-      background: rgba(200,169,110,0.12);
-      border: 1px solid rgba(200,169,110,0.12);
-      margin-bottom: 2.5rem;
-    }
-    .reg-card {
-      background: rgba(5,8,16,0.95);
-      padding: 2rem 1.8rem;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-    .reg-card.featured {
-      background: rgba(200,169,110,0.06);
-    }
-    .reg-card.featured::before {
-      content: 'RECOMMENDED';
-      position: absolute;
-      top: 12px; right: -20px;
-      font-family: var(--font-mono);
-      font-size: 0.5rem;
-      letter-spacing: 0.12em;
-      color: var(--ink);
-      background: var(--gold);
-      padding: 3px 28px;
-      transform: rotate(45deg);
-    }
-    .reg-type { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.7rem; }
-    .reg-price {
-      font-family: var(--font-display);
-      font-size: 2.5rem;
-      font-weight: 300;
-      color: var(--ivory);
-      line-height: 1;
-      margin-bottom: 0.2rem;
-    }
-    .reg-price span { font-size: 1rem; color: rgba(244,240,232,0.5); }
-    .reg-includes { font-size: 0.68rem; color: rgba(244,240,232,0.5); line-height: 1.7; margin-bottom: 1.5rem; }
-    .reg-includes li { list-style: none; padding-left: 1rem; position: relative; }
-    .reg-includes li::before { content: '→'; position: absolute; left: 0; color: var(--teal-light); }
-    .btn-reg {
-      display: block;
-      text-align: center;
-      padding: 0.65rem 1.5rem;
-      border: 1.5px solid var(--gold);
-      color: var(--gold);
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: all 0.3s var(--ease-out);
-      background: none;
-      width: 100%;
-    }
-    .btn-reg:hover, .btn-reg.solid {
-      background: var(--gold);
-      color: var(--ink);
-    }
-
-    /* Payment form */
-    .payment-form {
-      max-width: 560px;
-      background: rgba(5,8,16,0.9);
-      border: 1px solid rgba(200,169,110,0.15);
-      padding: 2rem;
-    }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    .form-row.full { grid-template-columns: 1fr; }
-    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
-    .form-group { display: flex; flex-direction: column; gap: 4px; }
-    .form-label {
-      font-family: var(--font-mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(244,240,232,0.4);
-    }
-    .form-input {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(200,169,110,0.2);
-      color: var(--ivory);
-      padding: 0.6rem 0.8rem;
-      font-family: var(--font-ui);
-      font-size: 0.78rem;
-      border-radius: 2px;
-      outline: none;
-      transition: border-color 0.3s;
-    }
-    .form-input:focus { border-color: var(--gold); }
-    .form-select {
-      background: rgba(10,15,30,0.95);
-      border: 1px solid rgba(200,169,110,0.2);
-      color: var(--ivory);
-      padding: 0.6rem 0.8rem;
-      font-family: var(--font-ui);
-      font-size: 0.78rem;
-      border-radius: 2px;
-      outline: none;
-      cursor: pointer;
-      transition: border-color 0.3s;
-      -webkit-appearance: none;
-    }
-    .form-select:focus { border-color: var(--gold); }
-    .card-row {
-      display: flex;
-      gap: 8px;
-      padding: 0.5rem 0.8rem;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(200,169,110,0.2);
-      border-radius: 2px;
-      align-items: center;
-      font-size: 0.72rem;
-      color: rgba(244,240,232,0.4);
-      letter-spacing: 0.1em;
-    }
-    .secure-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      color: rgba(42,157,157,0.7);
-      letter-spacing: 0.1em;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-    }
-    .btn-pay {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 0.9rem;
-      background: linear-gradient(135deg, var(--teal), var(--teal-light));
-      color: var(--white);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s var(--ease-out);
-      margin-top: 1.2rem;
-    }
-    .btn-pay:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(26,107,107,0.35);
-    }
-
-    /* Downloads */
-    .download-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .dl-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-      padding: 1.2rem 1.4rem;
-      border: 1px solid rgba(200,169,110,0.2);
-      background: rgba(5,8,16,0.8);
-      cursor: pointer;
-      transition: all 0.3s var(--ease-out);
-      border-radius: 2px;
-    }
-    .dl-btn:hover {
-      border-color: var(--gold);
-      background: rgba(200,169,110,0.06);
-      transform: translateY(-3px);
-    }
-    .dl-icon { font-size: 1.2rem; margin-bottom: 4px; }
-    .dl-label {
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: var(--ivory);
-      letter-spacing: 0.05em;
-    }
-    .dl-format {
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      color: var(--gold);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    /* Section subtitle */
-    .section-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(200,169,110,0.5);
-      margin-bottom: 0.7rem;
-    }
-    .section-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.2rem, 3vw, 2rem);
-      font-weight: 300;
-      color: var(--ivory);
-      margin-bottom: 1.5rem;
-    }
-
-    /* ═══════════════════════════════════════════
-       SLIDE 3 — JOURNAL
-    ═══════════════════════════════════════════ */
-    #slide-3 {
-      background:
-        radial-gradient(ellipse 80% 60% at 100% 0%, rgba(26,107,107,0.1) 0%, transparent 60%),
-        radial-gradient(ellipse 70% 60% at 0% 100%, rgba(200,169,110,0.06) 0%, transparent 50%),
-        linear-gradient(135deg, #040810 0%, #080e1c 50%, #060c18 100%);
-    }
-    #slide-3::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        rgba(200,169,110,0.015) 0px,
-        rgba(200,169,110,0.015) 1px,
-        transparent 1px,
-        transparent 50px
-      );
-      pointer-events: none;
-    }
-
-    .s3-inner {
-      position: relative;
-      z-index: 2;
-      min-height: 100vh;
-      padding: 80px clamp(1.5rem, 6vw, 8rem) 80px;
-    }
-
-    .journal-masthead {
-      border-bottom: 1px solid rgba(200,169,110,0.2);
-      padding-bottom: 2rem;
-      margin-bottom: 3rem;
-    }
-    .journal-tag {
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--teal-light);
-      margin-bottom: 0.8rem;
-    }
-    .journal-name {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      font-weight: 300;
-      color: var(--ivory);
-      line-height: 0.95;
-      margin-bottom: 0.3rem;
-    }
-    .journal-name span { color: var(--gold); }
-    .journal-subtitle-line {
-      font-family: var(--font-display);
-      font-size: clamp(0.85rem, 2vw, 1.1rem);
-      font-style: italic;
-      color: rgba(244,240,232,0.4);
-      letter-spacing: 0.02em;
-    }
-    .journal-metrics {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      margin-top: 1.5rem;
-    }
-    .metric { text-align: left; }
-    .metric-val {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      font-weight: 300;
-      color: var(--gold);
-      line-height: 1;
-    }
-    .metric-label {
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      color: rgba(244,240,232,0.4);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    /* Journal navigation */
-    .journal-nav {
-      display: flex;
-      gap: 0;
-      border-bottom: 1px solid rgba(200,169,110,0.15);
-      margin-bottom: 2.5rem;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .journal-nav::-webkit-scrollbar { display: none; }
-    .jnav-btn {
-      padding: 0.6rem 1rem;
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(244,240,232,0.35);
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      white-space: nowrap;
-      transition: all 0.3s;
-    }
-    .jnav-btn.active { color: var(--teal-light); border-bottom-color: var(--teal-light); }
-    .jnav-btn:hover:not(.active) { color: rgba(244,240,232,0.65); }
-
-    /* Articles list */
-    .articles-list { display: grid; gap: 1px; background: rgba(200,169,110,0.08); }
-    .article-item {
-      background: rgba(4,8,16,0.95);
-      padding: 1.5rem 1.8rem;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 1.4rem;
-      align-items: start;
-      transition: background 0.3s;
-      cursor: default;
-    }
-    @media (max-width: 640px) {
-      .article-item { grid-template-columns: auto 1fr; }
-      .article-meta-right { display: none; }
-    }
-    .article-item:hover { background: rgba(26,107,107,0.08); }
-    .art-issue {
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      color: var(--teal-light);
-      letter-spacing: 0.1em;
-      white-space: nowrap;
-      padding-top: 2px;
-    }
-    .art-title {
-      font-family: var(--font-display);
-      font-size: clamp(0.85rem, 1.5vw, 1.05rem);
-      font-weight: 400;
-      color: var(--ivory);
-      margin-bottom: 0.3rem;
-      line-height: 1.3;
-    }
-    .art-authors {
-      font-size: 0.65rem;
-      color: rgba(244,240,232,0.45);
-      margin-bottom: 0.4rem;
-    }
-    .art-keywords {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-    .keyword {
-      font-family: var(--font-mono);
-      font-size: 0.52rem;
-      color: var(--gold);
-      background: rgba(200,169,110,0.08);
-      padding: 2px 6px;
-      border-radius: 1px;
-      letter-spacing: 0.08em;
-    }
-    .article-meta-right {
-      text-align: right;
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      color: rgba(244,240,232,0.3);
-      line-height: 1.8;
-    }
-    .art-doi { color: var(--teal-light); }
-
-    /* Submit panel */
-    .submit-steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 1px;
-      background: rgba(200,169,110,0.1);
-      border: 1px solid rgba(200,169,110,0.1);
-      margin-bottom: 2rem;
-    }
-    .step-card {
-      background: rgba(4,8,16,0.95);
-      padding: 1.4rem 1.6rem;
-      position: relative;
-      transition: background 0.3s;
-    }
-    .step-card:hover { background: rgba(26,107,107,0.1); }
-    .step-n {
-      font-family: var(--font-mono);
-      font-size: 2.5rem;
-      color: rgba(200,169,110,0.1);
-      font-weight: 700;
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-    .step-title { font-size: 0.72rem; font-weight: 700; color: var(--ivory); margin-bottom: 0.3rem; }
-    .step-desc { font-size: 0.65rem; color: rgba(244,240,232,0.45); line-height: 1.5; }
-
-    /* Scope grid */
-    .scope-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1px;
-      background: rgba(200,169,110,0.08);
-      border: 1px solid rgba(200,169,110,0.08);
-      margin-bottom: 2rem;
-    }
-    .scope-item {
-      background: rgba(4,8,16,0.95);
-      padding: 1.2rem 1.4rem;
-      font-size: 0.72rem;
-      color: rgba(244,240,232,0.6);
-      transition: background 0.3s;
-      cursor: default;
-    }
-    .scope-item:hover { background: rgba(26,107,107,0.08); color: var(--ivory); }
-    .scope-item strong { display: block; color: var(--teal-light); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; }
-
-    /* Editorial board */
-    .editors-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1px;
-      background: rgba(200,169,110,0.08);
-      border: 1px solid rgba(200,169,110,0.08);
-    }
-    .editor-card {
-      background: rgba(4,8,16,0.95);
-      padding: 1.2rem 1.5rem;
-      transition: background 0.3s;
-    }
-    .editor-card:hover { background: rgba(42,157,157,0.08); }
-    .ed-role {
-      font-family: var(--font-mono);
-      font-size: 0.52rem;
-      color: var(--teal-light);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 0.4rem;
-    }
-    .ed-name { font-size: 0.78rem; font-weight: 700; color: var(--ivory); margin-bottom: 0.2rem; }
-    .ed-affil { font-size: 0.62rem; color: rgba(244,240,232,0.4); line-height: 1.5; margin-bottom: 0.3rem; }
-    .ed-orcid { font-family: var(--font-mono); font-size: 0.52rem; color: var(--gold); }
-    .ed-orcid a { color: inherit; }
-    .ed-orcid a:hover { color: var(--teal-light); }
-
-    /* Contact banner */
-    .contact-banner {
-      border: 1px solid rgba(200,169,110,0.2);
-      background: rgba(200,169,110,0.04);
-      padding: 2rem 2.5rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
-    .contact-banner p {
-      font-size: 0.78rem;
-      color: rgba(244,240,232,0.6);
-      line-height: 1.6;
-    }
-    .contact-banner strong { color: var(--gold-light); }
-
-    /* ═══════════════════════════════════════════
-       UTILITY
-    ═══════════════════════════════════════════ */
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(200,169,110,0.2), transparent);
-      margin: 2.5rem 0;
-    }
-
-    /* Notification toast */
-    #toast {
-      position: fixed;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--teal);
-      color: white;
-      padding: 0.6rem 1.5rem;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      border-radius: 2px;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.4s var(--ease-out);
-      z-index: 9999;
-    }
-    #toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* Responsive tweaks */
-    @media (max-width: 768px) {
-      .s1-inner, .s2-inner, .s3-inner {
-        padding: 76px 1.25rem 60px;
-      }
-      .nace-grid, .hover-gallery {
-        grid-template-columns: 1fr;
-      }
-      .form-row { grid-template-columns: 1fr; }
-      .conf-tabs { gap: 0; }
-    }
-
-    /* Accessibility */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-    }
-  </style>
+/* ── SLIDE 5 — HEALTH + AGRI INTELLIGENCE ─────────────── */
+#slide-5{
+  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
+  background:var(--paper2);
+}
+.s5-inner{max-width:1400px;margin:0 auto}
+.s5-headline{
+  font-family:var(--display);
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  line-height:0.95;
+  letter-spacing:0.04em;
+  color:var(--ink);
+  margin-bottom:0.5rem;
+}
+.s5-sub{
+  font-family:var(--mono);
+  font-size:0.62rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:2.5rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid var(--rule);
+}
+.dual-table-wrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  border:0.5px solid var(--rule);
+}
+@media(max-width:800px){.dual-table-wrap{grid-template-columns:1fr}}
+.dual-col{
+  padding:0;
+  overflow:hidden;
+}
+.dual-col:first-child{
+  border-right:0.5px solid var(--rule);
+}
+.dual-col-header{
+  padding:1rem 1.5rem;
+  background:var(--ink);
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:1rem;
+}
+.dual-col-header h3{
+  font-family:var(--display);
+  font-size:1.6rem;
+  letter-spacing:0.06em;
+  color:var(--paper);
+}
+.dual-col-header span{
+  font-family:var(--mono);
+  font-size:0.58rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--gold2);
+}
+.intel-table{
+  width:100%;
+  border-collapse:collapse;
+}
+.intel-table tbody tr{
+  border-bottom:0.5px solid var(--rule);
+  transition:background .2s;
+}
+.intel-table tbody tr:hover{background:var(--paper)}
+.intel-table td{
+  padding:0.85rem 1.5rem;
+  vertical-align:top;
+  font-size:0.9rem;
+  font-weight:300;
+  color:var(--ink2);
+  line-height:1.4;
+}
+.intel-table td:first-child{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:0.95rem;
+  color:var(--ink);
+  font-weight:400;
+  min-width:160px;
+  border-right:0.5px solid var(--rule2);
+}
+.intel-value{
+  font-family:var(--mono);
+  font-size:0.65rem;
+  letter-spacing:0.08em;
+  color:var(--ink);
+  display:block;
+  margin-bottom:0.2rem;
+}
+.intel-nace{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:0.58rem;
+  letter-spacing:0.1em;
+  color:var(--gold);
+  border:0.5px solid var(--gold);
+  padding:0.1rem 0.4rem;
+  margin-top:0.5rem;
+}
+.intel-table-head td{
+  font-family:var(--mono);
+  font-size:0.58rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  padding:0.6rem 1.5rem;
+  background:var(--paper);
+  border-bottom:0.5px solid var(--rule) !important;
+  font-style:normal !important;
+  font-weight:400 !important;
+}
+</style>
 </head>
 <body>
 
-<!-- ═══ GLOBAL NAV ═══ -->
-<nav id="global-nav">
-  <div class="nav-logo">Scientiae<span>-Naturalis</span></div>
-  <div class="nav-dots">
-    <button class="nav-dot active" onclick="goTo(0)" aria-label="Enterprise"></button>
-    <button class="nav-dot" onclick="goTo(1)" aria-label="Conference"></button>
-    <button class="nav-dot" onclick="goTo(2)" aria-label="Journal"></button>
-  </div>
-  <nav class="nav-links">
-    <a href="#" onclick="goTo(0);return false;">Enterprise</a>
-    <a href="#" onclick="goTo(1);return false;">Conference</a>
-    <a href="#" onclick="goTo(2);return false;">Journal</a>
-    <a href="mailto:procurement@scientiae-naturalis.org">Contact</a>
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">
+    Scientiae Naturalis
+    <span>Berlin, Germany</span>
+  </a>
+  <nav class="links" id="main-nav">
+    <a href="#" data-slide="0" class="nav-slide">Overview</a>
+    <a href="#" data-slide="1" class="nav-slide">Services</a>
+    <a href="#" data-slide="2" class="nav-slide">Organisation</a>
+    <a href="#" data-slide="3" class="nav-slide">NACE Matrix</a>
+    <a href="#" data-slide="4" class="nav-slide">Intelligence</a>
+    <a href="mailto:procurement@scientiae-naturalis.org" class="nav-cta">Contact</a>
   </nav>
-</nav>
+  <div class="hamburger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</header>
 
-<!-- ═══ CAROUSEL ═══ -->
-<div id="carousel-shell">
-  <div id="slides-track">
+<!-- CAROUSEL -->
+<div class="carousel-outer">
+  <div class="slides-track" id="track">
 
-    <!-- ════════════════════════════════════════
-         SLIDE 1 — ENTERPRISE
-    ════════════════════════════════════════ -->
-    <section class="slide" id="slide-1">
-      <div class="s1-inner">
+    <!-- SLIDE 1 — IDENTITY & OVERVIEW -->
+    <section class="slide" id="slide-1" aria-label="Company Overview">
+      <div class="s1-grid">
 
-        <div class="s1-eyebrow"> Scientiae-Naturalis GmbH · DE </div>
+        <!-- LEFT: Headline + description -->
+        <div>
+          <div class="s1-tagline">Knowledge Arbitrage</div>
+          <h1 class="s1-headline">
+            Scientiae<br>Naturalis
+            <em>High-Stakes Intelligence for Complex Systems</em>
+          </h1>
+          <p class="s1-body" style="margin-top:2rem">
+            Scientiae Naturalis is a Berlin-based professional and scientific advisory firm specialising in High-Stakes Knowledge Arbitrage. We operate at the intersection of natural science, policy, data systems, and institutional capacity — translating rigorous research into decision-grade intelligence for governments, international organisations, and private-sector clients.
+          </p>
+          <p class="s1-body">
+            Our work spans four strategic industries: Health, Food, Environment, and Education. Across these domains, we design, implement, and evaluate complex programmes where the cost of poor information is institutional, economic, or humanitarian.
+          </p>
 
-        <h1 class="s1-headline">
-          High-Stake<br>
-          <em>Knowledge Arbitrage</em>
-        </h1>
-        <p class="s1-subhead">Information asymmetry as a strategic asset — transforming scientific intelligence into competitive advantage.</p>
-        <p class="s1-descriptor">
-          Scientiae-Naturalis GmbH · (VAT DE123456789) · is an R&D enterprise founded by university professors and spin-off founders in Germany. We operate at the intersection of research, consultancy, and knowledge brokerage — converting domain-specific scientific intelligence into high-value decisions for enterprise clients.
-        </p>
-
-        <!-- NACE Codes -->
-        <p class="services-label">Regulatory Classification — NACE Rev. 2.1</p>
-        <div class="nace-grid">
-          <div class="nace-card">
-            <div class="nace-code">NACE 72.19</div>
-            <div class="nace-title">Research in Natural Sciences</div>
-            <div class="nace-desc">Applied and fundamental R & D across life sciences, chemistry, and environmental systems. Hypothesis-driven protocols. Proprietary datasets.</div>
+          <div class="nace-block">
+            <h4>Primary NACE Classification</h4>
+            <div class="nace-row">
+              <span class="nace-code">72.10</span>
+              <span class="nace-desc">R&D — Natural Sciences &amp; Engineering (anchor)</span>
+            </div>
+            <div class="nace-row">
+              <span class="nace-code">Section M</span>
+              <span class="nace-desc">Professional, scientific and technical activities</span>
+            </div>
+            <div class="nace-row">
+              <span class="nace-code">Section P</span>
+              <span class="nace-desc">Education</span>
+            </div>
+            <div class="nace-row">
+              <span class="nace-code">Section E</span>
+              <span class="nace-desc">Environmental services</span>
+            </div>
+            <div class="nace-row">
+              <span class="nace-code">Sections A–D</span>
+              <span class="nace-desc">Natural resources &amp; energy systems</span>
+            </div>
           </div>
-          <div class="nace-card">
-            <div class="nace-code">NACE 74.90</div>
-            <div class="nace-title">Technical Consultancy</div>
-            <div class="nace-desc">Specialist advisory on complex scientific-technical challenges. Regulatory intelligence. Patent landscape analysis. Due diligence.</div>
+
+          <div class="s1-sectors">
+            <div class="s1-sector">Education Data + Policy Integration</div>
+            <div class="s1-sector">Digital Transformation of Education</div>
+            <div class="s1-sector">Inclusive &amp; Gender-Responsive Systems</div>
+            <div class="s1-sector">TVET + Labour Market Alignment</div>
+            <div class="s1-sector">Programme Implementation Outsourcing</div>
+            <div class="s1-sector">Food Security Early Warning Systems</div>
+            <div class="s1-sector">Global Commodity &amp; Price Intelligence</div>
+            <div class="s1-sector">Traceability &amp; Supply Chain Transparency</div>
+            <div class="s1-sector">Climate-Agriculture Data Systems</div>
+            <div class="s1-sector">Agri-Food Data Platform Ownership</div>
           </div>
-          <div class="nace-card">
-            <div class="nace-code">NACE 70.22</div>
-            <div class="nace-title">Management Consultancy</div>
-            <div class="nace-desc">Strategic direction grounded in scientific evidence. R&amp;D portfolio design. Knowledge management systems. Innovation roadmapping.</div>
+
+          <div class="s1-legal">
+            <div class="s1-legal-name">Scientiae Naturalis GmbH</div>
+            <div class="s1-legal-vat">VAT DE123456789</div>
+            <p class="s1-legal-body">An R&amp;D enterprise founded by university professors and spin-off founders in Germany. We operate at the intersection of research, consultancy, and knowledge brokerage — converting domain-specific scientific intelligence into high-value decisions for enterprise clients.</p>
           </div>
         </div>
 
-        <!-- Hover Gallery — Services -->
-        <p class="services-label">Core Service Lines</p>
-        <div class="hover-gallery">
-          <div class="hg-item">
-            <span class="hg-num">01</span>
-            <div class="hg-title">Information Arbitrage</div>
-            <div class="hg-body">We identify scientific knowledge gaps between domains and convert them into proprietary intelligence packages for life science enterprises, investors, and regulators.</div>
+        <!-- RIGHT: Hover gallery of strategic domains -->
+        <div class="gallery-col">
+          <div class="gallery-item">
+            <div class="gallery-item-header">
+              <h3>Health Industry</h3>
+              <span class="gi-tag">Arbitrage Domain</span>
+            </div>
+            <div class="gallery-body">
+              <div class="gallery-body-inner">
+                <p>Health product policy, immunisation and vaccine intelligence, regulatory prequalification, digital health infrastructure, health emergency risk assessment, and pharmaceutical norms and standards advisory. We translate epidemiological and regulatory data into procurement-grade decision support for ministries of health and multilateral agencies.</p>
+              </div>
+            </div>
           </div>
-          <div class="hg-item">
-            <span class="hg-num">02</span>
-            <div class="hg-title">R&amp;D Landscape Analysis</div>
-            <div class="hg-body">Systematic mapping of research frontiers. Competitor pipeline surveillance. White space identification. Technology readiness assessment (TRL 1–9).</div>
+          <div class="gallery-item">
+            <div class="gallery-item-header">
+              <h3>Food Industry</h3>
+              <span class="gi-tag">Arbitrage Domain</span>
+            </div>
+            <div class="gallery-body">
+              <div class="gallery-body-inner">
+                <p>Food and nutrition systems, agri-food economics and policy, food standards and zoonotic disease monitoring, nutrition and food safety, and supply chain traceability. We operate commodity and price intelligence platforms and early warning systems for food security crises at regional and global scale.</p>
+              </div>
+            </div>
           </div>
-          <div class="hg-item">
-            <span class="hg-num">03</span>
-            <div class="hg-title">Scientific Advisory</div>
-            <div class="hg-body">Access to a curated network of domain experts. Rapid-response technical review panels. Expert witness services. Grant due diligence.</div>
+          <div class="gallery-item">
+            <div class="gallery-item-header">
+              <h3>Environment Industry</h3>
+              <span class="gi-tag">Arbitrage Domain</span>
+            </div>
+            <div class="gallery-body">
+              <div class="gallery-body-inner">
+                <p>Climate-agriculture data systems, natural resource management, environmental impact and strategic assessments, biodiversity monitoring, remote sensing analytics, and renewable energy systems. We build and operate data platforms for climate risk modelling, ESG reporting, and sustainable production streams.</p>
+              </div>
+            </div>
           </div>
-          <div class="hg-item">
-            <span class="hg-num">04</span>
-            <div class="hg-title">Knowledge Transfer</div>
-            <div class="hg-body">University–industry liaison. Technology transfer facilitation. Licensing strategy. Spin-off formation consultancy.</div>
+          <div class="gallery-item">
+            <div class="gallery-item-header">
+              <h3>Education Industry</h3>
+              <span class="gi-tag">Arbitrage Domain</span>
+            </div>
+            <div class="gallery-body">
+              <div class="gallery-body-inner">
+                <p>Education management information systems (EMIS), policy advisory, teacher training and workforce management, digital learning infrastructure, inclusive and gender-responsive education design, TVET alignment, and large-scale programme implementation for Erasmus+, UNESCO, and World Bank frameworks. Full-cycle delivery from strategy to evaluation.</p>
+              </div>
+            </div>
           </div>
-          <div class="hg-item">
-            <span class="hg-num">05</span>
-            <div class="hg-title">Strategic Publishing</div>
-            <div class="hg-body">High-impact scientific dissemination. Journal management (Scientiae-Naturalis). Conference organisation. Open-access strategy design.</div>
+          <div class="gallery-item">
+            <div class="gallery-item-header">
+              <h3>SDG Alignment</h3>
+              <span class="gi-tag">Framework</span>
+            </div>
+            <div class="gallery-body">
+              <div class="gallery-body-inner">
+                <p>All service lines are structured around verifiable SDG 4 (quality education), SDG 2 (zero hunger), SDG 3 (good health), and SDG 13 (climate action) outcomes. We provide benchmarking, indicator monitoring, and cross-country comparability frameworks aligned to PISA-equivalent international assessment systems.</p>
+              </div>
+            </div>
           </div>
-          <div class="hg-item">
-            <span class="hg-num">06</span>
-            <div class="hg-title">Policy &amp; Regulation</div>
-            <div class="hg-body">Scientific input for EU regulatory processes. HTA submissions. Position papers. Parliamentary briefings. EMA &amp; BfArM alignment strategy.</div>
+          <div class="gallery-item">
+            <div class="gallery-item-header">
+              <h3>Programme Outsourcing</h3>
+              <span class="gi-tag">Implementation</span>
+            </div>
+            <div class="gallery-body">
+              <div class="gallery-body-inner">
+                <p>Full outsourcing of multi-country project coordination, grant writing and proposal engineering, KPI dashboard systems, impact assessment, and independent project evaluation of EACEA-type programmes. We assume complete operational and reporting responsibility for consortium-led projects across jurisdictions.</p>
+              </div>
+            </div>
           </div>
-        </div>
-
-        <div class="s1-cta">
-          <a href="mailto:procurement@scientiae-naturalis.org" class="btn-primary">Request Engagement ↗</a>
-          <a href="#" onclick="goTo(2);return false;" class="btn-ghost">View Journal →</a>
-        </div>
-
-        <div class="s1-foot">
-          <div class="s1-foot-item"><strong>Jurisdiction</strong> Berlin, Germany (GmbH) · EU</div>
-          <div class="s1-foot-item"><strong>Email</strong>procurement@scientiae-naturalis.org</div>
-          <div class="s1-foot-item"><strong>NACE Codes</strong>72.19 · 74.90 · 70.22</div>
-          
+          <div class="gallery-contact">
+            <div class="gc-label">Procurement &amp; Institutional Enquiries</div>
+            <a class="gc-email" href="mailto:procurement@scientiae-naturalis.org">procurement@scientiae-naturalis.org</a>
+            <div class="gc-hq">Berlin, Germany &mdash; Founded under German GmbH law</div>
+          </div>
         </div>
 
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════
-         SLIDE 2 — CONFERENCE
-    ════════════════════════════════════════ -->
-    <section class="slide" id="slide-2">
+    <!-- SLIDE 2 — SERVICES -->
+    <section class="slide" id="slide-2" aria-label="Services">
       <div class="s2-inner">
+        <div class="slide-label">Service Architecture</div>
+        <h2 class="s2-headline">Knowledge<br>Service Lines</h2>
+        <div class="services-grid">
 
-        <div class="conf-badge">ISCC 2026 · Remote Conference · Registration Open</div>
+          <div class="svc-block">
+            <div class="svc-code">A — NACE M72 / M71 / M74</div>
+            <h3>Natural Sciences R&amp;D + Scientific Infrastructure</h3>
+            <ul>
+              <li>Contract R&amp;D (TRL 1–7), Applied research consortia</li>
+              <li>Lab-based experimentation, validation, DNA sequencing, bioinformatics</li>
+              <li>Scientific data modelling and simulation</li>
+              <li>Laboratory access, equipment calibration, metrology</li>
+              <li>Technology transfer, patent landscaping, IP strategy</li>
+              <li>Feasibility studies, scientific due diligence, risk modelling</li>
+            </ul>
+          </div>
 
-        <h1 class="conf-title">
-          International Scientific<br>
-          <em>Conference on AI in</em><br>
-          Bioethics &amp; Drug Discovery
-        </h1>
-        <p class="conf-subtitle">Scientiae-Naturalis International Conference on Natural Sciences — ISCC 2026</p>
+          <div class="svc-block">
+            <div class="svc-code">B — NACE P85 / M72 / N82</div>
+            <h3>Capacity Building in Science &amp; Engineering</h3>
+            <ul>
+              <li>MSc/PhD-level modular training, micro-credentials in STEM</li>
+              <li>Industry-academia blended and digital lab training</li>
+              <li>AI / data science for scientists; GLP/GMP compliance</li>
+              <li>University modernisation, curriculum design, accreditation</li>
+              <li>Staff/student mobility management, fellowship administration</li>
+              <li>Grant management: Erasmus+, Horizon; KPI monitoring systems</li>
+            </ul>
+          </div>
 
-        <div class="conf-meta">
-          <div class="conf-meta-item">
-            <div class="icon">📅</div>
-            24–26 April 2026
+          <div class="svc-block">
+            <div class="svc-code">C — NACE E36–39 / M71 / M72 / A / B / D</div>
+            <h3>Environmental Challenges &amp; Natural Resources</h3>
+            <ul>
+              <li>Environmental Impact Assessments, Strategic Environmental Assessments</li>
+              <li>Climate risk modelling, carbon footprint, ESG reporting</li>
+              <li>Forestry, fisheries, biodiversity, geological exploration</li>
+              <li>Water resource management, renewable energy feasibility</li>
+              <li>Remote sensing, GIS, satellite data analytics</li>
+              <li>Biodiversity monitoring platforms, smart grid modelling</li>
+            </ul>
           </div>
-          <div class="conf-meta-item">
-            <div class="icon">🌐</div>
-            Fully Remote (Video &amp; Poster)
+
+          <div class="svc-block">
+            <div class="svc-code">D — NACE J / M / N / K</div>
+            <h3>Crosscutting: Digital, Policy &amp; Innovation</h3>
+            <ul>
+              <li>Scientific software development, AI for science (AI4S)</li>
+              <li>Big data platforms, open science repositories</li>
+              <li>Startup incubation, living labs, TRL scaling (4–9)</li>
+              <li>Science-policy interface advisory, EU regulatory alignment</li>
+              <li>Standardisation, certification, stakeholder engagement</li>
+              <li>Scientific communication strategies, citizen science</li>
+            </ul>
           </div>
-          <div class="conf-meta-item">
-            <div class="icon">🔬</div>
-            Natural Sciences Focus
+
+          <div class="svc-block">
+            <div class="svc-code">E — NACE N82 / M70 / M74 / P85</div>
+            <h3>Programme Implementation</h3>
+            <ul>
+              <li>Multi-country consortium coordination and deliverable management</li>
+              <li>Risk, quality management, independent project evaluation</li>
+              <li>Financial audits, compliance, impact assessment</li>
+              <li>KPI dashboards, impact tracking, data collection frameworks</li>
+              <li>Proposal design: Horizon / Erasmus+; budget structuring</li>
+              <li>Partner search, consortium building, grant writing</li>
+            </ul>
           </div>
-          <div class="conf-meta-item">
-            <div class="icon">🏛</div>
-            Organised by Scientiae-Naturalis GmbH · ·
+
+          <div class="svc-block">
+            <div class="svc-code">F — Information Arbitrage</div>
+            <h3>Other High-Stakes Arbitrage Services</h3>
+            <ul>
+              <li>Integrated science + policy translation (M72 + M70)</li>
+              <li>Climate-tech validation, TRL certification, carbon accounting</li>
+              <li>Digital science infrastructure and open science compliance</li>
+              <li>Modular, stackable micro-certification systems</li>
+              <li>Full outsourcing of programme-level project coordination</li>
+              <li>Institutional transformation (beyond training delivery)</li>
+            </ul>
           </div>
+
+          <div class="svc-block">
+            <div class="svc-code">G–K — NACE P85</div>
+            <h3>Education Delivery &amp; Transformation</h3>
+            <ul>
+              <li>Core education (all levels): curriculum design, CBL, accreditation</li>
+              <li>Early Childhood Education: frameworks, assessment tools, SDG 4.2</li>
+              <li>Higher Education: university modernisation, internationalisation</li>
+              <li>TVET: skills frameworks, dual education, apprenticeships (SDG 4.3–4.4)</li>
+              <li>Adult education, reskilling/upskilling, lifelong learning systems</li>
+              <li>Education in emergencies: rapid continuity, remote deployment</li>
+            </ul>
+          </div>
+
+          <div class="svc-block">
+            <div class="svc-code">H — NACE P85 / M74 / N88</div>
+            <h3>Targeted Inclusion &amp; Equity Services</h3>
+            <ul>
+              <li>Universal access policy, education financing, inclusion mapping</li>
+              <li>Gender-responsive education system design, gender parity monitoring</li>
+              <li>Safe school frameworks, gender-sensitive curriculum development</li>
+              <li>Special education integration, assistive learning technologies</li>
+              <li>Inclusive pedagogy training, accessibility audits</li>
+              <li>Scholarship and subsidy programme design</li>
+            </ul>
+          </div>
+
+          <div class="svc-block">
+            <div class="svc-code">I–J — NACE P85 / M72</div>
+            <h3>Education Content &amp; Teacher Capital</h3>
+            <ul>
+              <li>National literacy campaigns, numeracy assessment tools</li>
+              <li>Civic education, democracy curricula, peace education</li>
+              <li>School health programmes, WASH systems integration</li>
+              <li>Climate education curricula, green skills training (SDG 4.7)</li>
+              <li>Continuous Professional Development, digital pedagogy</li>
+              <li>Teacher recruitment systems, workforce planning, CPD</li>
+            </ul>
+          </div>
+
+          <div class="svc-block">
+            <div class="svc-code">K–M — NACE M70 / N82</div>
+            <h3>Educational Management &amp; Governance</h3>
+            <ul>
+              <li>National education strategy development, regulatory alignment</li>
+              <li>School management systems, institutional governance frameworks</li>
+              <li>Large-scale programme management: Erasmus+, UNESCO, World Bank</li>
+              <li>Multi-country coordination, grant management and reporting</li>
+              <li>Qualification frameworks (NQF/EQF), competency frameworks</li>
+              <li>Benchmarking, SDG 4 indicator monitoring, PISA-aligned systems</li>
+            </ul>
+          </div>
+
+          <div class="svc-block">
+            <div class="svc-code">L — NACE J62–63 / M72 / N82</div>
+            <h3>Data, Digital &amp; Knowledge Systems</h3>
+            <ul>
+              <li>Education Management Information Systems (EMIS)</li>
+              <li>Data collection platforms, policy decision-making dashboards</li>
+              <li>Learning analytics, predictive dropout models, AI personalisation</li>
+              <li>LMS, cloud learning environments, EdTech platforms</li>
+              <li>Connectivity solutions, digital education infrastructure</li>
+              <li>Open education resources (OER), knowledge hubs</li>
+            </ul>
+          </div>
+
+          <div class="svc-block">
+            <div class="svc-code">N — NACE M72 / J63 / N82</div>
+            <h3>Knowledge Sharing &amp; Global Cooperation</h3>
+            <ul>
+              <li>Open education resources, knowledge repositories and dashboards</li>
+              <li>Multi-stakeholder coalition management</li>
+              <li>South-South cooperation programmes</li>
+              <li>Academic and institutional network management</li>
+              <li>Education research studies, impact evaluation</li>
+              <li>Policy experimentation labs and evidence systems</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3 — ORGANISATION -->
+    <section class="slide" id="slide-3" aria-label="Organisation">
+      <div class="s3-inner">
+        <div class="slide-label">Corporate Structure</div>
+        <h2 class="s3-headline">Divisional<br>Organisation</h2>
+        <p class="s3-sub">Scientiae Naturalis operates through specialised thematic and functional divisions, structured for multi-sector delivery across global mandates.</p>
+
+        <div class="divisions-grid">
+          <div class="div-card"><span class="div-code">PRCPMD</span><span class="div-name">Planning, Resource Coordination and Peer Monitoring</span></div>
+          <div class="div-card"><span class="div-code">PSD</span><span class="div-name">Project Support Division</span></div>
+          <div class="div-card"><span class="div-code">HRTMD</span><span class="div-name">Human Resource and Talent Management Division</span></div>
+          <div class="div-card"><span class="div-code">LED</span><span class="div-name">Legal and Ethics Division</span></div>
+          <div class="div-card"><span class="div-code">PSSD</span><span class="div-name">Procurement and Supply Services Division</span></div>
+          <div class="div-card"><span class="div-code">DADD</span><span class="div-name">Data and Analytics Division</span></div>
+          <div class="div-card"><span class="div-code">SD</span><span class="div-name">Statistics Division</span></div>
+          <div class="div-card"><span class="div-code">TICD</span><span class="div-name">Transformation, Implementation and Change Division</span></div>
+          <div class="div-card"><span class="div-code">ECCHD</span><span class="div-name">Environment, Climate Change and Health Division</span></div>
+          <div class="div-card"><span class="div-code">NFSD</span><span class="div-name">Nutrition and Food Safety Division</span></div>
+          <div class="div-card"><span class="div-code">FND</span><span class="div-name">Food and Nutrition Division</span></div>
+          <div class="div-card"><span class="div-code">ESF</span><span class="div-name">Agrifood Systems and Food Safety Division</span></div>
+          <div class="div-card"><span class="div-code">ESAD</span><span class="div-name">Agrifood Economics and Policy Division</span></div>
+          <div class="div-card"><span class="div-code">FSZDD</span><span class="div-name">Food Standards and Zoonotic Diseases Division</span></div>
+          <div class="div-card"><span class="div-code">AKH</span><span class="div-name">Agroecology Knowledge Hub</span></div>
+          <div class="div-card"><span class="div-code">HPPSD</span><span class="div-name">Health Product Policy and Standards Division</span></div>
+          <div class="div-card"><span class="div-code">RPD</span><span class="div-name">Regulation and Prequalifications Division</span></div>
+          <div class="div-card"><span class="div-code">QANSD</span><span class="div-name">Quality Assurance of Norms and Standards Division</span></div>
+          <div class="div-card"><span class="div-code">DHID</span><span class="div-name">Digital Health and Innovation Division</span></div>
+          <div class="div-card"><span class="div-code">RFHD</span><span class="div-name">Research for Health Division</span></div>
+          <div class="div-card"><span class="div-code">IVB</span><span class="div-name">Immunization, Vaccines and Biologicals Division</span></div>
+          <div class="div-card"><span class="div-code">HIMD</span><span class="div-name">Health Emergency and Risk Assessment Division</span></div>
+          <div class="div-card"><span class="div-code">ED</span><span class="div-name">Evaluation Division</span></div>
+          <div class="div-card"><span class="div-code">RTGED</span><span class="div-name">Rural Transformation and Gender Equality Division</span></div>
+          <div class="div-card"><span class="div-code">DYW</span><span class="div-name">Division of Youth and Women</span></div>
+          <div class="div-card"><span class="div-code">NRSPSD</span><span class="div-name">Natural Resources and Sustainable Production Stream</span></div>
+          <div class="div-card"><span class="div-code">NSD</span><span class="div-name">Natural Science Division</span></div>
+          <div class="div-card"><span class="div-code">HSSD</span><span class="div-name">Human and Social Science Division</span></div>
+          <div class="div-card"><span class="div-code">CICTD</span><span class="div-name">Culture and ICT Division</span></div>
+          <div class="div-card"><span class="div-code">ED</span><span class="div-name">Education and Integrated SDG4 Division</span></div>
         </div>
 
-        <!-- Tab Navigation -->
-        <div class="conf-tabs">
-          <button class="tab-btn active" onclick="switchTab(event,'program')">Programme</button>
-          <button class="tab-btn" onclick="switchTab(event,'advisory')">Advisory Committee</button>
-          <button class="tab-btn" onclick="switchTab(event,'registration')">Registration</button>
-          <button class="tab-btn" onclick="switchTab(event,'payment')">Payment</button>
-          <button class="tab-btn" onclick="switchTab(event,'downloads')">Downloads</button>
-        </div>
-
-        <!-- PROGRAMME -->
-        <div class="tab-panel active" id="panel-program">
-          <p class="section-eyebrow">Scientific Programme — ISCC 2026</p>
-          <h2 class="section-title">Bioethics and Drug Discovery in AI Technology</h2>
-          <div class="theme-list">
-            <div class="theme-item">
-              <div class="theme-num">THEME 01</div>
-              <div class="theme-text">
-                <h4>Fundamental Elements of AI in Drug R&amp;D</h4>
-                <p>Machine learning architectures, data ontologies, and computational modelling as the three foundational pillars of AI-driven pharmaceutical research. Examining transformer models, graph neural networks, and generative chemistry.</p>
-              </div>
-            </div>
-            <div class="theme-item">
-              <div class="theme-num">THEME 02</div>
-              <div class="theme-text">
-                <h4>Applications of AI in Drug Discovery</h4>
-                <p>Target identification, virtual screening, de novo molecular generation, ADMET prediction, and lead optimisation. Case studies from academia and biotech. Validation pipelines and wet-lab integration.</p>
-              </div>
-            </div>
-            <div class="theme-item">
-              <div class="theme-num">THEME 03</div>
-              <div class="theme-text">
-                <h4>AI Applications Across the Pharmaceutical Industry</h4>
-                <p>Clinical trial design optimisation, pharmacovigilance, real-world evidence mining, drug repurposing, manufacturing process control, and regulatory submission automation.</p>
-              </div>
-            </div>
-            <div class="theme-item">
-              <div class="theme-num">THEME 04</div>
-              <div class="theme-text">
-                <h4>Challenges and Potential Solutions in AI for Drug R&amp;D</h4>
-                <p>Data scarcity, model interpretability, bias in training sets, regulatory acceptance, bioethical implications of autonomous decision-making, and reproducibility standards. Proposed governance frameworks.</p>
-              </div>
-            </div>
+        <div class="regional-section">
+          <div>
+            <span class="r-label">Regional Office</span>
+            <span class="r-name">Africa</span>
           </div>
-
-          <div class="divider"></div>
-
-          <p class="section-eyebrow">Presentation Formats</p>
-          <div class="hover-gallery" style="max-width:100%;">
-            <div class="hg-item">
-              <span class="hg-num">FORMAT A</span>
-              <div class="hg-title">Video Presentation</div>
-              <div class="hg-body">15-minute recorded or live talk with Q&amp;A. Abstract &lt;300 words. Submission via conference portal. Acceptance notification within 3 weeks.</div>
-            </div>
-            <div class="hg-item">
-              <span class="hg-num">FORMAT B</span>
-              <div class="hg-title">Poster Presentation</div>
-              <div class="hg-body">Digital poster in A0 portrait format (PDF). Async discussion board. Featured in Book of Abstracts. Optional 3-minute video pitch.</div>
-            </div>
-            <div class="hg-item">
-              <span class="hg-num">FORMAT C</span>
-              <div class="hg-title">Invited Keynote</div>
-              <div class="hg-body">30–45 minutes. By invitation of Scientific Advisory Committee. Open access recording published post-conference.</div>
-            </div>
+          <div>
+            <span class="r-label">Regional Office</span>
+            <span class="r-name">Asia and the Pacific</span>
           </div>
-        </div>
-
-        <!-- ADVISORY COMMITTEE -->
-        <div class="tab-panel" id="panel-advisory">
-          <p class="section-eyebrow">International Scientific Advisory Committee — ISCC 2026</p>
-          <h2 class="section-title">Scientific Leadership</h2>
-          <div class="advisory-grid">
-            <div class="scientist-card">
-              <div class="sci-name">Prof. Yoshua Bengio</div>
-              <div class="sci-inst">Université de Montréal, Mila Quebec AI Institute, Canada</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0002-7213-0858" target="_blank" rel="noopener">0000-0002-7213-0858</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Prof. Daphne Koller</div>
-              <div class="sci-inst">Stanford University / insitro Inc., USA</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0002-1762-3800" target="_blank" rel="noopener">0000-0002-1762-3800</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Prof. Atul Butte</div>
-              <div class="sci-inst">UCSF Bakar Computational Health Sciences Institute, USA</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0002-5692-4609" target="_blank" rel="noopener">0000-0002-5692-4609</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Prof. Gianluca Valentini</div>
-              <div class="sci-inst">Università degli Studi di Milano, Italy</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0002-4467-9630" target="_blank" rel="noopener">0000-0002-4467-9630</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Prof. Caroline Uhler</div>
-              <div class="sci-inst">MIT EECS &amp; IMES, USA</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0002-7008-0513" target="_blank" rel="noopener">0000-0002-7008-0513</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Dr. Marinka Zitnik</div>
-              <div class="sci-inst">Harvard Medical School, USA</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0001-8530-7228" target="_blank" rel="noopener">0000-0001-8530-7228</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Prof. Ross King</div>
-              <div class="sci-inst">Chalmers University of Technology, Sweden</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0003-0485-3330" target="_blank" rel="noopener">0000-0003-0485-3330</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Prof. Nils Reimer</div>
-              <div class="sci-inst">Charité – Universitätsmedizin Berlin, Germany</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0002-3011-1740" target="_blank" rel="noopener">0000-0002-3011-1740</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Prof. Russ Altman</div>
-              <div class="sci-inst">Stanford University (Bioengineering &amp; Genetics), USA</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0003-3859-2905" target="_blank" rel="noopener">0000-0003-3859-2905</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Dr. Ewa Deelman</div>
-              <div class="sci-inst">USC Information Sciences Institute, USA</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0002-0307-4505" target="_blank" rel="noopener">0000-0002-0307-4505</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Prof. Claudia Langenberg</div>
-              <div class="sci-inst">Queen Mary University of London, UK</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0002-5017-7344" target="_blank" rel="noopener">0000-0002-5017-7344</a></div>
-            </div>
-            <div class="scientist-card">
-              <div class="sci-name">Prof. Gunnar Rätsch</div>
-              <div class="sci-inst">ETH Zürich, Department of Computer Science, Switzerland</div>
-              <div class="sci-orcid">ORCID: <a href="https://orcid.org/0000-0003-4163-1272" target="_blank" rel="noopener">0000-0003-4163-1272</a></div>
-            </div>
+          <div>
+            <span class="r-label">Regional Office</span>
+            <span class="r-name">Europe and Central Asia</span>
           </div>
-        </div>
-
-        <!-- REGISTRATION -->
-        <div class="tab-panel" id="panel-registration">
-          <p class="section-eyebrow">Delegate Registration — ISCC 2026</p>
-          <h2 class="section-title">Active Participant Categories</h2>
-          <div class="reg-types">
-            <div class="reg-card">
-              <div class="reg-type">Student / Early Career</div>
-              <div class="reg-price">€ 85<span> / delegate</span></div>
-              <ul class="reg-includes">
-                <li>Full programme access (3 days)</li>
-                <li>Book of Abstracts (digital)</li>
-                <li>Certificate of Participation</li>
-                <li>Poster or video presentation</li>
-              </ul>
-              <button class="btn-reg" onclick="switchTab(event,'payment');return false;">Register Now</button>
-            </div>
-            <div class="reg-card featured">
-              <div class="reg-type">Academic / Professional</div>
-              <div class="reg-price">€ 180<span> / delegate</span></div>
-              <ul class="reg-includes">
-                <li>Full programme access (3 days)</li>
-                <li>Book of Proceedings + Abstracts</li>
-                <li>Certificate of Participation</li>
-                <li>Priority poster &amp; video slot</li>
-                <li>Networking access (async)</li>
-              </ul>
-              <button class="btn-reg solid" onclick="switchTab(event,'payment');return false;">Register Now</button>
-            </div>
-            <div class="reg-card">
-              <div class="reg-type">Corporate / Industry</div>
-              <div class="reg-price">€ 320<span> / delegate</span></div>
-              <ul class="reg-includes">
-                <li>Full programme access (3 days)</li>
-                <li>All publications package</li>
-                <li>Sponsor acknowledgement</li>
-                <li>Priority Q&amp;A access</li>
-                <li>Logo in proceedings</li>
-              </ul>
-              <button class="btn-reg" onclick="switchTab(event,'payment');return false;">Register Now</button>
-            </div>
+          <div>
+            <span class="r-label">Regional Office</span>
+            <span class="r-name">Latin America and the Caribbean</span>
           </div>
-
-          <p style="font-size:0.68rem;color:rgba(244,240,232,0.4);line-height:1.7;">
-            Abstract submission deadline: <strong style="color:var(--gold);">28 February 2026</strong> ·
-            Notification of acceptance: <strong style="color:var(--gold);">15 March 2026</strong> ·
-            Camera-ready submission: <strong style="color:var(--gold);">5 April 2026</strong>
-          </p>
-        </div>
-
-        <!-- PAYMENT -->
-        <div class="tab-panel" id="panel-payment">
-          <p class="section-eyebrow">Secure Conference Fee Payment</p>
-          <h2 class="section-title">Complete Your Registration</h2>
-          <div class="payment-form">
-            <div class="secure-badge">
-              🔒 256-bit TLS encrypted · PCI DSS compliant · GDPR compliant
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">First Name</label>
-                <input class="form-input" type="text" placeholder="Given name" autocomplete="given-name" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">Last Name</label>
-                <input class="form-input" type="text" placeholder="Surname" autocomplete="family-name" />
-              </div>
-            </div>
-            <div class="form-row full">
-              <div class="form-group">
-                <label class="form-label">Institutional Email</label>
-                <input class="form-input" type="email" placeholder="name@institution.edu" autocomplete="email" />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Institution / Organisation</label>
-                <input class="form-input" type="text" placeholder="University / Company" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">Country</label>
-                <select class="form-select">
-                  <option value="">Select country</option>
-                  <option>Germany</option><option>United States</option><option>United Kingdom</option>
-                  <option>France</option><option>Netherlands</option><option>Switzerland</option>
-                  <option>Italy</option><option>Spain</option><option>Canada</option>
-                  <option>China</option><option>Japan</option><option>Brazil</option>
-                  <option>Other</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row full">
-              <div class="form-group">
-                <label class="form-label">Registration Category</label>
-                <select class="form-select" id="cat-select" onchange="updateTotal()">
-                  <option value="85">Student / Early Career — € 85</option>
-                  <option value="180" selected>Academic / Professional — € 180</option>
-                  <option value="320">Corporate / Industry — € 320</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row full">
-              <div class="form-group">
-                <label class="form-label">Presentation Type</label>
-                <select class="form-select">
-                  <option>Video Presentation (15 min)</option>
-                  <option>Poster Presentation</option>
-                  <option>Attendee Only (no presentation)</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="divider"></div>
-            <p class="section-eyebrow" style="margin-bottom:0.5rem;">Payment Details</p>
-            <div class="form-row full">
-              <div class="form-group">
-                <label class="form-label">Cardholder Name</label>
-                <input class="form-input" type="text" placeholder="As shown on card" autocomplete="cc-name" />
-              </div>
-            </div>
-            <div class="form-row full">
-              <div class="form-group">
-                <label class="form-label">Card Number</label>
-                <div class="card-row">
-                  <span>💳</span>
-                  <input style="background:none;border:none;outline:none;color:var(--ivory);font-family:var(--font-mono);font-size:0.72rem;width:100%;letter-spacing:0.05em;" type="text" placeholder="•••• •••• •••• ••••" maxlength="19" autocomplete="cc-number" oninput="formatCard(this)" />
-                </div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Expiry</label>
-                <input class="form-input" type="text" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">CVV</label>
-                <input class="form-input" type="password" placeholder="•••" maxlength="4" autocomplete="cc-csc" />
-              </div>
-            </div>
-
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.8rem;padding:0.8rem;background:rgba(200,169,110,0.06);border:1px solid rgba(200,169,110,0.15);">
-              <span style="font-size:0.68rem;color:rgba(244,240,232,0.5);">Total amount:</span>
-              <span id="total-display" style="font-family:var(--font-display);font-size:1.5rem;color:var(--gold);">€ 180</span>
-            </div>
-
-            <button class="btn-pay" onclick="handlePayment(event)">
-              🔒 &nbsp; Complete Secure Payment
-            </button>
-            <p style="font-size:0.58rem;color:rgba(244,240,232,0.3);text-align:center;margin-top:0.8rem;line-height:1.6;">
-              Payment processed via PCI-DSS Level 1 gateway · SEPA bank transfer available on request<br>
-              Invoice issued within 48h · Contact: procurement@scientiae-naturalis.org · VAT DE123456789
-            </p>
+          <div>
+            <span class="r-label">Regional Office</span>
+            <span class="r-name">Near East and North Africa</span>
           </div>
-        </div>
-
-        <!-- DOWNLOADS -->
-        <div class="tab-panel" id="panel-downloads">
-          <p class="section-eyebrow">Conference Materials — Available for Download</p>
-          <h2 class="section-title">Official ISCC 2026 Documents</h2>
-          <div class="download-grid">
-            <button class="dl-btn" onclick="simulateDownload('Conference Programme')">
-              <div class="dl-icon">📋</div>
-              <div class="dl-label">Conference Programme</div>
-              <div class="dl-format">PDF · Schedule &amp; Abstracts</div>
-            </button>
-            <button class="dl-btn" onclick="simulateDownload('Poster Submission Form')">
-              <div class="dl-icon">🖼</div>
-              <div class="dl-label">Poster Submission Form</div>
-              <div class="dl-format">DOCX · Template</div>
-            </button>
-            <button class="dl-btn" onclick="simulateDownload('Book of Proceedings')">
-              <div class="dl-icon">📖</div>
-              <div class="dl-label">Book of Proceedings</div>
-              <div class="dl-format">PDF · Post-conference release</div>
-            </button>
-            <button class="dl-btn" onclick="simulateDownload('Book of Abstracts')">
-              <div class="dl-icon">📄</div>
-              <div class="dl-label">Book of Abstracts</div>
-              <div class="dl-format">PDF · ISSN registered</div>
-            </button>
-            <button class="dl-btn" onclick="simulateDownload('Abstract Template')">
-              <div class="dl-icon">✏️</div>
-              <div class="dl-label">Abstract Template</div>
-              <div class="dl-format">DOCX · 300 words max</div>
-            </button>
-            <button class="dl-btn" onclick="simulateDownload('Certificate of Participation')">
-              <div class="dl-icon">🏅</div>
-              <div class="dl-label">Participation Certificate</div>
-              <div class="dl-format">PDF · After conference</div>
-            </button>
-          </div>
-          <p style="font-size:0.65rem;color:rgba(244,240,232,0.35);line-height:1.7;">
-            Pre-conference documents are available upon confirmed registration. Post-conference publications (Book of Proceedings, Certificates) will be distributed to all registered participants within 30 days of conclusion.
-          </p>
         </div>
 
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════
-         SLIDE 3 — JOURNAL
-    ════════════════════════════════════════ -->
-    <section class="slide" id="slide-3">
-      <div class="s3-inner">
+    <!-- SLIDE 4 — NACE LAYER MATRIX (education_nace Sheet1 + health_agri Sheet1) -->
+    <section class="slide" id="slide-4" aria-label="NACE Service Layer Matrix">
+      <div class="s4-inner">
+        <div class="slide-label" style="color:var(--gold2)">Structural Classification</div>
+        <h2 class="s4-headline">NACE Service<br>Layer Matrix</h2>
+        <p class="s4-sub">Mapping every service layer to its primary NACE classification and functional cluster — the architectural backbone of the Scientiae Naturalis service architecture.</p>
 
-        <!-- Masthead -->
-        <div class="journal-masthead">
-          <div class="journal-tag">International Scientific Journal · Open Access · Peer-Reviewed</div>
-          <h1 class="journal-name">Scientiae<span>-Naturalis</span></h1>
-          <p class="journal-subtitle-line">Journal of Natural Sciences, Applied Research &amp; Interdisciplinary Studies</p>
-          <div class="journal-metrics">
-            <div class="metric"><div class="metric-val">2.4</div><div class="metric-label">Impact Factor</div></div>
-            <div class="metric"><div class="metric-val">Q2</div><div class="metric-label">Scopus Quartile</div></div>
-            <div class="metric"><div class="metric-val">4 wks</div><div class="metric-label">Review Turnaround</div></div>
-            <div class="metric"><div class="metric-val">CC BY</div><div class="metric-label">Licence</div></div>
-            <div class="metric"><div class="metric-val">ISSN</div><div class="metric-label">Registered</div></div>
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Service Layer</th>
+              <th>NACE Code</th>
+              <th>Service Cluster</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="row-num">01</span>Knowledge creation</td>
+              <td><span class="nace-pill">M72</span></td>
+              <td>R&amp;D, labs, scientific modelling</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">02</span>Technical validation</td>
+              <td><span class="nace-pill">M71</span></td>
+              <td>Engineering, feasibility, testing</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">03</span>Capacity building</td>
+              <td><span class="nace-pill">P85</span></td>
+              <td>Education, training, mobility</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">04</span>Environmental services</td>
+              <td><span class="nace-pill">E36–39</span></td>
+              <td>Waste, water, remediation</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">05</span>Natural resources</td>
+              <td><span class="nace-pill">A, B, D</span></td>
+              <td>Forestry, mining, energy</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">06</span>Digital layer</td>
+              <td><span class="nace-pill">J62–63</span></td>
+              <td>Data, AI, platforms</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">07</span>Programme delivery</td>
+              <td><span class="nace-pill">N82</span></td>
+              <td>Project management, grants</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">08</span>Strategy &amp; governance</td>
+              <td><span class="nace-pill">M70</span></td>
+              <td>Policy, advisory</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">09</span>Education delivery</td>
+              <td><span class="nace-pill">P85</span></td>
+              <td>Teaching, curriculum, training</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">10</span>Inclusion &amp; access</td>
+              <td><span class="nace-pill">P85 / N88</span></td>
+              <td>Equity, gender, vulnerable groups</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">11</span>Content domains</td>
+              <td><span class="nace-pill">P85 / M72</span></td>
+              <td>Literacy, ESD, health, civic</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">12</span>Teachers</td>
+              <td><span class="nace-pill">P85 / N78</span></td>
+              <td>Training, workforce systems</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">13</span>Governance</td>
+              <td><span class="nace-pill">M70</span></td>
+              <td>Policy, reform, financing</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">14</span>Programme execution</td>
+              <td><span class="nace-pill">N82</span></td>
+              <td>Implementation, M&amp;E</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">15</span>Data &amp; digital</td>
+              <td><span class="nace-pill">J62–63</span></td>
+              <td>EMIS, AI, EdTech</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">16</span>Standards</td>
+              <td><span class="nace-pill">M70 / M74</span></td>
+              <td>Frameworks, guidelines</td>
+            </tr>
+            <tr>
+              <td><span class="row-num">17</span>Knowledge systems</td>
+              <td><span class="nace-pill">M72 / J63</span></td>
+              <td>Research, platforms</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SLIDE 5 — HEALTH + AGRI-FOOD INTELLIGENCE (Sheet2 from both files) -->
+    <section class="slide" id="slide-5" aria-label="Health and Agri-Food Intelligence Matrix">
+      <div class="s5-inner">
+        <div class="slide-label">Cross-Sector Intelligence</div>
+        <h2 class="s5-headline">Health &amp; Agri-Food<br>Intelligence Systems</h2>
+        <p class="s5-sub">Parallel data intelligence architecture across Health and Food sectors — unified NACE classification and programme logic</p>
+
+        <div class="dual-table-wrap">
+
+          <div class="dual-col">
+            <div class="dual-col-header">
+              <h3>Health</h3>
+              <span>Knowledge Arbitrage Domain</span>
+            </div>
+            <table class="intel-table">
+              <tbody>
+                <tr class="intel-table-head">
+                  <td>Intelligence Layer</td>
+                  <td>Service Application</td>
+                </tr>
+                <tr>
+                  <td>Core data systems</td>
+                  <td>
+                    <span class="intel-value">HIS, EHR</span>
+                    Health Information Systems, Electronic Health Records infrastructure and interoperability
+                    <span class="intel-nace">J63</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Predictive analytics</td>
+                  <td>
+                    <span class="intel-value">Epidemiology</span>
+                    Disease surveillance modelling, outbreak prediction, burden-of-disease analytics
+                    <span class="intel-nace">M72</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Governance intelligence</td>
+                  <td>
+                    <span class="intel-value">UHC policy</span>
+                    Universal Health Coverage policy advisory, health financing reform, regulatory alignment
+                    <span class="intel-nace">M70</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Standards &amp; compliance</td>
+                  <td>
+                    <span class="intel-value">Clinical guidelines</span>
+                    WHO-aligned clinical standards, prequalification, norms and quality frameworks
+                    <span class="intel-nace">M74</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Programme intelligence</td>
+                  <td>
+                    <span class="intel-value">M&amp;E systems</span>
+                    Programme monitoring and evaluation, KPI dashboards, results-based management
+                    <span class="intel-nace">N82</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Digital AI systems</td>
+                  <td>
+                    <span class="intel-value">Diagnostics AI</span>
+                    AI-assisted diagnostics, digital health platform development, telemedicine infrastructure
+                    <span class="intel-nace">J62</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
 
-        <!-- Journal Navigation -->
-        <div class="journal-nav">
-          <button class="jnav-btn active" onclick="switchJournal(event,'articles')">Current Issue</button>
-          <button class="jnav-btn" onclick="switchJournal(event,'scope')">Scope &amp; Aims</button>
-          <button class="jnav-btn" onclick="switchJournal(event,'submit')">Submit</button>
-          <button class="jnav-btn" onclick="switchJournal(event,'editorial')">Editorial Board</button>
-          <button class="jnav-btn" onclick="switchJournal(event,'guidelines')">Guidelines</button>
-        </div>
-
-        <!-- ARTICLES -->
-        <div class="jpanel active" id="jpanel-articles">
-          <p class="section-eyebrow">Volume 3 · Issue 1 · 2026</p>
-          <div class="articles-list">
-            <div class="article-item">
-              <div class="art-issue">V3 · I1<br>2026</div>
-              <div>
-                <div class="art-title">Transformer-Based Molecular Property Prediction: A Benchmark Across 12 Drug Datasets</div>
-                <div class="art-authors">Chen, W.; Okonkwo, I.; Müller, K. et al.</div>
-                <div class="art-keywords">
-                  <span class="keyword">drug discovery</span>
-                  <span class="keyword">deep learning</span>
-                  <span class="keyword">ADMET</span>
-                </div>
-              </div>
-              <div class="article-meta-right">
-                <div>pp. 1–22</div>
-                <div class="art-doi">DOI:10.xxxx/SN-2026-001</div>
-                <div>Open Access</div>
-              </div>
+          <div class="dual-col">
+            <div class="dual-col-header">
+              <h3>Agri-Food</h3>
+              <span>Knowledge Arbitrage Domain</span>
             </div>
-            <div class="article-item">
-              <div class="art-issue">V3 · I1<br>2026</div>
-              <div>
-                <div class="art-title">Ethical Governance Frameworks for Autonomous Drug Screening Systems</div>
-                <div class="art-authors">Lindqvist, A.; Martínez, P.; Shah, R.</div>
-                <div class="art-keywords">
-                  <span class="keyword">bioethics</span>
-                  <span class="keyword">AI governance</span>
-                  <span class="keyword">regulation</span>
-                </div>
-              </div>
-              <div class="article-meta-right">
-                <div>pp. 23–44</div>
-                <div class="art-doi">DOI:10.xxxx/SN-2026-002</div>
-                <div>Open Access</div>
-              </div>
-            </div>
-            <div class="article-item">
-              <div class="art-issue">V3 · I1<br>2026</div>
-              <div>
-                <div class="art-title">Graph Neural Networks for Protein–Ligand Binding Affinity Prediction: Review and Meta-Analysis</div>
-                <div class="art-authors">Park, J.; Bakker, S.; Nwosu, C.</div>
-                <div class="art-keywords">
-                  <span class="keyword">GNN</span>
-                  <span class="keyword">binding affinity</span>
-                  <span class="keyword">proteomics</span>
-                </div>
-              </div>
-              <div class="article-meta-right">
-                <div>pp. 45–69</div>
-                <div class="art-doi">DOI:10.xxxx/SN-2026-003</div>
-                <div>Open Access</div>
-              </div>
-            </div>
-            <div class="article-item">
-              <div class="art-issue">V3 · I1<br>2026</div>
-              <div>
-                <div class="art-title">Generative Adversarial Networks in Multi-Target Drug Design: Opportunities and Constraints</div>
-                <div class="art-authors">Osei-Bonsu, M.; Tanaka, H.; Reyes, F.</div>
-                <div class="art-keywords">
-                  <span class="keyword">GAN</span>
-                  <span class="keyword">polypharmacology</span>
-                  <span class="keyword">synthesis</span>
-                </div>
-              </div>
-              <div class="article-meta-right">
-                <div>pp. 70–91</div>
-                <div class="art-doi">DOI:10.xxxx/SN-2026-004</div>
-                <div>Open Access</div>
-              </div>
-            </div>
-            <div class="article-item">
-              <div class="art-issue">V3 · I1<br>2026</div>
-              <div>
-                <div class="art-title">Digital Biomarkers in Phase II Trial Design: AI-Augmented Patient Stratification</div>
-                <div class="art-authors">Petrov, A.; Adeyemi, O.; Fischer, N.; Liu, X.</div>
-                <div class="art-keywords">
-                  <span class="keyword">clinical trials</span>
-                  <span class="keyword">biomarkers</span>
-                  <span class="keyword">stratification</span>
-                </div>
-              </div>
-              <div class="article-meta-right">
-                <div>pp. 92–115</div>
-                <div class="art-doi">DOI:10.xxxx/SN-2026-005</div>
-                <div>Open Access</div>
-              </div>
-            </div>
+            <table class="intel-table">
+              <tbody>
+                <tr class="intel-table-head">
+                  <td>Intelligence Layer</td>
+                  <td>Service Application</td>
+                </tr>
+                <tr>
+                  <td>Core data systems</td>
+                  <td>
+                    <span class="intel-value">Agri-data platforms</span>
+                    Integrated agrifood data ecosystems, commodity tracking, traceability infrastructure
+                    <span class="intel-nace">J63</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Predictive analytics</td>
+                  <td>
+                    <span class="intel-value">Yield &amp; food security</span>
+                    Crop yield forecasting, food security early warning, climate-agriculture modelling
+                    <span class="intel-nace">M72</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Governance intelligence</td>
+                  <td>
+                    <span class="intel-value">Food policy</span>
+                    Agrifood system policy advisory, trade regulation alignment, value chain governance
+                    <span class="intel-nace">M70</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Standards &amp; compliance</td>
+                  <td>
+                    <span class="intel-value">Food safety</span>
+                    Codex Alimentarius alignment, zoonotic disease standards, food safety certification
+                    <span class="intel-nace">M74</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Programme intelligence</td>
+                  <td>
+                    <span class="intel-value">Programme dashboards</span>
+                    Agrifood programme monitoring, impact tracking, multi-country coordination tools
+                    <span class="intel-nace">N82</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Digital AI systems</td>
+                  <td>
+                    <span class="intel-value">Precision agriculture</span>
+                    AI-driven precision farming, remote sensing, satellite-based crop monitoring
+                    <span class="intel-nace">J62</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
 
-        <!-- SCOPE -->
-        <div class="jpanel" id="jpanel-scope">
-          <p class="section-eyebrow">Aims, Scope &amp; Disciplines</p>
-          <h2 class="section-title">What We Publish</h2>
-          <p style="font-size:0.78rem;color:rgba(244,240,232,0.55);line-height:1.8;max-width:700px;margin-bottom:2rem;">
-            Scientiae-Naturalis publishes original research articles, systematic reviews, methodological papers, and perspectives across the natural sciences, with a focus on computationally intensive and interdisciplinary work at the interface of biology, chemistry, physics, and data science.
-          </p>
-          <div class="scope-grid">
-            <div class="scope-item"><strong>Computational Biology</strong>Bioinformatics, structural biology, systems biology, network medicine.</div>
-            <div class="scope-item"><strong>AI &amp; Machine Learning</strong>Drug discovery, clinical decision support, biomedical NLP, computer vision.</div>
-            <div class="scope-item"><strong>Pharmaceutical Sciences</strong>Drug design, formulation, pharmacokinetics, ADMET modelling.</div>
-            <div class="scope-item"><strong>Bioethics &amp; Governance</strong>AI ethics in biomedicine, data sovereignty, regulatory science.</div>
-            <div class="scope-item"><strong>Environmental Sciences</strong>Ecotoxicology, climate modelling, environmental genomics.</div>
-            <div class="scope-item"><strong>Materials Science</strong>Nanomaterials, biomaterials, computational materials design.</div>
-            <div class="scope-item"><strong>Neuroscience</strong>Computational neuroscience, connectomics, neuroimaging AI.</div>
-            <div class="scope-item"><strong>Data Science in Science</strong>Reproducibility, FAIR data, scientific knowledge graphs.</div>
-          </div>
         </div>
-
-        <!-- SUBMIT -->
-        <div class="jpanel" id="jpanel-submit">
-          <p class="section-eyebrow">Manuscript Submission — Step-by-Step</p>
-          <h2 class="section-title">Author Workflow</h2>
-          <div class="submit-steps">
-            <div class="step-card"><div class="step-n">01</div><div class="step-title">Prepare Manuscript</div><div class="step-desc">Format per author guidelines. Include abstract, keywords, author statement, data availability, conflict of interest.</div></div>
-            <div class="step-card"><div class="step-n">02</div><div class="step-title">Submit via Portal</div><div class="step-desc">Upload via journal management system. Provide cover letter, ORCID for all co-authors, suggested reviewers.</div></div>
-            <div class="step-card"><div class="step-n">03</div><div class="step-title">Editorial Screening</div><div class="step-desc">Scope check and technical screening within 5 business days. Plagiarism detection (iThenticate). Desk rejection or peer-review.</div></div>
-            <div class="step-card"><div class="step-n">04</div><div class="step-title">Peer Review</div><div class="step-desc">Double-blind review by ≥2 independent experts. Target turnaround: 4 weeks. RevMan-based revision tracking.</div></div>
-            <div class="step-card"><div class="step-n">05</div><div class="step-title">Decision &amp; Revision</div><div class="step-desc">Accept / Major revision / Minor revision / Reject with rationale. Revision window: 6 weeks.</div></div>
-            <div class="step-card"><div class="step-n">06</div><div class="step-title">Production &amp; DOI</div><div class="step-desc">Copy-editing, typesetting, DOI assignment. Online First within 72h of final acceptance. Issue assignment within 2 months.</div></div>
-          </div>
-          <div class="s1-cta" style="margin-top:0;">
-            <a href="mailto:procurement@scientiae-naturalis.org" class="btn-primary">Submit Manuscript ↗</a>
-            <a href="mailto:procurement@scientiae-naturalis.org" class="btn-ghost">Author Guidelines →</a>
-          </div>
-        </div>
-
-        <!-- EDITORIAL BOARD -->
-        <div class="jpanel" id="jpanel-editorial">
-          <p class="section-eyebrow">Editorial Board — Scientiae-Naturalis Journal</p>
-          <h2 class="section-title">Leadership &amp; Reviewers</h2>
-          <div class="editors-grid">
-            <div class="editor-card">
-              <div class="ed-role">Editor-in-Chief</div>
-              <div class="ed-name">Prof. Karsten Fischer</div>
-              <div class="ed-affil">Heidelberg University, Germany<br>Computational Pharmacology</div>
-              <div class="ed-orcid">ORCID: <a href="https://orcid.org" target="_blank">0000-0001-XXXX-XXXX</a></div>
-            </div>
-            <div class="editor-card">
-              <div class="ed-role">Deputy Editor</div>
-              <div class="ed-name">Prof. Ananya Bose</div>
-              <div class="ed-affil">Max Planck Institute, Germany<br>Systems Biology</div>
-              <div class="ed-orcid">ORCID: <a href="https://orcid.org" target="_blank">0000-0002-XXXX-XXXX</a></div>
-            </div>
-            <div class="editor-card">
-              <div class="ed-role">Associate Editor</div>
-              <div class="ed-name">Dr. Thomas Brückner</div>
-              <div class="ed-affil">TU Munich, Germany<br>AI &amp; Drug Design</div>
-              <div class="ed-orcid">ORCID: <a href="https://orcid.org" target="_blank">0000-0003-XXXX-XXXX</a></div>
-            </div>
-            <div class="editor-card">
-              <div class="ed-role">Associate Editor</div>
-              <div class="ed-name">Dr. Ifeoma Okafor</div>
-              <div class="ed-affil">Charité Berlin, Germany<br>Translational Medicine</div>
-              <div class="ed-orcid">ORCID: <a href="https://orcid.org" target="_blank">0000-0001-XXXX-XXXX</a></div>
-            </div>
-            <div class="editor-card">
-              <div class="ed-role">Statistical Editor</div>
-              <div class="ed-name">Prof. Lars Henriksen</div>
-              <div class="ed-affil">Freie Universität Berlin, Germany<br>Biostatistics</div>
-              <div class="ed-orcid">ORCID: <a href="https://orcid.org" target="_blank">0000-0002-XXXX-XXXX</a></div>
-            </div>
-            <div class="editor-card">
-              <div class="ed-role">Managing Editor</div>
-              <div class="ed-name">Dr. Sophie Weiss</div>
-              <div class="ed-affil">Scientiae-Naturalis GmbH, Germany</div>
-              <div class="ed-orcid">Contact: procurement@scientiae-naturalis.org</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- GUIDELINES -->
-        <div class="jpanel" id="jpanel-guidelines">
-          <p class="section-eyebrow">Author Guidelines — Technical Specifications</p>
-          <h2 class="section-title">Manuscript Requirements</h2>
-          <div class="scope-grid">
-            <div class="scope-item"><strong>Word Limits</strong>Research article: 6,000–10,000 words. Review: up to 15,000 words. Letter: 1,500 words.</div>
-            <div class="scope-item"><strong>File Formats</strong>Manuscript: DOCX or LaTeX. Figures: TIFF / EPS ≥ 300 dpi. Supplementary: ZIP.</div>
-            <div class="scope-item"><strong>Referencing</strong>Vancouver style. DOI required where available. Max 60 references (original articles).</div>
-            <div class="scope-item"><strong>Data Availability</strong>FAIR data principles mandatory. Raw datasets deposited in Zenodo, Figshare, or equivalent.</div>
-            <div class="scope-item"><strong>Ethics</strong>IRB/ethics board approval required for all human or animal studies. Statement in manuscript.</div>
-            <div class="scope-item"><strong>APC / Open Access</strong>Article Processing Charge: € 450 (standard). Waiver available for low-income country institutions.</div>
-            <div class="scope-item"><strong>Code Availability</strong>Interoperable Europe Portal. Archived version via Zenodo.</div>
-            <div class="scope-item"><strong>Language</strong>English only. Professional language editing recommended. Grammarly or equivalent.</div>
-          </div>
-        </div>
-
-        <!-- Contact banner -->
-        <div class="contact-banner">
-          <div>
-            <p><strong>Editorial Correspondence</strong></p>
-            <p>Submissions, peer review, special issues: <strong>procurement@scientiae-naturalis.org</strong></p>
-            <p>Scientiae-Naturalis GmbH · Germany · VAT DE123456789/scientiae-naturalis</p>
-          </div>
-          <a href="mailto:procurement@scientiae-naturalis.org" class="btn-primary" style="white-space:nowrap;">Contact Editorial Office ↗</a>
-        </div>
-
       </div>
     </section>
 
   </div><!-- /slides-track -->
-</div><!-- /carousel-shell -->
+</div><!-- /carousel-outer -->
 
-<!-- Arrows -->
-<button class="carousel-arrow prev hidden" id="btn-prev" onclick="navigate(-1)" aria-label="Previous">‹</button>
-<button class="carousel-arrow next" id="btn-next" onclick="navigate(1)" aria-label="Next">›</button>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Scientiae Naturalis</div>
+      <div class="footer-tagline">High-Stakes Knowledge Arbitrage</div>
+      <p class="footer-body">
+        Procurement and institutional enquiries:<br>
+        <a href="/cdn-cgi/l/email-protection#3141435e524443545c545f4571425258545f455850541c5f50454443505d58421f5e4356"><span class="__cf_email__" data-cfemail="1262607d716760777f777c665261717b777c667b73773f7c73666760737e7b613c7d6075">[email&#160;protected]</span></a>
+      </p>
+    </div>
+    <div class="footer-hq">
+      <strong>Headquarters</strong>
+      Scientiae Naturalis<br>
+      Berlin, Germany<br><br>
+      <strong>Primary Classification</strong>
+      NACE 72.10 — R&amp;D Natural Sciences<br>
+      Section M, P, E, A–D
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>Scientiae Naturalis — Berlin, Germany</p>
+    <p>High-Stakes Knowledge Arbitrage Services</p>
+  </div>
+</footer>
 
-<!-- Counter -->
-<div id="slide-counter">01 / 03</div>
+<!-- NAV CONTROLS -->
+<div class="nav-arrows">
+  <button class="arrow-btn" id="prev-btn" aria-label="Previous slide">&#8592;</button>
+  <button class="arrow-btn" id="next-btn" aria-label="Next slide">&#8594;</button>
+</div>
+<div class="slide-dots" id="dots"></div>
+<div class="slide-counter" id="counter">01 / 05</div>
 
-<!-- Toast -->
-<div id="toast"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const TOTAL = 5;
+let current = 0;
+const track = document.getElementById('track');
+const counterEl = document.getElementById('counter');
+const dotsEl = document.getElementById('dots');
 
+// Build dots
+for(let i=0;i<TOTAL;i++){
+  const d = document.createElement('button');
+  d.className = 'dot' + (i===0?' active':'');
+  d.setAttribute('aria-label','Slide '+(i+1));
+  d.onclick = ()=>goTo(i);
+  dotsEl.appendChild(d);
+}
 
-<script>
-  // ═══════════════════════════════════════════
-  //  CAROUSEL ENGINE
-  // ═══════════════════════════════════════════
-  let current = 0;
-  const total = 3;
-  const track = document.getElementById('slides-track');
-  const dots  = document.querySelectorAll('.nav-dot');
-  const counter = document.getElementById('slide-counter');
-  const btnPrev = document.getElementById('btn-prev');
-  const btnNext = document.getElementById('btn-next');
+function goTo(n){
+  current = Math.max(0,Math.min(TOTAL-1,n));
+  track.style.transform = `translateX(-${current * 100}vw)`;
+  counterEl.textContent = String(current+1).padStart(2,'0') + ' / ' + String(TOTAL).padStart(2,'0');
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+}
+function next(){goTo(current+1)}
+function prev(){goTo(current-1)}
 
-  function goTo(idx) {
-    current = Math.max(0, Math.min(total - 1, idx));
-    track.style.transform = `translateX(-${current * 33.333}%)`;
-    dots.forEach((d, i) => d.classList.toggle('active', i === current));
-    counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
-    btnPrev.classList.toggle('hidden', current === 0);
-    btnNext.classList.toggle('hidden', current === total - 1);
-  }
+document.getElementById('next-btn').addEventListener('click', next);
+document.getElementById('prev-btn').addEventListener('click', prev);
 
-  function navigate(dir) { goTo(current + dir); }
-
-  // Touch/swipe support
-  let touchStartX = 0;
-  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-  document.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 60) navigate(dx < 0 ? 1 : -1);
-  }, { passive: true });
-
-  // Keyboard navigation
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') navigate(1);
-    if (e.key === 'ArrowLeft')  navigate(-1);
-  });
-
-  // ═══════════════════════════════════════════
-  //  CONFERENCE TABS
-  // ═══════════════════════════════════════════
-  function switchTab(e, panelId) {
-    const btns   = document.querySelectorAll('#slide-2 .tab-btn');
-    const panels = document.querySelectorAll('#slide-2 .tab-panel');
-    btns.forEach(b => b.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
-    if (e && e.target) e.target.classList.add('active');
-    document.getElementById('panel-' + panelId).classList.add('active');
-  }
-
-  // ═══════════════════════════════════════════
-  //  JOURNAL TABS
-  // ═══════════════════════════════════════════
-  function switchJournal(e, panelId) {
-    const btns   = document.querySelectorAll('#slide-3 .jnav-btn');
-    const panels = document.querySelectorAll('#slide-3 .jpanel');
-    btns.forEach(b => b.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
-    e.target.classList.add('active');
-    document.getElementById('jpanel-' + panelId).classList.add('active');
-  }
-
-  // ═══════════════════════════════════════════
-  //  PAYMENT HELPERS
-  // ═══════════════════════════════════════════
-  function updateTotal() {
-    const sel = document.getElementById('cat-select');
-    const val = sel ? sel.value : '180';
-    const disp = document.getElementById('total-display');
-    if (disp) disp.textContent = '€ ' + val;
-  }
-
-  function formatCard(input) {
-    let v = input.value.replace(/\D/g, '').substring(0, 16);
-    input.value = v.replace(/(.{4})/g, '$1 ').trim();
-  }
-
-  function handlePayment(e) {
+document.querySelectorAll('.nav-slide').forEach(a=>{
+  a.addEventListener('click',e=>{
     e.preventDefault();
-    showToast('Processing... Please wait.');
-    setTimeout(() => {
-      showToast('✓ Registration confirmed. Check your email for details.');
-    }, 2000);
-  }
+    goTo(parseInt(a.dataset.slide));
+    document.getElementById('main-nav').classList.remove('open');
+  });
+});
 
-  // ═══════════════════════════════════════════
-  //  DOWNLOAD SIMULATION
-  // ═══════════════════════════════════════════
-  function simulateDownload(name) {
-    showToast('⬇ ' + name + ' — preparing download...');
-  }
+document.getElementById('burger').addEventListener('click',()=>{
+  document.getElementById('main-nav').classList.toggle('open');
+});
 
-  // ═══════════════════════════════════════════
-  //  TOAST
-  // ═══════════════════════════════════════════
-  let toastTimer;
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
-  }
+// Keyboard
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') next();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') prev();
+});
 
-  // Init
-  goTo(0);
+// Touch / swipe
+let tx=0;
+document.querySelector('.carousel-outer').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+document.querySelector('.carousel-outer').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50){dx<0?next():prev()}
+},{passive:true});
+
+// Hover gallery toggle
+document.querySelectorAll('.gallery-item').forEach(item=>{
+  item.addEventListener('click',()=>item.classList.toggle('open'));
+});
 </script>
-
 </body>
 </html>
