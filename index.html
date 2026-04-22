@@ -3,1586 +3,1400 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scientiae Naturalis — High-Stakes Knowledge Arbitrage</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Bebas+Neue&display=swap" rel="stylesheet">
+<title>Scientiae-Naturalis | Monitoring, Evaluation & Knowledge Hub </title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&family=Inconsolata:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --ink:#0e0e0c;
-  --ink2:#2c2c28;
-  --ink3:#5a5a54;
-  --rule:#d4d2c8;
-  --rule2:#e8e6de;
-  --paper:#f5f3ee;
-  --paper2:#ece9e0;
-  --gold:#a08630;
-  --gold2:#c9a84c;
-  --white:#ffffff;
-  --serif:'Cormorant Garamond',Georgia,serif;
-  --mono:'DM Mono',monospace;
-  --display:'Bebas Neue',sans-serif;
-  --slide-dur:600ms;
-}
-html{scroll-behavior:smooth}
-body{
-  background:var(--paper);
-  color:var(--ink);
-  font-family:var(--serif);
-  font-size:18px;
-  line-height:1.7;
-  overflow-x:hidden;
+:root {
+  --bg: #0a0e0b;
+  --bg2: #0f1510;
+  --bg3: #141c15;
+  --surface: #192019;
+  --border: rgba(180,210,160,0.1);
+  --border2: rgba(180,210,160,0.18);
+  --sage: #8aab78;
+  --sage-light: #b4d2a0;
+  --sage-dim: rgba(138,171,120,0.15);
+  --gold: #c9a84c;
+  --gold-dim: rgba(201,168,76,0.12);
+  --text: #e8ede4;
+  --text-mid: rgba(232,237,228,0.6);
+  --text-dim: rgba(232,237,228,0.35);
+  --accent-red: #c46b4a;
 }
 
-/* ── HEADER ──────────────────────────────────────────── */
-header{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 clamp(1.5rem,4vw,4rem);
-  height:64px;
-  background:rgba(245,243,238,0.96);
-  border-bottom:1px solid var(--rule);
-  backdrop-filter:blur(6px);
-}
-.logo{
-  font-family:var(--serif);
-  font-size:1rem;
-  font-weight:600;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-  color:var(--ink);
-  text-decoration:none;
-  line-height:1.1;
-}
-.logo span{
-  display:block;
-  font-weight:300;
-  font-size:0.7rem;
-  letter-spacing:0.2em;
-  color:var(--ink3);
-  font-style:italic;
-}
-nav{
-  display:flex;align-items:center;gap:2rem;
-}
-nav a{
-  font-family:var(--mono);
-  font-size:0.68rem;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  text-decoration:none;
-  transition:color .2s;
-}
-nav a:hover{color:var(--ink)}
-.nav-cta{
-  font-family:var(--mono);
-  font-size:0.68rem;
-  letter-spacing:0.1em;
-  text-transform:uppercase;
-  color:var(--white);
-  background:var(--ink);
-  padding:0.45rem 1.1rem;
-  text-decoration:none;
-  transition:background .2s;
-}
-.nav-cta:hover{background:var(--gold)}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
-.hamburger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:all .3s}
-@media(max-width:768px){
-  nav.links{
-    display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
-    background:var(--paper);
-    flex-direction:column;align-items:center;justify-content:center;
-    gap:2.5rem;z-index:99;
-  }
-  nav.links.open{display:flex}
-  nav.links a{font-size:1rem}
-  .hamburger{display:flex}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
 }
 
-/* ── CAROUSEL WRAPPER ─────────────────────────────────── */
-.carousel-outer{
-  margin-top:64px;
-  position:relative;
-  overflow:hidden;
-  background:var(--paper);
+/* ── CUSTOM CURSOR ── */
+.cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--sage);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
 }
-.slides-track{
-  display:flex;
-  transition:transform var(--slide-dur) cubic-bezier(.55,.05,.15,.99);
-  will-change:transform;
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(138,171,120,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: transform 0.18s ease-out, width 0.3s, height 0.3s;
 }
-.slide{
-  min-width:100vw;
-  min-height:calc(100vh - 64px);
-  display:flex;
-  flex-direction:column;
-  position:relative;
+body:hover .cursor { opacity: 1; }
+a:hover ~ .cursor, button:hover ~ .cursor { width: 14px; height: 14px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.4rem 3rem;
+  background: rgba(10,14,11,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s;
+}
+nav.scrolled { padding: 0.9rem 3rem; }
+.nav-brand {
+  display: flex; flex-direction: column; gap: 0.1rem; text-decoration: none;
+}
+.nav-brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem; font-weight: 600; letter-spacing: 0.04em;
+  color: var(--text); line-height: 1;
+}
+.nav-brand-sub {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sage); line-height: 1;
+}
+.nav-links { display: flex; gap: 2.2rem; list-style: none; }
+.nav-links a {
+  font-size: 0.78rem; font-weight: 400; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-mid); text-decoration: none;
+  transition: color 0.25s; position: relative; padding-bottom: 2px;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px; background: var(--sage); transform: scaleX(0);
+  transition: transform 0.3s; transform-origin: left;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--bg) !important;
+  background: var(--sage); padding: 0.6rem 1.4rem;
+  text-decoration: none; transition: background 0.25s, transform 0.2s;
+}
+.nav-cta:hover { background: var(--sage-light) !important; transform: translateY(-1px); }
+.nav-cta::after { display: none !important; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.hamburger span { display: block; width: 24px; height: 1px; background: var(--text-mid); transition: all 0.3s; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 0 3rem; padding-top: 100px;
+  position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 75% 50%, rgba(138,171,120,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 50%);
+}
+.hero-grid-overlay {
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image:
+    linear-gradient(var(--sage) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sage) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-content { position: relative; z-index: 2; max-width: 700px; }
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 2.5rem;
+  opacity: 0; animation: fadeUp 0.9s 0.2s forwards;
+}
+.hero-eyebrow-line { width: 40px; height: 1px; background: var(--sage); }
+.hero-eyebrow-text {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--sage);
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.2rem, 7vw, 6.5rem);
+  font-weight: 300; line-height: 1.05; letter-spacing: -0.01em;
+  color: var(--text); margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
+}
+.hero h1 em { font-style: italic; color: var(--sage-light); }
+.hero h1 strong { font-weight: 600; }
+.hero-desc {
+  font-size: 1rem; font-weight: 300; line-height: 1.85;
+  color: var(--text-mid); max-width: 520px; margin-bottom: 3rem;
+  opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+}
+.hero-actions {
+  display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.9s 0.65s forwards;
+}
+.btn-main {
+  background: var(--sage); color: var(--bg);
+  padding: 0.9rem 2.2rem; font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+  transition: background 0.25s, transform 0.2s; display: inline-block;
+}
+.btn-main:hover { background: var(--sage-light); transform: translateY(-2px); }
+.btn-ghost {
+  border: 1px solid var(--border2); color: var(--text-mid);
+  padding: 0.9rem 2.2rem; font-size: 0.78rem; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+  transition: all 0.25s; display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--sage); color: var(--sage); transform: translateY(-2px); }
+
+/* Hero stats */
+.hero-stats {
+  display: flex; gap: 3rem; margin-top: 5rem; padding-top: 3rem;
+  border-top: 1px solid var(--border);
+  opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+  flex-wrap: wrap;
+}
+.hero-stat {}
+.hero-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem; font-weight: 300; line-height: 1;
+  color: var(--text);
+}
+.hero-stat-num sup { font-size: 1.2rem; color: var(--sage); vertical-align: super; }
+.hero-stat-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim); margin-top: 0.4rem;
 }
 
-/* ── SLIDE NAVIGATION ─────────────────────────────────── */
-.nav-arrows{
-  position:fixed;
-  bottom:2.5rem;right:clamp(1.5rem,4vw,4rem);
-  display:flex;gap:0.6rem;z-index:50;
+/* Hero right — animated radial chart */
+.hero-visual {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 42vw; height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; animation: fadeIn 1.2s 1s forwards;
 }
-.arrow-btn{
-  width:44px;height:44px;
-  border:1px solid var(--rule);
-  background:rgba(245,243,238,0.9);
-  cursor:pointer;
-  font-size:1.1rem;
-  display:flex;align-items:center;justify-content:center;
-  transition:background .2s,border-color .2s;
-  backdrop-filter:blur(4px);
+@media (max-width: 900px) { .hero-visual { display: none; } }
+
+/* ── SCROLLING TICKER ── */
+.ticker-wrap {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1.1rem 0;
+  overflow: hidden;
+  position: relative;
 }
-.arrow-btn:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
-.slide-dots{
-  position:fixed;
-  bottom:2.7rem;
-  left:50%;transform:translateX(-50%);
-  display:flex;gap:0.5rem;z-index:50;
-  align-items:center;
+.ticker-wrap::before, .ticker-wrap::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
 }
-.dot{
-  width:6px;height:6px;
-  border-radius:50%;
-  background:var(--rule);
-  border:none;cursor:pointer;padding:0;
-  transition:background .25s,transform .25s;
+.ticker-wrap::before { left: 0; background: linear-gradient(90deg, var(--surface), transparent); }
+.ticker-wrap::after { right: 0; background: linear-gradient(-90deg, var(--surface), transparent); }
+.ticker-label {
+  position: absolute; left: 2rem; top: 50%; transform: translateY(-50%);
+  font-family: 'Inconsolata', monospace; font-size: 0.65rem;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--sage);
+  z-index: 3; background: var(--surface); padding-right: 1rem;
 }
-.dot.active{background:var(--ink);transform:scale(1.4)}
-.slide-counter{
-  position:fixed;
-  bottom:2.7rem;left:clamp(1.5rem,4vw,4rem);
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.15em;
-  color:var(--ink3);
-  z-index:50;
+.ticker-track {
+  display: flex; gap: 0; width: max-content;
+  animation: ticker 40s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+.ticker-item {
+  display: flex; align-items: center; gap: 2rem;
+  padding: 0 2.5rem; white-space: nowrap;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-style: italic; font-weight: 300;
+  color: var(--text-mid);
+  transition: color 0.3s;
+}
+.ticker-item:hover { color: var(--sage-light); cursor: default; }
+.ticker-dot { width: 4px; height: 4px; background: var(--sage); border-radius: 50%; opacity: 0.5; }
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* ── SECTIONS ── */
+section { padding: 7rem 3rem; }
+.s-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sage); display: flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.s-label::before { content: ''; width: 28px; height: 1px; background: var(--sage); }
+.s-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.1;
+  letter-spacing: -0.01em; margin-bottom: 1rem;
+}
+.s-title em { font-style: italic; color: var(--sage-light); }
+
+/* ── SERVICES ── */
+.services { background: var(--bg2); }
+.services-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; margin-bottom: 4rem; }
+.services-desc { font-size: 0.92rem; line-height: 1.85; color: var(--text-mid); font-weight: 300; }
+
+.services-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border);
+}
+.service-card {
+  padding: 2.5rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  transition: background 0.4s;
+  cursor: default;
+}
+.service-card:nth-child(3n) { border-right: none; }
+.service-card:nth-last-child(-n+3) { border-bottom: none; }
+.service-card::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 0; background: var(--sage-dim); transition: height 0.5s;
+}
+.service-card:hover::before { height: 100%; }
+.service-card:hover { background: rgba(138,171,120,0.04); }
+.svc-num {
+  font-family: 'Inconsolata', monospace; font-size: 0.65rem;
+  letter-spacing: 0.15em; color: var(--sage); margin-bottom: 1.5rem;
+}
+.svc-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 600; margin-bottom: 0.9rem; line-height: 1.2;
+}
+.svc-text { font-size: 0.84rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
+
+/* ── INTERACTIVE CHART SECTION ── */
+.data-section { background: var(--bg); position: relative; }
+.data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-top: 4rem; }
+.chart-card {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 2rem;
+}
+.chart-title {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.chart-subtitle { color: var(--text-dim); font-size: 0.6rem; }
+
+/* Radar chart canvas */
+canvas { width: 100% !important; }
+
+/* Sector pills for filtering */
+.sector-filters {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem;
+}
+.sector-pill {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.35rem 0.9rem; border: 1px solid var(--border2);
+  color: var(--text-dim); background: transparent; cursor: pointer;
+  transition: all 0.25s;
+}
+.sector-pill.active { border-color: var(--sage); color: var(--sage); background: var(--sage-dim); }
+.sector-pill:hover { border-color: var(--sage-light); color: var(--sage-light); }
+
+/* ── TEAM ── */
+.team { background: var(--bg2); }
+.team-intro { display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: end; margin-bottom: 5rem; }
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.team-card {
+  background: var(--surface); border: 1px solid var(--border);
+  overflow: hidden; position: relative;
+  transition: transform 0.4s, box-shadow 0.4s;
+}
+.team-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.team-card-header {
+  height: 160px; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.team-avatar-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem; font-weight: 300; font-style: italic;
+  color: rgba(138,171,120,0.35); line-height: 1; user-select: none;
+}
+.team-nationality {
+  position: absolute; top: 1rem; right: 1rem;
+  font-size: 1.3rem; line-height: 1;
+}
+.team-card-body { padding: 1.5rem; }
+.team-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem; font-weight: 600; margin-bottom: 0.2rem;
+}
+.team-role {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 0.9rem;
+}
+.team-bio { font-size: 0.8rem; line-height: 1.7; color: var(--text-mid); font-weight: 300; margin-bottom: 1rem; }
+.team-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+.team-tag {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.6rem; padding: 0.2rem 0.55rem;
+  border: 1px solid var(--border); color: var(--text-dim); letter-spacing: 0.04em;
+}
+.team-linkedin {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.72rem; font-weight: 400; color: var(--sage);
+  text-decoration: none; letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(138,171,120,0.3); padding-bottom: 1px;
+  transition: all 0.2s;
+}
+.team-linkedin:hover { color: var(--sage-light); border-color: var(--sage-light); }
+
+/* ── PROJECTS ── */
+.projects { background: var(--bg); }
+.projects-table-head {
+  display: grid; grid-template-columns: 80px 1fr 120px 140px 100px;
+  padding: 0.7rem 1.5rem;
+  border-bottom: 1px solid var(--border2);
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.63rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim);
+}
+.projects-list { border: 1px solid var(--border); }
+.project-row {
+  display: grid; grid-template-columns: 80px 1fr 120px 140px 100px;
+  padding: 1.3rem 1.5rem; align-items: center;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background 0.25s;
+  position: relative;
+}
+.project-row:last-child { border-bottom: none; }
+.project-row:hover { background: var(--surface); }
+.project-row.expanded { background: var(--surface); }
+.project-year {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.72rem; color: var(--sage); letter-spacing: 0.08em;
+}
+.project-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-weight: 600; line-height: 1.2;
+}
+.project-client {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.68rem; letter-spacing: 0.06em; color: var(--gold);
+}
+.project-country { font-size: 0.8rem; color: var(--text-mid); }
+.project-arrow {
+  text-align: right; color: var(--text-dim); font-size: 0.8rem;
+  transition: transform 0.3s;
+}
+.project-row.expanded .project-arrow { transform: rotate(90deg); color: var(--sage); }
+.project-detail {
+  display: none; grid-column: 1/-1;
+  padding: 1.2rem 0 0.3rem;
+  font-size: 0.83rem; line-height: 1.75; color: var(--text-mid); font-weight: 300;
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+}
+.project-row.expanded .project-detail { display: block; }
+
+/* ── METHODOLOGY ── */
+.methodology { background: var(--bg3); }
+.method-steps {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  border: 1px solid var(--border); margin-top: 4rem;
+}
+.method-step {
+  padding: 2.5rem 2rem; border-right: 1px solid var(--border);
+  position: relative; transition: background 0.3s;
+}
+.method-step:last-child { border-right: none; }
+.method-step:hover { background: var(--surface); }
+.method-step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem; font-weight: 300; font-style: italic;
+  color: rgba(138,171,120,0.08); line-height: 1; margin-bottom: 0.5rem;
+  letter-spacing: -0.04em;
+}
+.method-step h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem; font-weight: 600; margin-bottom: 0.8rem; line-height: 1.2;
+}
+.method-step p { font-size: 0.82rem; line-height: 1.7; color: var(--text-mid); font-weight: 300; }
+.method-connector {
+  position: absolute; top: 50%; right: -1px;
+  width: 2px; height: 30px; background: var(--sage);
+  transform: translateY(-50%); display: none;
+}
+.method-step:hover .method-connector { display: block; }
+
+/* ── CONTACT ── */
+.contact { background: var(--bg2); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; margin-top: 4rem; }
+.contact-info { }
+.c-block { margin-bottom: 2.5rem; }
+.c-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.63rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 0.5rem;
+}
+.c-val { font-size: 0.92rem; color: var(--text-mid); font-weight: 300; }
+.c-val a { color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
+.c-val a:hover { color: var(--sage-light); }
+
+.urgent-bar {
+  display: flex; align-items: flex-start; gap: 1rem;
+  background: rgba(196,107,74,0.08); border: 1px solid rgba(196,107,74,0.25);
+  padding: 1.2rem 1.5rem; margin-top: 2rem;
+}
+.urgent-pulse {
+  width: 8px; height: 8px; background: var(--accent-red); border-radius: 50%;
+  flex-shrink: 0; margin-top: 3px;
+  animation: urgentPulse 1.8s infinite;
+}
+@keyframes urgentPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(196,107,74,0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(196,107,74,0); }
+}
+.urgent-text { font-size: 0.82rem; line-height: 1.6; color: rgba(232,237,228,0.65); font-weight: 300; }
+.urgent-text strong { color: var(--accent-red); font-weight: 500; letter-spacing: 0.05em; }
+.urgent-text a { color: var(--accent-red); text-decoration: none; }
+
+.contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+.f-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.f-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim);
+}
+.f-input, .f-select, .f-textarea {
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 0.8rem 1rem;
+  font-family: 'Jost', sans-serif; font-size: 0.87rem; font-weight: 300;
+  outline: none; transition: border-color 0.25s; border-radius: 0;
+  appearance: none;
+}
+.f-input::placeholder, .f-textarea::placeholder { color: var(--text-dim); }
+.f-input:focus, .f-select:focus, .f-textarea:focus { border-color: var(--sage); }
+.f-select option { background: var(--bg2); }
+.f-textarea { resize: vertical; min-height: 120px; }
+.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.f-urgent {
+  display: flex; align-items: center; gap: 0.8rem;
+  background: rgba(196,107,74,0.05); border: 1px solid rgba(196,107,74,0.2);
+  padding: 0.9rem 1rem; cursor: pointer;
+}
+.f-urgent input { accent-color: var(--accent-red); width: 15px; height: 15px; }
+.f-urgent label { font-size: 0.82rem; color: var(--text-mid); cursor: pointer; font-weight: 300; }
+.f-urgent label strong { color: var(--accent-red); }
+.btn-submit {
+  background: var(--sage); color: var(--bg);
+  padding: 1rem 2.5rem; font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  border: none; cursor: pointer; transition: background 0.25s, transform 0.2s;
+  align-self: flex-start; font-family: 'Jost', sans-serif;
+}
+.btn-submit:hover { background: var(--sage-light); transform: translateY(-2px); }
+
+/* ── FOOTER ── */
+footer {
+  background: #060907; border-top: 1px solid var(--border);
+  padding: 2rem 3rem; display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 300; font-style: italic;
+  color: rgba(232,237,228,0.5);
+}
+footer p { font-size: 0.75rem; color: var(--text-dim); }
+.footer-links { display: flex; gap: 2rem; list-style: none; }
+.footer-links a { font-size: 0.72rem; color: var(--text-dim); text-decoration: none; transition: color 0.2s; letter-spacing: 0.06em; }
+.footer-links a:hover { color: var(--sage); }
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s, transform 0.8s; }
+.reveal.vis { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes counterSpin { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+
+/* ── TEAM BG PATTERNS ── */
+.thdr-1 { background: linear-gradient(135deg, #0f1f12 0%, #1a2e1c 100%); }
+.thdr-2 { background: linear-gradient(135deg, #141a22 0%, #1e2a35 100%); }
+.thdr-3 { background: linear-gradient(135deg, #1a1510 0%, #2a2018 100%); }
+.thdr-4 { background: linear-gradient(135deg, #101822 0%, #162030 100%); }
+.thdr-5 { background: linear-gradient(135deg, #151020 0%, #221830 100%); }
+.thdr-6 { background: linear-gradient(135deg, #1a1010 0%, #2a1818 100%); }
+.thdr-7 { background: linear-gradient(135deg, #0f1a12 0%, #182a1e 100%); }
+.thdr-8 { background: linear-gradient(135deg, #1a1a10 0%, #282818 100%); }
+.thdr-9 { background: linear-gradient(135deg, #101a1a 0%, #182828 100%); }
+
+/* ── MOBILE NAV DRAWER ── */
+.mobile-nav {
+  display: none; position: fixed; top: 0; right: -100%;
+  width: 75%; max-width: 320px; height: 100vh;
+  background: var(--bg2); border-left: 1px solid var(--border);
+  z-index: 300; flex-direction: column; padding: 5rem 2rem 2rem;
+  transition: right 0.4s ease;
+}
+.mobile-nav.open { right: 0; }
+.mobile-nav a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 300; color: var(--text-mid);
+  text-decoration: none; padding: 0.8rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s;
+}
+.mobile-nav a:hover { color: var(--sage-light); }
+.mobile-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7); z-index: 299;
+}
+.mobile-overlay.open { display: block; }
+.close-mobile {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  background: none; border: none; color: var(--text-mid);
+  font-size: 1.5rem; cursor: pointer;
 }
 
-/* ── SLIDE 1 — IDENTITY ───────────────────────────────── */
-#slide-1{
-  background:var(--paper);
-  padding:clamp(2rem,4vh,3.5rem) clamp(1.5rem,8vw,8rem) clamp(2rem,4vh,3.5rem);
-  justify-content:flex-start;
-  min-height:calc(100vh - 64px);
-}
-.s1-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:4rem 6rem;
-  align-items:stretch;
-  max-width:1400px;
-  margin:0 auto;
-}
-@media(max-width:900px){.s1-grid{grid-template-columns:1fr;gap:2.5rem}}
-.s1-headline{
-  font-family:var(--display);
-  font-size:clamp(3.5rem,8vw,7rem);
-  line-height:0.92;
-  letter-spacing:0.03em;
-  color:var(--ink);
-  border-left:3px solid var(--gold);
-  padding-left:1.5rem;
-}
-.s1-headline em{
-  font-family:var(--serif);
-  font-style:italic;
-  font-size:0.55em;
-  display:block;
-  color:var(--gold);
-  letter-spacing:0.05em;
-  margin-top:0.2em;
-}
-.s1-tagline{
-  font-family:var(--mono);
-  font-size:0.72rem;
-  letter-spacing:0.25em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  margin-bottom:2rem;
-  display:flex;align-items:center;gap:1rem;
-}
-.s1-tagline::before{content:'';display:block;width:2.5rem;height:1px;background:var(--gold)}
-.s1-body{
-  font-size:1.05rem;
-  font-weight:300;
-  color:var(--ink2);
-  line-height:1.75;
-  margin-bottom:1.5rem;
-}
-.s1-sectors{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:0.75rem 1.5rem;
-  margin-top:1.5rem;
-}
-.s1-sector{
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  padding:0.4rem 0;
-  border-bottom:0.5px solid var(--rule);
-  position:relative;
-}
-.s1-sector::before{
-  content:'';
-  position:absolute;left:0;bottom:-0.5px;
-  width:0;height:1px;
-  background:var(--gold);
-  transition:width .35s ease;
-}
-.s1-sector:hover::before{width:100%}
-.nace-block{
-  margin-top:2.5rem;
-  padding:1.5rem;
-  border:0.5px solid var(--rule);
-  background:var(--paper2);
-}
-.nace-block h4{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:0.75rem;
-}
-.nace-row{
-  display:flex;align-items:baseline;gap:0.75rem;
-  margin-bottom:0.35rem;
-}
-.nace-code{
-  font-family:var(--mono);
-  font-size:0.68rem;
-  color:var(--ink);
-  font-weight:400;
-  min-width:4.5rem;
-}
-.nace-desc{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  color:var(--ink3);
-  letter-spacing:0.04em;
-}
-
-/* ── HOVER GALLERY (SLIDE 1 RIGHT) ──────────────────────── */
-.gallery-col{
-  display:flex;
-  flex-direction:column;
-  gap:0;
-  border-top:1px solid var(--rule);
-}
-.gallery-contact{
-  margin-top:auto;
-  padding:1.5rem 0 0;
-  border-top:1px solid var(--rule);
-}
-.gc-label{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  margin-bottom:0.5rem;
-}
-.gc-email{
-  display:block;
-  font-family:var(--serif);
-  font-size:1.05rem;
-  font-style:italic;
-  color:var(--gold);
-  text-decoration:none;
-  margin-bottom:0.4rem;
-  transition:color .2s;
-}
-.gc-email:hover{color:var(--ink)}
-.gc-hq{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.1em;
-  color:var(--ink3);
-}
-.s1-legal{
-  margin-top:2rem;
-  padding:1.5rem;
-  border:0.5px solid var(--rule);
-  background:var(--ink);
-  position:relative;
-  overflow:hidden;
-}
-.s1-legal::before{
-  content:'';
-  position:absolute;
-  top:0;left:0;
-  width:3px;height:100%;
-  background:var(--gold);
-}
-.s1-legal-name{
-  font-family:var(--display);
-  font-size:1.4rem;
-  letter-spacing:0.06em;
-  color:var(--paper);
-  margin-bottom:0.15rem;
-  padding-left:0.75rem;
-}
-.s1-legal-vat{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  margin-bottom:1rem;
-  padding-left:0.75rem;
-}
-.s1-legal-body{
-  font-family:var(--serif);
-  font-size:0.88rem;
-  font-weight:300;
-  color:rgba(245,243,238,0.75);
-  line-height:1.7;
-  padding-left:0.75rem;
-}
-.gallery-item{
-  overflow:hidden;
-  border-bottom:0.5px solid var(--rule);
-  cursor:pointer;
-  position:relative;
-}
-.gallery-item-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:1rem 0;
-  transition:padding .3s ease;
-}
-.gallery-item-header h3{
-  font-family:var(--serif);
-  font-size:1.25rem;
-  font-weight:400;
-  color:var(--ink);
-  letter-spacing:0.01em;
-}
-.gallery-item-header .gi-tag{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:var(--ink3);
-}
-.gallery-body{
-  max-height:0;
-  overflow:hidden;
-  transition:max-height .45s cubic-bezier(.4,0,.2,1);
-  font-size:0.88rem;
-  font-weight:300;
-  color:var(--ink2);
-  line-height:1.6;
-}
-.gallery-item:hover .gallery-body,
-.gallery-item.open .gallery-body{
-  max-height:300px;
-}
-.gallery-item:hover .gallery-item-header{padding:1rem 0 0.25rem}
-.gallery-body-inner{
-  padding:0 0 1rem 0;
-}
-.gallery-body-inner p{margin-bottom:0.5rem;font-size:0.85rem}
-
-/* ── SLIDE 2 — SERVICES ───────────────────────────────── */
-#slide-2{
-  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
-  background:var(--white);
-}
-.s2-inner{max-width:1400px;margin:0 auto}
-.slide-label{
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.25em;
-  text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:1rem;
-}
-.s2-headline{
-  font-family:var(--display);
-  font-size:clamp(2.5rem,5vw,4.5rem);
-  line-height:0.95;
-  letter-spacing:0.04em;
-  color:var(--ink);
-  margin-bottom:2.5rem;
-  border-bottom:1px solid var(--rule);
-  padding-bottom:1.5rem;
-}
-.services-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:0;
-  border-top:0.5px solid var(--rule);
-  border-left:0.5px solid var(--rule);
-}
-@media(max-width:700px){.services-grid{grid-template-columns:1fr}}
-.svc-block{
-  border-right:0.5px solid var(--rule);
-  border-bottom:0.5px solid var(--rule);
-  padding:1.5rem 1.75rem;
-  position:relative;
-  overflow:hidden;
-  transition:background .25s;
-  cursor:default;
-}
-.svc-block::after{
-  content:'';
-  position:absolute;
-  left:0;top:0;
-  width:3px;height:0;
-  background:var(--gold);
-  transition:height .35s ease;
-}
-.svc-block:hover::after{height:100%}
-.svc-block:hover{background:var(--paper)}
-.svc-code{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:0.5rem;
-}
-.svc-block h3{
-  font-family:var(--serif);
-  font-size:1.05rem;
-  font-weight:500;
-  color:var(--ink);
-  margin-bottom:0.6rem;
-  line-height:1.3;
-}
-.svc-block ul{
-  list-style:none;
-  padding:0;
-}
-.svc-block ul li{
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.06em;
-  color:var(--ink3);
-  padding:0.18rem 0;
-  border-bottom:0.5px dotted var(--rule);
-}
-.svc-block ul li:last-child{border:none}
-.svc-block ul li::before{
-  content:'— ';
-  color:var(--gold2);
-}
-
-/* ── SLIDE 3 — ORGANISATION ───────────────────────────── */
-#slide-3{
-  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
-  background:var(--paper);
-}
-.s3-inner{max-width:1400px;margin:0 auto}
-.s3-headline{
-  font-family:var(--display);
-  font-size:clamp(2.5rem,5vw,4.5rem);
-  line-height:0.95;
-  letter-spacing:0.04em;
-  color:var(--ink);
-  margin-bottom:0.5rem;
-}
-.s3-sub{
-  font-family:var(--mono);
-  font-size:0.65rem;
-  letter-spacing:0.15em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  margin-bottom:2.5rem;
-  padding-bottom:1.5rem;
-  border-bottom:1px solid var(--rule);
-}
-.divisions-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:0;
-  border-top:0.5px solid var(--rule);
-  border-left:0.5px solid var(--rule);
-}
-@media(max-width:600px){.divisions-grid{grid-template-columns:1fr}}
-.div-card{
-  border-right:0.5px solid var(--rule);
-  border-bottom:0.5px solid var(--rule);
-  padding:1.25rem 1.5rem;
-  transition:background .2s;
-}
-.div-card:hover{background:var(--paper2)}
-.div-code{
-  font-family:var(--display);
-  font-size:1.15rem;
-  letter-spacing:0.04em;
-  color:var(--gold);
-  display:block;
-  margin-bottom:0.3rem;
-  line-height:1;
-}
-.div-name{
-  font-family:var(--serif);
-  font-size:0.88rem;
-  font-weight:400;
-  color:var(--ink);
-  line-height:1.35;
-}
-.regional-section{
-  margin-top:2.5rem;
-  padding:1.5rem;
-  background:var(--ink);
-  color:var(--paper);
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:1rem 2rem;
-}
-.regional-section .r-label{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  margin-bottom:0.25rem;
-  display:block;
-}
-.regional-section .r-name{
-  font-family:var(--serif);
-  font-size:0.95rem;
-  color:var(--paper);
-  font-weight:300;
-}
-
-/* ── CONTACT FOOTER ───────────────────────────────────── */
-footer{
-  background:var(--ink);
-  color:var(--paper);
-  padding:clamp(3rem,6vw,5rem) clamp(1.5rem,8vw,8rem);
-  display:flex;
-  flex-direction:column;
-  gap:2rem;
-}
-.footer-inner{
-  max-width:1400px;
-  margin:0 auto;
-  width:100%;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:3rem 6rem;
-  align-items:end;
-}
-@media(max-width:700px){.footer-inner{grid-template-columns:1fr;gap:2rem}}
-.footer-brand{
-  font-family:var(--serif);
-  font-size:1.1rem;
-  font-weight:600;
-  letter-spacing:0.06em;
-  text-transform:uppercase;
-  color:var(--paper);
-  margin-bottom:0.75rem;
-}
-.footer-tagline{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  margin-bottom:1.25rem;
-}
-.footer-body{
-  font-size:0.9rem;
-  font-weight:300;
-  color:var(--paper2);
-  line-height:1.7;
-}
-.footer-body a{
-  color:var(--gold2);
-  text-decoration:none;
-}
-.footer-body a:hover{text-decoration:underline}
-.footer-hq{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:rgba(245,243,238,0.4);
-  line-height:1.8;
-}
-.footer-hq strong{
-  display:block;
-  color:var(--gold2);
-  font-size:0.62rem;
-  margin-bottom:0.4rem;
-  letter-spacing:0.2em;
-}
-.footer-bottom{
-  max-width:1400px;
-  margin:0 auto;
-  width:100%;
-  padding-top:1.5rem;
-  border-top:0.5px solid rgba(245,243,238,0.15);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:1rem;
-  flex-wrap:wrap;
-}
-.footer-bottom p{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.1em;
-  text-transform:uppercase;
-  color:rgba(245,243,238,0.35);
-}
-
-/* ── SLIDE 4 — NACE LAYER MATRIX ──────────────────────── */
-#slide-4{
-  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
-  background:var(--ink);
-  color:var(--paper);
-}
-.s4-inner{max-width:1400px;margin:0 auto}
-.s4-headline{
-  font-family:var(--display);
-  font-size:clamp(2.5rem,5vw,4.5rem);
-  line-height:0.95;
-  letter-spacing:0.04em;
-  color:var(--paper);
-  margin-bottom:0.5rem;
-}
-.s4-sub{
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  margin-bottom:2.5rem;
-  padding-bottom:1.5rem;
-  border-bottom:1px solid rgba(245,243,238,0.12);
-}
-.matrix-table{
-  width:100%;
-  border-collapse:collapse;
-  font-family:var(--serif);
-}
-.matrix-table thead tr{
-  border-bottom:1px solid rgba(245,243,238,0.2);
-}
-.matrix-table thead th{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  text-align:left;
-  padding:0.75rem 1.25rem 0.75rem 0;
-  font-weight:400;
-}
-.matrix-table thead th:first-child{
-  min-width:200px;
-}
-.matrix-table tbody tr{
-  border-bottom:0.5px solid rgba(245,243,238,0.08);
-  transition:background .2s;
-}
-.matrix-table tbody tr:hover{
-  background:rgba(245,243,238,0.05);
-}
-.matrix-table td{
-  padding:0.9rem 1.25rem 0.9rem 0;
-  vertical-align:middle;
-  font-size:0.95rem;
-  font-weight:300;
-  color:var(--paper2);
-  line-height:1.4;
-}
-.matrix-table td:first-child{
-  font-family:var(--serif);
-  font-style:italic;
-  font-size:1rem;
-  color:var(--paper);
-  font-weight:400;
-}
-.nace-pill{
-  display:inline-block;
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.1em;
-  color:var(--gold);
-  border:0.5px solid var(--gold);
-  padding:0.15rem 0.5rem;
-  white-space:nowrap;
-}
-.row-num{
-  font-family:var(--mono);
-  font-size:0.55rem;
-  letter-spacing:0.15em;
-  color:rgba(245,243,238,0.25);
-  margin-right:1rem;
-  display:inline-block;
-  min-width:1.5rem;
-}
-
-/* ── SLIDE 5 — HEALTH + AGRI INTELLIGENCE ─────────────── */
-#slide-5{
-  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
-  background:var(--paper2);
-}
-.s5-inner{max-width:1400px;margin:0 auto}
-.s5-headline{
-  font-family:var(--display);
-  font-size:clamp(2.5rem,5vw,4.5rem);
-  line-height:0.95;
-  letter-spacing:0.04em;
-  color:var(--ink);
-  margin-bottom:0.5rem;
-}
-.s5-sub{
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  margin-bottom:2.5rem;
-  padding-bottom:1.5rem;
-  border-bottom:1px solid var(--rule);
-}
-.dual-table-wrap{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:0;
-  border:0.5px solid var(--rule);
-}
-@media(max-width:800px){.dual-table-wrap{grid-template-columns:1fr}}
-.dual-col{
-  padding:0;
-  overflow:hidden;
-}
-.dual-col:first-child{
-  border-right:0.5px solid var(--rule);
-}
-.dual-col-header{
-  padding:1rem 1.5rem;
-  background:var(--ink);
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  gap:1rem;
-}
-.dual-col-header h3{
-  font-family:var(--display);
-  font-size:1.6rem;
-  letter-spacing:0.06em;
-  color:var(--paper);
-}
-.dual-col-header span{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.15em;
-  text-transform:uppercase;
-  color:var(--gold2);
-}
-.intel-table{
-  width:100%;
-  border-collapse:collapse;
-}
-.intel-table tbody tr{
-  border-bottom:0.5px solid var(--rule);
-  transition:background .2s;
-}
-.intel-table tbody tr:hover{background:var(--paper)}
-.intel-table td{
-  padding:0.85rem 1.5rem;
-  vertical-align:top;
-  font-size:0.9rem;
-  font-weight:300;
-  color:var(--ink2);
-  line-height:1.4;
-}
-.intel-table td:first-child{
-  font-family:var(--serif);
-  font-style:italic;
-  font-size:0.95rem;
-  color:var(--ink);
-  font-weight:400;
-  min-width:160px;
-  border-right:0.5px solid var(--rule2);
-}
-.intel-value{
-  font-family:var(--mono);
-  font-size:0.65rem;
-  letter-spacing:0.08em;
-  color:var(--ink);
-  display:block;
-  margin-bottom:0.2rem;
-}
-.intel-nace{
-  display:inline-block;
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.1em;
-  color:var(--gold);
-  border:0.5px solid var(--gold);
-  padding:0.1rem 0.4rem;
-  margin-top:0.5rem;
-}
-.intel-table-head td{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.15em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  padding:0.6rem 1.5rem;
-  background:var(--paper);
-  border-bottom:0.5px solid var(--rule) !important;
-  font-style:normal !important;
-  font-weight:400 !important;
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .method-steps { grid-template-columns: repeat(2, 1fr); }
+  .method-step:nth-child(2) { border-right: none; }
+  .method-step { border-bottom: 1px solid var(--border); }
+  .method-step:nth-child(3), .method-step:nth-child(4) { border-bottom: none; }
+  .method-step:nth-child(4) { border-right: none; }
+}
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  nav.scrolled { padding: 0.8rem 1.5rem; }
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .hamburger { display: flex; }
+  section { padding: 5rem 1.5rem; }
+  .hero { padding: 5rem 1.5rem 4rem; }
+  .hero-stats { gap: 1.5rem; }
+  .services-intro { grid-template-columns: 1fr; gap: 1.5rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .service-card { border-right: none !important; }
+  .data-grid { grid-template-columns: 1fr; }
+  .team-intro { grid-template-columns: 1fr; gap: 2rem; }
+  .team-grid { grid-template-columns: 1fr; }
+  .projects-table-head { display: none; }
+  .project-row { grid-template-columns: 70px 1fr 80px; }
+  .project-client { display: none; }
+  .method-steps { grid-template-columns: 1fr; }
+  .method-step { border-right: none !important; border-bottom: 1px solid var(--border) !important; }
+  .method-step:last-child { border-bottom: none !important; }
+  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .f-row { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; gap: 1rem; }
+  .footer-links { justify-content: center; }
+}
+@media (max-width: 600px) {
+  .hero h1 { font-size: 2.8rem; }
+  .hero-stat-num { font-size: 2rem; }
+  .hero-stats { gap: 1.5rem; }
+  .hero-actions { flex-direction: column; align-items: flex-start; }
+  .btn-main, .btn-ghost { width: 100%; text-align: center; }
+  .ticker-label { display: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header>
-  <a href="#" class="logo">
-    Scientiae Naturalis
-    <span>Berlin, Germany</span>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileNav()"></div>
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-mobile" onclick="closeMobileNav()">✕</button>
+  <a href="#services" onclick="closeMobileNav()">Services</a>
+  <a href="#data" onclick="closeMobileNav()">Expertise</a>
+  <a href="#team" onclick="closeMobileNav()">Team</a>
+  <a href="#projects" onclick="closeMobileNav()">Projects</a>
+  <a href="#methodology" onclick="closeMobileNav()">Methodology</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-brand">
+    <span class="nav-brand-name">Scientiae-Naturalis</span>
+    <span class="nav-brand-sub">Monitoring · Evaluation · Learning</span>
   </a>
-  <nav class="links" id="main-nav">
-    <a href="#" data-slide="0" class="nav-slide">Overview</a>
-    <a href="#" data-slide="1" class="nav-slide">Services</a>
-    <a href="#" data-slide="2" class="nav-slide">Organisation</a>
-    <a href="#" data-slide="3" class="nav-slide">NACE Matrix</a>
-    <a href="#" data-slide="4" class="nav-slide">Intelligence</a>
-    <a href="mailto:procurement@scientiae-naturalis.org" class="nav-cta">Contact</a>
-  </nav>
-  <div class="hamburger" id="burger" aria-label="Menu">
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#data">Expertise</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#methodology">Methodology</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <div class="hamburger" onclick="openMobileNav()">
     <span></span><span></span><span></span>
   </div>
-</header>
+</nav>
 
-<!-- CAROUSEL -->
-<div class="carousel-outer">
-  <div class="slides-track" id="track">
-
-    <!-- SLIDE 1 — IDENTITY & OVERVIEW -->
-    <section class="slide" id="slide-1" aria-label="Company Overview">
-      <div class="s1-grid">
-
-        <!-- LEFT: Headline + description -->
-        <div>
-          <div class="s1-tagline">Knowledge Arbitrage</div>
-          <h1 class="s1-headline">
-            Scientiae<br>Naturalis
-            <em>High-Stakes Intelligence for Complex Systems</em>
-          </h1>
-          <p class="s1-body" style="margin-top:2rem">
-            Scientiae Naturalis is a Berlin-based professional and scientific advisory firm specialising in High-Stakes Knowledge Arbitrage. We operate at the intersection of natural science, policy, data systems, and institutional capacity — translating rigorous research into decision-grade intelligence for governments, international organisations, and private-sector clients.
-          </p>
-          <p class="s1-body">
-            Our work spans four strategic industries: Health, Food, Environment, and Education. Across these domains, we design, implement, and evaluate complex programmes where the cost of poor information is institutional, economic, or humanitarian.
-          </p>
-
-          <div class="nace-block">
-            <h4>Primary NACE Classification</h4>
-            <div class="nace-row">
-              <span class="nace-code">72.10</span>
-              <span class="nace-desc">R&D — Natural Sciences &amp; Engineering (anchor)</span>
-            </div>
-            <div class="nace-row">
-              <span class="nace-code">Section M</span>
-              <span class="nace-desc">Professional, scientific and technical activities</span>
-            </div>
-            <div class="nace-row">
-              <span class="nace-code">Section P</span>
-              <span class="nace-desc">Education</span>
-            </div>
-            <div class="nace-row">
-              <span class="nace-code">Section E</span>
-              <span class="nace-desc">Environmental services</span>
-            </div>
-            <div class="nace-row">
-              <span class="nace-code">Sections A–D</span>
-              <span class="nace-desc">Natural resources &amp; energy systems</span>
-            </div>
-          </div>
-
-          <div class="s1-sectors">
-            <div class="s1-sector">Education Data + Policy Integration</div>
-            <div class="s1-sector">Digital Transformation of Education</div>
-            <div class="s1-sector">Inclusive &amp; Gender-Responsive Systems</div>
-            <div class="s1-sector">TVET + Labour Market Alignment</div>
-            <div class="s1-sector">Programme Implementation Outsourcing</div>
-            <div class="s1-sector">Food Security Early Warning Systems</div>
-            <div class="s1-sector">Global Commodity &amp; Price Intelligence</div>
-            <div class="s1-sector">Traceability &amp; Supply Chain Transparency</div>
-            <div class="s1-sector">Climate-Agriculture Data Systems</div>
-            <div class="s1-sector">Agri-Food Data Platform Ownership</div>
-          </div>
-
-          <div class="s1-legal">
-            <div class="s1-legal-name">Scientiae Naturalis GmbH</div>
-            <div class="s1-legal-vat">VAT DE123456789</div>
-            <p class="s1-legal-body">An R&amp;D enterprise founded by university professors and spin-off founders in Germany. We operate at the intersection of research, consultancy, and knowledge brokerage — converting domain-specific scientific intelligence into high-value decisions for enterprise clients.</p>
-          </div>
-        </div>
-
-        <!-- RIGHT: Hover gallery of strategic domains -->
-        <div class="gallery-col">
-          <div class="gallery-item">
-            <div class="gallery-item-header">
-              <h3>Health Industry</h3>
-              <span class="gi-tag">Arbitrage Domain</span>
-            </div>
-            <div class="gallery-body">
-              <div class="gallery-body-inner">
-                <p>Health product policy, immunisation and vaccine intelligence, regulatory prequalification, digital health infrastructure, health emergency risk assessment, and pharmaceutical norms and standards advisory. We translate epidemiological and regulatory data into procurement-grade decision support for ministries of health and multilateral agencies.</p>
-              </div>
-            </div>
-          </div>
-          <div class="gallery-item">
-            <div class="gallery-item-header">
-              <h3>Food Industry</h3>
-              <span class="gi-tag">Arbitrage Domain</span>
-            </div>
-            <div class="gallery-body">
-              <div class="gallery-body-inner">
-                <p>Food and nutrition systems, agri-food economics and policy, food standards and zoonotic disease monitoring, nutrition and food safety, and supply chain traceability. We operate commodity and price intelligence platforms and early warning systems for food security crises at regional and global scale.</p>
-              </div>
-            </div>
-          </div>
-          <div class="gallery-item">
-            <div class="gallery-item-header">
-              <h3>Environment Industry</h3>
-              <span class="gi-tag">Arbitrage Domain</span>
-            </div>
-            <div class="gallery-body">
-              <div class="gallery-body-inner">
-                <p>Climate-agriculture data systems, natural resource management, environmental impact and strategic assessments, biodiversity monitoring, remote sensing analytics, and renewable energy systems. We build and operate data platforms for climate risk modelling, ESG reporting, and sustainable production streams.</p>
-              </div>
-            </div>
-          </div>
-          <div class="gallery-item">
-            <div class="gallery-item-header">
-              <h3>Education Industry</h3>
-              <span class="gi-tag">Arbitrage Domain</span>
-            </div>
-            <div class="gallery-body">
-              <div class="gallery-body-inner">
-                <p>Education management information systems (EMIS), policy advisory, teacher training and workforce management, digital learning infrastructure, inclusive and gender-responsive education design, TVET alignment, and large-scale programme implementation for Erasmus+, UNESCO, and World Bank frameworks. Full-cycle delivery from strategy to evaluation.</p>
-              </div>
-            </div>
-          </div>
-          <div class="gallery-item">
-            <div class="gallery-item-header">
-              <h3>SDG Alignment</h3>
-              <span class="gi-tag">Framework</span>
-            </div>
-            <div class="gallery-body">
-              <div class="gallery-body-inner">
-                <p>All service lines are structured around verifiable SDG 4 (quality education), SDG 2 (zero hunger), SDG 3 (good health), and SDG 13 (climate action) outcomes. We provide benchmarking, indicator monitoring, and cross-country comparability frameworks aligned to PISA-equivalent international assessment systems.</p>
-              </div>
-            </div>
-          </div>
-          <div class="gallery-item">
-            <div class="gallery-item-header">
-              <h3>Programme Outsourcing</h3>
-              <span class="gi-tag">Implementation</span>
-            </div>
-            <div class="gallery-body">
-              <div class="gallery-body-inner">
-                <p>Full outsourcing of multi-country project coordination, grant writing and proposal engineering, KPI dashboard systems, impact assessment, and independent project evaluation of EACEA-type programmes. We assume complete operational and reporting responsibility for consortium-led projects across jurisdictions.</p>
-              </div>
-            </div>
-          </div>
-          <div class="gallery-contact">
-            <div class="gc-label">Procurement &amp; Institutional Enquiries</div>
-            <a class="gc-email" href="mailto:procurement@scientiae-naturalis.org">procurement@scientiae-naturalis.org</a>
-            <div class="gc-hq">Berlin, Germany &mdash; Founded under German GmbH law</div>
-          </div>
-        </div>
-
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">Evidence · Analysis · Impact</span>
+    </div>
+    <h1>Turning <strong>Complexity</strong><br>into <em>Clarity</em></h1>
+    <p class="hero-desc">An international monitoring and evaluation consultancy serving German development finance and bilateral agencies. We deliver rigorous evidence, precise analysis, and actionable learning across four continents.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-main">Request a Proposal</a>
+      <a href="#projects" class="btn-ghost">View Projects</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">120<sup>+</sup></div>
+        <div class="hero-stat-label">Projects</div>
       </div>
-    </section>
-
-    <!-- SLIDE 2 — SERVICES -->
-    <section class="slide" id="slide-2" aria-label="Services">
-      <div class="s2-inner">
-        <div class="slide-label">Service Architecture</div>
-        <h2 class="s2-headline">Knowledge<br>Service Lines</h2>
-        <div class="services-grid">
-
-          <div class="svc-block">
-            <div class="svc-code">A — NACE M72 / M71 / M74</div>
-            <h3>Natural Sciences R&amp;D + Scientific Infrastructure</h3>
-            <ul>
-              <li>Contract R&amp;D (TRL 1–7), Applied research consortia</li>
-              <li>Lab-based experimentation, validation, DNA sequencing, bioinformatics</li>
-              <li>Scientific data modelling and simulation</li>
-              <li>Laboratory access, equipment calibration, metrology</li>
-              <li>Technology transfer, patent landscaping, IP strategy</li>
-              <li>Feasibility studies, scientific due diligence, risk modelling</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">B — NACE P85 / M72 / N82</div>
-            <h3>Capacity Building in Science &amp; Engineering</h3>
-            <ul>
-              <li>MSc/PhD-level modular training, micro-credentials in STEM</li>
-              <li>Industry-academia blended and digital lab training</li>
-              <li>AI / data science for scientists; GLP/GMP compliance</li>
-              <li>University modernisation, curriculum design, accreditation</li>
-              <li>Staff/student mobility management, fellowship administration</li>
-              <li>Grant management: Erasmus+, Horizon; KPI monitoring systems</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">C — NACE E36–39 / M71 / M72 / A / B / D</div>
-            <h3>Environmental Challenges &amp; Natural Resources</h3>
-            <ul>
-              <li>Environmental Impact Assessments, Strategic Environmental Assessments</li>
-              <li>Climate risk modelling, carbon footprint, ESG reporting</li>
-              <li>Forestry, fisheries, biodiversity, geological exploration</li>
-              <li>Water resource management, renewable energy feasibility</li>
-              <li>Remote sensing, GIS, satellite data analytics</li>
-              <li>Biodiversity monitoring platforms, smart grid modelling</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">D — NACE J / M / N / K</div>
-            <h3>Crosscutting: Digital, Policy &amp; Innovation</h3>
-            <ul>
-              <li>Scientific software development, AI for science (AI4S)</li>
-              <li>Big data platforms, open science repositories</li>
-              <li>Startup incubation, living labs, TRL scaling (4–9)</li>
-              <li>Science-policy interface advisory, EU regulatory alignment</li>
-              <li>Standardisation, certification, stakeholder engagement</li>
-              <li>Scientific communication strategies, citizen science</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">E — NACE N82 / M70 / M74 / P85</div>
-            <h3>Programme Implementation</h3>
-            <ul>
-              <li>Multi-country consortium coordination and deliverable management</li>
-              <li>Risk, quality management, independent project evaluation</li>
-              <li>Financial audits, compliance, impact assessment</li>
-              <li>KPI dashboards, impact tracking, data collection frameworks</li>
-              <li>Proposal design: Horizon / Erasmus+; budget structuring</li>
-              <li>Partner search, consortium building, grant writing</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">F — Information Arbitrage</div>
-            <h3>Other High-Stakes Arbitrage Services</h3>
-            <ul>
-              <li>Integrated science + policy translation (M72 + M70)</li>
-              <li>Climate-tech validation, TRL certification, carbon accounting</li>
-              <li>Digital science infrastructure and open science compliance</li>
-              <li>Modular, stackable micro-certification systems</li>
-              <li>Full outsourcing of programme-level project coordination</li>
-              <li>Institutional transformation (beyond training delivery)</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">G–K — NACE P85</div>
-            <h3>Education Delivery &amp; Transformation</h3>
-            <ul>
-              <li>Core education (all levels): curriculum design, CBL, accreditation</li>
-              <li>Early Childhood Education: frameworks, assessment tools, SDG 4.2</li>
-              <li>Higher Education: university modernisation, internationalisation</li>
-              <li>TVET: skills frameworks, dual education, apprenticeships (SDG 4.3–4.4)</li>
-              <li>Adult education, reskilling/upskilling, lifelong learning systems</li>
-              <li>Education in emergencies: rapid continuity, remote deployment</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">H — NACE P85 / M74 / N88</div>
-            <h3>Targeted Inclusion &amp; Equity Services</h3>
-            <ul>
-              <li>Universal access policy, education financing, inclusion mapping</li>
-              <li>Gender-responsive education system design, gender parity monitoring</li>
-              <li>Safe school frameworks, gender-sensitive curriculum development</li>
-              <li>Special education integration, assistive learning technologies</li>
-              <li>Inclusive pedagogy training, accessibility audits</li>
-              <li>Scholarship and subsidy programme design</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">I–J — NACE P85 / M72</div>
-            <h3>Education Content &amp; Teacher Capital</h3>
-            <ul>
-              <li>National literacy campaigns, numeracy assessment tools</li>
-              <li>Civic education, democracy curricula, peace education</li>
-              <li>School health programmes, WASH systems integration</li>
-              <li>Climate education curricula, green skills training (SDG 4.7)</li>
-              <li>Continuous Professional Development, digital pedagogy</li>
-              <li>Teacher recruitment systems, workforce planning, CPD</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">K–M — NACE M70 / N82</div>
-            <h3>Educational Management &amp; Governance</h3>
-            <ul>
-              <li>National education strategy development, regulatory alignment</li>
-              <li>School management systems, institutional governance frameworks</li>
-              <li>Large-scale programme management: Erasmus+, UNESCO, World Bank</li>
-              <li>Multi-country coordination, grant management and reporting</li>
-              <li>Qualification frameworks (NQF/EQF), competency frameworks</li>
-              <li>Benchmarking, SDG 4 indicator monitoring, PISA-aligned systems</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">L — NACE J62–63 / M72 / N82</div>
-            <h3>Data, Digital &amp; Knowledge Systems</h3>
-            <ul>
-              <li>Education Management Information Systems (EMIS)</li>
-              <li>Data collection platforms, policy decision-making dashboards</li>
-              <li>Learning analytics, predictive dropout models, AI personalisation</li>
-              <li>LMS, cloud learning environments, EdTech platforms</li>
-              <li>Connectivity solutions, digital education infrastructure</li>
-              <li>Open education resources (OER), knowledge hubs</li>
-            </ul>
-          </div>
-
-          <div class="svc-block">
-            <div class="svc-code">N — NACE M72 / J63 / N82</div>
-            <h3>Knowledge Sharing &amp; Global Cooperation</h3>
-            <ul>
-              <li>Open education resources, knowledge repositories and dashboards</li>
-              <li>Multi-stakeholder coalition management</li>
-              <li>South-South cooperation programmes</li>
-              <li>Academic and institutional network management</li>
-              <li>Education research studies, impact evaluation</li>
-              <li>Policy experimentation labs and evidence systems</li>
-            </ul>
-          </div>
-
-        </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">28<sup>+</sup></div>
+        <div class="hero-stat-label">Countries</div>
       </div>
-    </section>
-
-    <!-- SLIDE 3 — ORGANISATION -->
-    <section class="slide" id="slide-3" aria-label="Organisation">
-      <div class="s3-inner">
-        <div class="slide-label">Corporate Structure</div>
-        <h2 class="s3-headline">Divisional<br>Organisation</h2>
-        <p class="s3-sub">Scientiae Naturalis operates through specialised thematic and functional divisions, structured for multi-sector delivery across global mandates.</p>
-
-        <div class="divisions-grid">
-          <div class="div-card"><span class="div-code">PRCPMD</span><span class="div-name">Planning, Resource Coordination and Peer Monitoring</span></div>
-          <div class="div-card"><span class="div-code">PSD</span><span class="div-name">Project Support Division</span></div>
-          <div class="div-card"><span class="div-code">HRTMD</span><span class="div-name">Human Resource and Talent Management Division</span></div>
-          <div class="div-card"><span class="div-code">LED</span><span class="div-name">Legal and Ethics Division</span></div>
-          <div class="div-card"><span class="div-code">PSSD</span><span class="div-name">Procurement and Supply Services Division</span></div>
-          <div class="div-card"><span class="div-code">DADD</span><span class="div-name">Data and Analytics Division</span></div>
-          <div class="div-card"><span class="div-code">SD</span><span class="div-name">Statistics Division</span></div>
-          <div class="div-card"><span class="div-code">TICD</span><span class="div-name">Transformation, Implementation and Change Division</span></div>
-          <div class="div-card"><span class="div-code">ECCHD</span><span class="div-name">Environment, Climate Change and Health Division</span></div>
-          <div class="div-card"><span class="div-code">NFSD</span><span class="div-name">Nutrition and Food Safety Division</span></div>
-          <div class="div-card"><span class="div-code">FND</span><span class="div-name">Food and Nutrition Division</span></div>
-          <div class="div-card"><span class="div-code">ESF</span><span class="div-name">Agrifood Systems and Food Safety Division</span></div>
-          <div class="div-card"><span class="div-code">ESAD</span><span class="div-name">Agrifood Economics and Policy Division</span></div>
-          <div class="div-card"><span class="div-code">FSZDD</span><span class="div-name">Food Standards and Zoonotic Diseases Division</span></div>
-          <div class="div-card"><span class="div-code">AKH</span><span class="div-name">Agroecology Knowledge Hub</span></div>
-          <div class="div-card"><span class="div-code">HPPSD</span><span class="div-name">Health Product Policy and Standards Division</span></div>
-          <div class="div-card"><span class="div-code">RPD</span><span class="div-name">Regulation and Prequalifications Division</span></div>
-          <div class="div-card"><span class="div-code">QANSD</span><span class="div-name">Quality Assurance of Norms and Standards Division</span></div>
-          <div class="div-card"><span class="div-code">DHID</span><span class="div-name">Digital Health and Innovation Division</span></div>
-          <div class="div-card"><span class="div-code">RFHD</span><span class="div-name">Research for Health Division</span></div>
-          <div class="div-card"><span class="div-code">IVB</span><span class="div-name">Immunization, Vaccines and Biologicals Division</span></div>
-          <div class="div-card"><span class="div-code">HIMD</span><span class="div-name">Health Emergency and Risk Assessment Division</span></div>
-          <div class="div-card"><span class="div-code">ED</span><span class="div-name">Evaluation Division</span></div>
-          <div class="div-card"><span class="div-code">RTGED</span><span class="div-name">Rural Transformation and Gender Equality Division</span></div>
-          <div class="div-card"><span class="div-code">DYW</span><span class="div-name">Division of Youth and Women</span></div>
-          <div class="div-card"><span class="div-code">NRSPSD</span><span class="div-name">Natural Resources and Sustainable Production Stream</span></div>
-          <div class="div-card"><span class="div-code">NSD</span><span class="div-name">Natural Science Division</span></div>
-          <div class="div-card"><span class="div-code">HSSD</span><span class="div-name">Human and Social Science Division</span></div>
-          <div class="div-card"><span class="div-code">CICTD</span><span class="div-name">Culture and ICT Division</span></div>
-          <div class="div-card"><span class="div-code">ED</span><span class="div-name">Education and Integrated SDG4 Division</span></div>
-        </div>
-
-        <div class="regional-section">
-          <div>
-            <span class="r-label">Regional Office</span>
-            <span class="r-name">Africa</span>
-          </div>
-          <div>
-            <span class="r-label">Regional Office</span>
-            <span class="r-name">Asia and the Pacific</span>
-          </div>
-          <div>
-            <span class="r-label">Regional Office</span>
-            <span class="r-name">Europe and Central Asia</span>
-          </div>
-          <div>
-            <span class="r-label">Regional Office</span>
-            <span class="r-name">Latin America and the Caribbean</span>
-          </div>
-          <div>
-            <span class="r-label">Regional Office</span>
-            <span class="r-name">Near East and North Africa</span>
-          </div>
-        </div>
-
+      <div class="hero-stat">
+        <div class="hero-stat-num">9</div>
+        <div class="hero-stat-label">Senior Experts</div>
       </div>
-    </section>
-
-    <!-- SLIDE 4 — NACE LAYER MATRIX (education_nace Sheet1 + health_agri Sheet1) -->
-    <section class="slide" id="slide-4" aria-label="NACE Service Layer Matrix">
-      <div class="s4-inner">
-        <div class="slide-label" style="color:var(--gold2)">Structural Classification</div>
-        <h2 class="s4-headline">NACE Service<br>Layer Matrix</h2>
-        <p class="s4-sub">Mapping every service layer to its primary NACE classification and functional cluster — the architectural backbone of the Scientiae Naturalis service architecture.</p>
-
-        <table class="matrix-table">
-          <thead>
-            <tr>
-              <th>Service Layer</th>
-              <th>NACE Code</th>
-              <th>Service Cluster</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="row-num">01</span>Knowledge creation</td>
-              <td><span class="nace-pill">M72</span></td>
-              <td>R&amp;D, labs, scientific modelling</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">02</span>Technical validation</td>
-              <td><span class="nace-pill">M71</span></td>
-              <td>Engineering, feasibility, testing</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">03</span>Capacity building</td>
-              <td><span class="nace-pill">P85</span></td>
-              <td>Education, training, mobility</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">04</span>Environmental services</td>
-              <td><span class="nace-pill">E36–39</span></td>
-              <td>Waste, water, remediation</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">05</span>Natural resources</td>
-              <td><span class="nace-pill">A, B, D</span></td>
-              <td>Forestry, mining, energy</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">06</span>Digital layer</td>
-              <td><span class="nace-pill">J62–63</span></td>
-              <td>Data, AI, platforms</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">07</span>Programme delivery</td>
-              <td><span class="nace-pill">N82</span></td>
-              <td>Project management, grants</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">08</span>Strategy &amp; governance</td>
-              <td><span class="nace-pill">M70</span></td>
-              <td>Policy, advisory</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">09</span>Education delivery</td>
-              <td><span class="nace-pill">P85</span></td>
-              <td>Teaching, curriculum, training</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">10</span>Inclusion &amp; access</td>
-              <td><span class="nace-pill">P85 / N88</span></td>
-              <td>Equity, gender, vulnerable groups</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">11</span>Content domains</td>
-              <td><span class="nace-pill">P85 / M72</span></td>
-              <td>Literacy, ESD, health, civic</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">12</span>Teachers</td>
-              <td><span class="nace-pill">P85 / N78</span></td>
-              <td>Training, workforce systems</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">13</span>Governance</td>
-              <td><span class="nace-pill">M70</span></td>
-              <td>Policy, reform, financing</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">14</span>Programme execution</td>
-              <td><span class="nace-pill">N82</span></td>
-              <td>Implementation, M&amp;E</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">15</span>Data &amp; digital</td>
-              <td><span class="nace-pill">J62–63</span></td>
-              <td>EMIS, AI, EdTech</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">16</span>Standards</td>
-              <td><span class="nace-pill">M70 / M74</span></td>
-              <td>Frameworks, guidelines</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">17</span>Knowledge systems</td>
-              <td><span class="nace-pill">M72 / J63</span></td>
-              <td>Research, platforms</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="hero-stat">
+        <div class="hero-stat-num">15<sup>+</sup></div>
+        <div class="hero-stat-label">Years Active</div>
       </div>
-    </section>
+    </div>
+  </div>
+  <!-- Animated SVG visual -->
+  <div class="hero-visual">
+    <svg id="heroSvg" viewBox="0 0 460 460" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:420px;height:420px;">
+      <defs>
+        <radialGradient id="rg1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#8aab78" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#8aab78" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- Outer rings -->
+      <circle cx="230" cy="230" r="200" stroke="rgba(138,171,120,0.06)" stroke-width="1"/>
+      <circle cx="230" cy="230" r="160" stroke="rgba(138,171,120,0.1)" stroke-width="1"/>
+      <circle cx="230" cy="230" r="120" stroke="rgba(138,171,120,0.14)" stroke-width="1"/>
+      <circle cx="230" cy="230" r="80" stroke="rgba(138,171,120,0.2)" stroke-width="1"/>
+      <!-- Rotating dashed ring -->
+      <circle cx="230" cy="230" r="200" stroke="rgba(138,171,120,0.2)" stroke-width="1" stroke-dasharray="8 16"
+        style="transform-origin:230px 230px; animation: spin 30s linear infinite;"/>
+      <circle cx="230" cy="230" r="120" stroke="rgba(201,168,76,0.15)" stroke-width="1" stroke-dasharray="6 12"
+        style="transform-origin:230px 230px; animation: counterSpin 20s linear infinite;"/>
+      <!-- Cross lines -->
+      <line x1="230" y1="30" x2="230" y2="430" stroke="rgba(138,171,120,0.05)" stroke-width="1"/>
+      <line x1="30" y1="230" x2="430" y2="230" stroke="rgba(138,171,120,0.05)" stroke-width="1"/>
+      <!-- Center glow -->
+      <circle cx="230" cy="230" r="60" fill="url(#rg1)"/>
+      <circle cx="230" cy="230" r="8" fill="#8aab78" opacity="0.9">
+        <animate attributeName="r" values="8;12;8" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.9;0.5;0.9" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Region nodes -->
+      <circle cx="230" cy="70" r="5" fill="#c9a84c" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="3s" repeatCount="indefinite"/></circle>
+      <circle cx="390" cy="180" r="5" fill="#8aab78" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="2.5s" begin="0.5s" repeatCount="indefinite"/></circle>
+      <circle cx="340" cy="360" r="5" fill="#c9a84c" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="3.5s" begin="1s" repeatCount="indefinite"/></circle>
+      <circle cx="120" cy="340" r="5" fill="#8aab78" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="2.8s" begin="0.8s" repeatCount="indefinite"/></circle>
+      <circle cx="80" cy="160" r="5" fill="#c9a84c" opacity="0.8"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="3.2s" begin="1.5s" repeatCount="indefinite"/></circle>
+      <!-- Connecting lines -->
+      <line x1="230" y1="222" x2="230" y2="75" stroke="rgba(138,171,120,0.2)" stroke-width="1" stroke-dasharray="3 6">
+        <animate attributeName="stroke-dashoffset" values="0;-18" dur="1.5s" repeatCount="indefinite"/>
+      </line>
+      <line x1="230" y1="222" x2="385" y2="183" stroke="rgba(138,171,120,0.18)" stroke-width="1" stroke-dasharray="3 6">
+        <animate attributeName="stroke-dashoffset" values="0;-18" dur="2s" repeatCount="indefinite"/>
+      </line>
+      <line x1="230" y1="238" x2="336" y2="356" stroke="rgba(201,168,76,0.15)" stroke-width="1" stroke-dasharray="3 6">
+        <animate attributeName="stroke-dashoffset" values="0;-18" dur="1.8s" repeatCount="indefinite"/>
+      </line>
+      <line x1="230" y1="238" x2="124" y2="336" stroke="rgba(138,171,120,0.15)" stroke-width="1" stroke-dasharray="3 6">
+        <animate attributeName="stroke-dashoffset" values="0;-18" dur="2.2s" repeatCount="indefinite"/>
+      </line>
+      <line x1="222" y1="230" x2="84" y2="162" stroke="rgba(201,168,76,0.15)" stroke-width="1" stroke-dasharray="3 6">
+        <animate attributeName="stroke-dashoffset" values="0;-18" dur="1.6s" repeatCount="indefinite"/>
+      </line>
+      <!-- Labels -->
+      <text x="218" y="62" fill="rgba(201,168,76,0.7)" font-size="9" font-family="Inconsolata, monospace" letter-spacing="1">DACH</text>
+      <text x="395" y="185" fill="rgba(138,171,120,0.6)" font-size="9" font-family="Inconsolata, monospace" letter-spacing="1">C. ASIA</text>
+      <text x="325" y="375" fill="rgba(201,168,76,0.6)" font-size="9" font-family="Inconsolata, monospace" letter-spacing="1">E. AFRICA</text>
+      <text x="60" y="355" fill="rgba(138,171,120,0.6)" font-size="9" font-family="Inconsolata, monospace" letter-spacing="1">W. AFRICA</text>
+      <text x="30" y="158" fill="rgba(201,168,76,0.6)" font-size="9" font-family="Inconsolata, monospace" letter-spacing="1">LATAM</text>
+    </svg>
+  </div>
+</section>
 
-    <!-- SLIDE 5 — HEALTH + AGRI-FOOD INTELLIGENCE (Sheet2 from both files) -->
-    <section class="slide" id="slide-5" aria-label="Health and Agri-Food Intelligence Matrix">
-      <div class="s5-inner">
-        <div class="slide-label">Cross-Sector Intelligence</div>
-        <h2 class="s5-headline">Health &amp; Agri-Food<br>Intelligence Systems</h2>
-        <p class="s5-sub">Parallel data intelligence architecture across Health and Food sectors — unified NACE classification and programme logic</p>
+<!-- ROLLING TICKER - TRUSTED BY -->
+<div class="ticker-wrap">
+  <span class="ticker-label">Trusted by</span>
+  <div class="ticker-track" id="ticker">
+    <!-- Items duplicated for seamless loop -->
+    <div class="ticker-item">KfW Development Bank<div class="ticker-dot"></div></div>
+    <div class="ticker-item">GIZ GmbH<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Deutsche Bundesbank<div class="ticker-dot"></div></div>
+    <div class="ticker-item">BMZ<div class="ticker-dot"></div></div>
+    <div class="ticker-item">SECO Switzerland<div class="ticker-dot"></div></div>
+    <div class="ticker-item">ADA Austria<div class="ticker-dot"></div></div>
+    <div class="ticker-item">EU Delegation<div class="ticker-dot"></div></div>
+    <div class="ticker-item">UNDP<div class="ticker-dot"></div></div>
+    <div class="ticker-item">UN Women<div class="ticker-dot"></div></div>
+    <div class="ticker-item">World Bank Group<div class="ticker-dot"></div></div>
+    <div class="ticker-item">DEG<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Kreditanstalt für Wiederaufbau<div class="ticker-dot"></div></div>
+    <!-- Duplicate -->
+    <div class="ticker-item">KfW Development Bank<div class="ticker-dot"></div></div>
+    <div class="ticker-item">GIZ GmbH<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Deutsche Bundesbank<div class="ticker-dot"></div></div>
+    <div class="ticker-item">BMZ<div class="ticker-dot"></div></div>
+    <div class="ticker-item">SECO Switzerland<div class="ticker-dot"></div></div>
+    <div class="ticker-item">ADA Austria<div class="ticker-dot"></div></div>
+    <div class="ticker-item">EU Delegation<div class="ticker-dot"></div></div>
+    <div class="ticker-item">UNDP<div class="ticker-dot"></div></div>
+    <div class="ticker-item">UN Women<div class="ticker-dot"></div></div>
+    <div class="ticker-item">World Bank Group<div class="ticker-dot"></div></div>
+    <div class="ticker-item">DEG<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Kreditanstalt für Wiederaufbau<div class="ticker-dot"></div></div>
+  </div>
+</div>
 
-        <div class="dual-table-wrap">
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-intro reveal">
+    <div>
+      <div class="s-label">What We Do</div>
+      <h2 class="s-title">Our Core <em>Services</em></h2>
+    </div>
+    <p class="services-desc">Methodologically rigorous and contextually grounded — our work meets the highest standards of German development cooperation and international evaluation practice.</p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="svc-num">01 ——</div>
+      <h3 class="svc-title">Project Monitoring Systems</h3>
+      <p class="svc-text">Design and operationalisation of MEAL frameworks, indicator matrices, and real-time dashboards aligned with BMZ, KfW, and GIZ standards.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">02 ——</div>
+      <h3 class="svc-title">Programme Evaluations</h3>
+      <p class="svc-text">Independent mid-term and final evaluations applying OECD-DAC criteria — relevance, coherence, effectiveness, efficiency, impact, and sustainability.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">03 ——</div>
+      <h3 class="svc-title">Baseline & Endline Studies</h3>
+      <p class="svc-text">Mixed-methods data collection and statistical analysis establishing robust evidence baselines in fragile and complex country contexts.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">04 ——</div>
+      <h3 class="svc-title">Theory of Change Development</h3>
+      <p class="svc-text">Facilitated co-creation with programme teams to build credible, evidence-based theories of change and logical frameworks.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">05 ——</div>
+      <h3 class="svc-title">Impact Assessments</h3>
+      <p class="svc-text">Rigorous quasi-experimental evaluations using DiD, RDD, and PSM approaches for credible attribution in development programmes.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">06 ——</div>
+      <h3 class="svc-title">Capacity Development</h3>
+      <p class="svc-text">Training partner institutions in M&E best practices, data literacy, and results-based management — delivered in German, English, and French.</p>
+    </div>
+  </div>
+</section>
 
-          <div class="dual-col">
-            <div class="dual-col-header">
-              <h3>Health</h3>
-              <span>Knowledge Arbitrage Domain</span>
-            </div>
-            <table class="intel-table">
-              <tbody>
-                <tr class="intel-table-head">
-                  <td>Intelligence Layer</td>
-                  <td>Service Application</td>
-                </tr>
-                <tr>
-                  <td>Core data systems</td>
-                  <td>
-                    <span class="intel-value">HIS, EHR</span>
-                    Health Information Systems, Electronic Health Records infrastructure and interoperability
-                    <span class="intel-nace">J63</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Predictive analytics</td>
-                  <td>
-                    <span class="intel-value">Epidemiology</span>
-                    Disease surveillance modelling, outbreak prediction, burden-of-disease analytics
-                    <span class="intel-nace">M72</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Governance intelligence</td>
-                  <td>
-                    <span class="intel-value">UHC policy</span>
-                    Universal Health Coverage policy advisory, health financing reform, regulatory alignment
-                    <span class="intel-nace">M70</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Standards &amp; compliance</td>
-                  <td>
-                    <span class="intel-value">Clinical guidelines</span>
-                    WHO-aligned clinical standards, prequalification, norms and quality frameworks
-                    <span class="intel-nace">M74</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Programme intelligence</td>
-                  <td>
-                    <span class="intel-value">M&amp;E systems</span>
-                    Programme monitoring and evaluation, KPI dashboards, results-based management
-                    <span class="intel-nace">N82</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Digital AI systems</td>
-                  <td>
-                    <span class="intel-value">Diagnostics AI</span>
-                    AI-assisted diagnostics, digital health platform development, telemedicine infrastructure
-                    <span class="intel-nace">J62</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+<!-- INTERACTIVE DATA CHARTS -->
+<section class="data-section" id="data">
+  <div class="reveal">
+    <div class="s-label">Sectoral Expertise</div>
+    <h2 class="s-title">Our <em>Analytical</em> Profile</h2>
+  </div>
+  <div class="data-grid reveal">
+    <!-- Radar Chart -->
+    <div class="chart-card">
+      <div class="chart-title">
+        <span>Sectoral Competency Radar</span>
+        <span class="chart-subtitle">Hover to explore</span>
+      </div>
+      <canvas id="radarChart" height="280"></canvas>
+      <div class="sector-filters">
+        <button class="sector-pill active" data-sector="all">All Sectors</button>
+        <button class="sector-pill" data-sector="governance">Governance</button>
+        <button class="sector-pill" data-sector="health">Health & WASH</button>
+        <button class="sector-pill" data-sector="energy">Energy</button>
+        <button class="sector-pill" data-sector="agriculture">Agriculture</button>
+        <button class="sector-pill" data-sector="finance">Private Sector</button>
+      </div>
+    </div>
+    <!-- Bar Chart — Geographic Distribution -->
+    <div class="chart-card">
+      <div class="chart-title">
+        <span>Regional Project Distribution</span>
+        <span class="chart-subtitle">Last 10 years · 120+ engagements</span>
+      </div>
+      <canvas id="barChart" height="280"></canvas>
+    </div>
+  </div>
+  <!-- Timeline chart spanning full width -->
+  <div class="chart-card reveal" style="margin-top:2rem;">
+    <div class="chart-title">
+      <span>Project Volume Over Time</span>
+      <span class="chart-subtitle">2010 – 2025 · Engagements by year</span>
+    </div>
+    <canvas id="lineChart" height="140"></canvas>
+  </div>
+</section>
 
-          <div class="dual-col">
-            <div class="dual-col-header">
-              <h3>Agri-Food</h3>
-              <span>Knowledge Arbitrage Domain</span>
-            </div>
-            <table class="intel-table">
-              <tbody>
-                <tr class="intel-table-head">
-                  <td>Intelligence Layer</td>
-                  <td>Service Application</td>
-                </tr>
-                <tr>
-                  <td>Core data systems</td>
-                  <td>
-                    <span class="intel-value">Agri-data platforms</span>
-                    Integrated agrifood data ecosystems, commodity tracking, traceability infrastructure
-                    <span class="intel-nace">J63</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Predictive analytics</td>
-                  <td>
-                    <span class="intel-value">Yield &amp; food security</span>
-                    Crop yield forecasting, food security early warning, climate-agriculture modelling
-                    <span class="intel-nace">M72</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Governance intelligence</td>
-                  <td>
-                    <span class="intel-value">Food policy</span>
-                    Agrifood system policy advisory, trade regulation alignment, value chain governance
-                    <span class="intel-nace">M70</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Standards &amp; compliance</td>
-                  <td>
-                    <span class="intel-value">Food safety</span>
-                    Codex Alimentarius alignment, zoonotic disease standards, food safety certification
-                    <span class="intel-nace">M74</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Programme intelligence</td>
-                  <td>
-                    <span class="intel-value">Programme dashboards</span>
-                    Agrifood programme monitoring, impact tracking, multi-country coordination tools
-                    <span class="intel-nace">N82</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Digital AI systems</td>
-                  <td>
-                    <span class="intel-value">Precision agriculture</span>
-                    AI-driven precision farming, remote sensing, satellite-based crop monitoring
-                    <span class="intel-nace">J62</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+<!-- TEAM -->
+<section class="team" id="team">
+  <div class="team-intro reveal">
+    <div>
+      <div class="s-label">Our People</div>
+      <h2 class="s-title">Nine Experts,<br><em>One Vision</em></h2>
+    </div>
+    <p class="services-desc">A multinational team of senior professionals combining deep sectoral expertise with regional fluency. Collectively, we work in over ten languages and have lived and worked in more than thirty countries.</p>
+  </div>
+  <div class="team-grid">
 
+    <div class="team-card reveal">
+      <div class="team-card-header thdr-1">
+        <span class="team-avatar-letter">K</span>
+        <span class="team-nationality">🇩🇪</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Dr. Katharina Müller</div>
+        <div class="team-role">Managing Director · Lead Evaluator</div>
+        <p class="team-bio">20+ years directing evaluations for KfW and GIZ across Sub-Saharan Africa and Southeast Asia. PhD Development Economics, Humboldt-Universität Berlin.</p>
+        <div class="team-tags"><span class="team-tag">Impact Evaluation</span><span class="team-tag">DAC Criteria</span><span class="team-tag">DE / EN / FR</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-card-header thdr-2">
+        <span class="team-avatar-letter">J</span>
+        <span class="team-nationality">🇫🇷</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Jean-Pierre Dubois</div>
+        <div class="team-role">Senior M&E Specialist · Francophone Africa</div>
+        <p class="team-bio">15 years evaluating gender-responsive programmes in West and Central Africa for EU and AFD. Expert in social inclusion indicators.</p>
+        <div class="team-tags"><span class="team-tag">Gender M&E</span><span class="team-tag">W. Africa</span><span class="team-tag">FR / DE / EN</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-card-header thdr-3">
+        <span class="team-avatar-letter">A</span>
+        <span class="team-nationality">🇰🇪</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Donika Stavro Milo</div>
+        <div class="team-role">Data & Research Lead</div>
+        <p class="team-bio"> Policymaker in Research & Experimental Development on Natural Sciences and Engineering that Includes R&D in natural sciences, engineering, biotech, environmental sciences, interdisciplinary work. Ex-IFPRI Nairobi, World Bank.</p>
+        <div class="team-tags"><span class="team-tag">Stata / R</span><span class="team-tag">GIS / QGIS</span><span class="team-tag">EN / SW</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal">
+      <div class="team-card-header thdr-4">
+        <span class="team-avatar-letter">T</span>
+        <span class="team-nationality">🇦🇹</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Thomas Hofmann</div>
+        <div class="team-role">Western Balkans & Eastern Europe Specialist</div>
+        <p class="team-bio">Expert in post-conflict M&E, EU accession programming, and rule-of-law evaluations. 12 years in-country experience across the Balkans.</p>
+        <div class="team-tags"><span class="team-tag">Rule of Law</span><span class="team-tag">Balkans</span><span class="team-tag">DE / SR / EN</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-card-header thdr-5">
+        <span class="team-avatar-letter">M</span>
+        <span class="team-nationality">🇨🇴</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">María Rodríguez-Sanz</div>
+        <div class="team-role">Latin America Programme Evaluator</div>
+        <p class="team-bio">Specialised in rural development, food security, and climate adaptation in the Andes and Caribbean. Deep KfW agricultural finance experience.</p>
+        <div class="team-tags"><span class="team-tag">Rural Dev.</span><span class="team-tag">Climate</span><span class="team-tag">ES / EN / DE</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-card-header thdr-6">
+        <span class="team-avatar-letter">A</span>
+        <span class="team-nationality">🇰🇬</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Aizat Kydyralieva</div>
+        <div class="team-role">Central Asia & Governance Specialist</div>
+        <p class="team-bio">Public sector reform and civil society expert in Central Asia. Fluent German speaker — key liaison for DACH-funded portfolios in the region.</p>
+        <div class="team-tags"><span class="team-tag">Governance</span><span class="team-tag">C. Asia</span><span class="team-tag">KY / RU / DE</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal">
+      <div class="team-card-header thdr-7">
+        <span class="team-avatar-letter">R</span>
+        <span class="team-nationality">🇨🇭</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Reto Schweizer</div>
+        <div class="team-role">Health & WASH Evaluation Expert</div>
+        <p class="team-bio">18 years evaluating WASH and health systems strengthening programmes. Extensive SECO and SDC portfolio experience across Asia and Africa.</p>
+        <div class="team-tags"><span class="team-tag">Health Systems</span><span class="team-tag">WASH</span><span class="team-tag">DE / FR / EN</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-card-header thdr-8">
+        <span class="team-avatar-letter">C</span>
+        <span class="team-nationality">🇳🇬</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Chidi Okonkwo</div>
+        <div class="team-role">Private Sector & Financial Systems Evaluator</div>
+        <p class="team-bio">Expert in financial sector development and inclusive finance. Strong track record with DEG portfolio reviews and SME programme evaluations.</p>
+        <div class="team-tags"><span class="team-tag">Inclusive Finance</span><span class="team-tag">SME</span><span class="team-tag">EN / HA / DE</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-card-header thdr-9">
+        <span class="team-avatar-letter">J</span>
+        <span class="team-nationality">🇧🇦</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-name">Jelena Vuković</div>
+        <div class="team-role">Education & Social Protection Specialist</div>
+        <p class="team-bio">Evaluates education reform, TVET, and social safety net programmes across the Balkans, MENA, and East Africa for German and EU funders.</p>
+        <div class="team-tags"><span class="team-tag">Education</span><span class="team-tag">Social Protection</span><span class="team-tag">BS / DE / EN</span></div>
+        <a href="https://linkedin.com" target="_blank" class="team-linkedin">↗ LinkedIn</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="projects">
+  <div class="reveal">
+    <div class="s-label">Track Record</div>
+    <h2 class="s-title">Selected <em>Projects</em></h2>
+    <p style="font-size:0.88rem;color:var(--text-dim);margin-top:0.5rem;font-weight:300;">Click any row to expand details.</p>
+  </div>
+  <div style="margin-top:3rem;" class="reveal">
+    <div class="projects-table-head">
+      <span>Year</span>
+      <span>Assignment</span>
+      <span>Client</span>
+      <span>Country / Region</span>
+      <span></span>
+    </div>
+    <div class="projects-list">
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2023–24</span>
+        <span class="project-name">Final Evaluation — Renewable Energy Access Programme (REAP II)</span>
+        <span class="project-client">KfW</span>
+        <span class="project-country">🇰🇪 Kenya · 🇹🇿 Tanzania</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Mixed-methods final evaluation assessing off-grid solar rollout reaching 2.3M households. Conducted household surveys (n=2,400), stakeholder interviews, and econometric impact modelling aligned to KfW's development effectiveness standards.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2022–23</span>
+        <span class="project-name">Mid-Term Evaluation — EU Integration & Governance Support</span>
+        <span class="project-client">GIZ</span>
+        <span class="project-country">🇷🇸 Serbia · 🇧🇦 Bosnia</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Comprehensive evaluation of GIZ's Western Balkans EU integration portfolio covering rule of law, public administration reform, and anti-corruption programming across five simultaneous bilateral projects.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2022</span>
+        <span class="project-name">Baseline Study — Water Infrastructure & Governance (WIG)</span>
+        <span class="project-client">SECO</span>
+        <span class="project-country">🇺🇿 Uzbekistan · 🇰🇬 Kyrgyzstan</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Comprehensive baseline establishing measurable indicators for a 5-year WASH programme, including institutional capacity mapping and primary data collection in 180 villages using mobile survey tools and community participatory methods.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2021–22</span>
+        <span class="project-name">Impact Assessment — Rural Value Chains Programme</span>
+        <span class="project-client">BMZ</span>
+        <span class="project-country">🇨🇴 Colombia · 🇵🇪 Peru</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Quasi-experimental impact evaluation using Propensity Score Matching assessing income and food security outcomes for 14,000 smallholder farming families in post-conflict Colombia and the Peruvian highlands.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2021</span>
+        <span class="project-name">Programme Evaluation — Vocational Skills & Employment</span>
+        <span class="project-client">ADA Austria</span>
+        <span class="project-country">🇳🇬 Nigeria</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">End-line evaluation of a €12M TVET programme targeting displaced youth in northeast Nigeria, applying contribution analysis to link training outputs to employment and income outcomes among conflict-affected populations.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2020–21</span>
+        <span class="project-name">Portfolio Review — SME Finance & Inclusive Banking</span>
+        <span class="project-client">DEG</span>
+        <span class="project-country">🌍 Sub-Saharan Africa (6 countries)</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Cluster evaluation of DEG's inclusive finance portfolio across six African countries assessing additionality, development outcomes, and financial sustainability — integrating KfW development effectiveness indicators throughout.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2019–20</span>
+        <span class="project-name">Mid-Term Review — MENA Urban Water Reform</span>
+        <span class="project-client">KfW / EU</span>
+        <span class="project-country">🇲🇦 Morocco · 🇹🇳 Tunisia</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Joint KfW-EU evaluation of water utility reform and tariff restructuring in Maghreb cities, covering infrastructure investment performance, governance reform progress, and consumer welfare analysis across three urban centres.</div>
+      </div>
+
+      <div class="project-row" onclick="toggleProject(this)">
+        <span class="project-year">2018–19</span>
+        <span class="project-name">MEAL System Design — Biodiversity & Forest Governance</span>
+        <span class="project-client">GIZ</span>
+        <span class="project-country">🇲🇲 Myanmar · 🇻🇳 Vietnam</span>
+        <span class="project-arrow">›</span>
+        <div class="project-detail">Design and rollout of a bespoke MEAL framework integrating satellite-based deforestation monitoring with community participatory indicators and REDD+ compliant result measurement systems.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section class="methodology" id="methodology">
+  <div class="reveal">
+    <div class="s-label">How We Work</div>
+    <h2 class="s-title">Our <em>Methodology</em></h2>
+  </div>
+  <div class="method-steps reveal">
+    <div class="method-step">
+      <div class="method-step-num">01</div>
+      <h4>Inception & Co-Design</h4>
+      <p>Deep immersion in programme logic, evaluability assessment, and stakeholder mapping. Every engagement begins with a rigorous inception phase before data collection.</p>
+      <div class="method-connector"></div>
+    </div>
+    <div class="method-step">
+      <div class="method-step-num">02</div>
+      <h4>Mixed-Methods Collection</h4>
+      <p>Quantitative surveys, key informant interviews, focus groups, and observational work. Mobile tools (KoBoToolbox, ODK) and triangulated data for robustness.</p>
+      <div class="method-connector"></div>
+    </div>
+    <div class="method-step">
+      <div class="method-step-num">03</div>
+      <h4>Rigorous Analysis</h4>
+      <p>Statistical modelling (Stata, R), qualitative coding (ATLAS.ti), contribution analysis, and process tracing — all subject to internal peer review.</p>
+      <div class="method-connector"></div>
+    </div>
+    <div class="method-step">
+      <div class="method-step-num">04</div>
+      <h4>Learning & Uptake</h4>
+      <p>Results workshops, management response facilitation, and knowledge products tailored for technical and executive audiences — in German and English as standard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="reveal">
+    <div class="s-label">Get In Touch</div>
+    <h2 class="s-title">Start a <em>Conversation</em></h2>
+  </div>
+  <div class="contact-grid reveal">
+    <div class="contact-info">
+      <div class="c-block">
+        <div class="c-label">Head Office</div>
+        <div class="c-val">Unter den Linden 42<br>10117 Berlin, Germany</div>
+      </div>
+      <div class="c-block">
+        <div class="c-label">General Inquiries</div>
+        <div class="c-val"><a href="mailto:scientiae-naturalis-marketing@yahoo.com">scientiae-naturalis-marketing@yahoo.com</a></div>
+      </div>
+      <div class="c-block">
+        <div class="c-label">Procurement & Tenders</div>
+        <div class="c-val"><a href="mailto:procurement@scientiae-naturalis.org">procurement@scientiae-naturalis.org</a></div>
+      </div>
+      <div class="c-block">
+        <div class="c-label">Languages</div>
+        <div class="c-val">German · English · French · Spanish · Russian</div>
+      </div>
+      <div class="c-block">
+        <div class="c-label">Company Registration</div>
+        <div class="c-val">GmbH · HRB 123456 B · Berlin Charlottenburg</div>
+      </div>
+      <div class="urgent-bar">
+        <div class="urgent-pulse"></div>
+        <div class="urgent-text">
+          <strong>Procurement Office:</strong> For urgent tenders or time-critical framework calls, write directly to <a href="mailto:procurement@scientiae-naturalis.org">procurement@scientiae-naturalis.org</a> — we respond within 4 business hours.
         </div>
       </div>
-    </section>
-
-  </div><!-- /slides-track -->
-</div><!-- /carousel-outer -->
+    </div>
+    <div class="contact-form">
+      <div class="f-row">
+        <div class="f-group"><label class="f-label">First Name</label><input class="f-input" type="text" placeholder="Anna"></div>
+        <div class="f-group"><label class="f-label">Last Name</label><input class="f-input" type="text" placeholder="Schmidt"></div>
+      </div>
+      <div class="f-group"><label class="f-label">Organisation</label><input class="f-input" type="text" placeholder="KfW Development Bank"></div>
+      <div class="f-group"><label class="f-label">Email Address</label><input class="f-input" type="email" placeholder="procurement@scientiae-naturalis.org"></div>
+      <div class="f-group">
+        <label class="f-label">Inquiry Type</label>
+        <select class="f-select">
+          <option value="">Select type…</option>
+          <option>Project Evaluation</option>
+          <option>Monitoring System Design</option>
+          <option>Baseline / Endline Study</option>
+          <option>Impact Assessment</option>
+          <option>Tender / Procurement</option>
+          <option>Partnership Inquiry</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="f-group">
+        <label class="f-label">Message</label>
+        <textarea class="f-textarea" placeholder="Please describe your programme or evaluation needs, including country context, timeline, and specific requirements…"></textarea>
+      </div>
+      <div class="f-urgent">
+        <input type="checkbox" id="urgentBox">
+        <label for="urgentBox"><strong>Urgent Request</strong> — Tender deadline within 72 hours</label>
+      </div>
+      <button class="btn-submit" id="submitBtn" onclick="handleSubmit(event)">Send Inquiry ›</button>
+    </div>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-brand">Scientiae Naturalis</div>
-      <div class="footer-tagline">High-Stakes Knowledge Arbitrage</div>
-      <p class="footer-body">
-        Procurement and institutional enquiries:<br>
-        <a href="/cdn-cgi/l/email-protection#3141435e524443545c545f4571425258545f455850541c5f50454443505d58421f5e4356"><span class="__cf_email__" data-cfemail="1262607d716760777f777c665261717b777c667b73773f7c73666760737e7b613c7d6075">[email&#160;protected]</span></a>
-      </p>
-    </div>
-    <div class="footer-hq">
-      <strong>Headquarters</strong>
-      Scientiae Naturalis<br>
-      Berlin, Germany<br><br>
-      <strong>Primary Classification</strong>
-      NACE 72.10 — R&amp;D Natural Sciences<br>
-      Section M, P, E, A–D
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>Scientiae Naturalis — Berlin, Germany</p>
-    <p>High-Stakes Knowledge Arbitrage Services</p>
-  </div>
+  <div class="footer-brand">Scientiae Naturalis</div>
+  <p>© Scientiae-Naturalis.org GmbH · Berlin, Germany</p>
+  <ul class="footer-links">
+    <li><a href="#">Imprint</a></li>
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">LinkedIn</a></li>
+  </ul>
 </footer>
 
-<!-- NAV CONTROLS -->
-<div class="nav-arrows">
-  <button class="arrow-btn" id="prev-btn" aria-label="Previous slide">&#8592;</button>
-  <button class="arrow-btn" id="next-btn" aria-label="Next slide">&#8594;</button>
-</div>
-<div class="slide-dots" id="dots"></div>
-<div class="slide-counter" id="counter">01 / 05</div>
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+/* ── CURSOR ── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function animRing(){ rx+=(mx-rx)*0.14; ry+=(my-ry)*0.14; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
+document.querySelectorAll('a,button,.project-row,.service-card,.team-card,.sector-pill').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cur.style.width='14px'; cur.style.height='14px'; cur.style.background='#c9a84c'; ring.style.width='50px'; ring.style.height='50px'; });
+  el.addEventListener('mouseleave',()=>{ cur.style.width='8px'; cur.style.height='8px'; cur.style.background='var(--sage)'; ring.style.width='36px'; ring.style.height='36px'; });
+});
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const TOTAL = 5;
-let current = 0;
-const track = document.getElementById('track');
-const counterEl = document.getElementById('counter');
-const dotsEl = document.getElementById('dots');
+/* ── NAV SCROLL ── */
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
 
-// Build dots
-for(let i=0;i<TOTAL;i++){
-  const d = document.createElement('button');
-  d.className = 'dot' + (i===0?' active':'');
-  d.setAttribute('aria-label','Slide '+(i+1));
-  d.onclick = ()=>goTo(i);
-  dotsEl.appendChild(d);
+/* ── MOBILE NAV ── */
+function openMobileNav(){ document.getElementById('mobileNav').classList.add('open'); document.getElementById('mobileOverlay').classList.add('open'); }
+function closeMobileNav(){ document.getElementById('mobileNav').classList.remove('open'); document.getElementById('mobileOverlay').classList.remove('open'); }
+
+/* ── REVEAL ON SCROLL ── */
+const revEls = document.querySelectorAll('.reveal');
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+revEls.forEach(el => revObs.observe(el));
+
+/* ── PROJECT ROWS ── */
+function toggleProject(row){ row.classList.toggle('expanded'); }
+
+/* ── URGENT FORM ── */
+const urgentBox = document.getElementById('urgentBox');
+const submitBtn = document.getElementById('submitBtn');
+urgentBox.addEventListener('change', function(){
+  if(this.checked){ submitBtn.textContent='Send Urgent Request ›'; submitBtn.style.background='#c46b4a'; submitBtn.style.color='#e8ede4'; }
+  else { submitBtn.textContent='Send Inquiry ›'; submitBtn.style.background=''; submitBtn.style.color=''; }
+});
+function handleSubmit(e){
+  e.preventDefault();
+  submitBtn.textContent='Message Sent ✓';
+  submitBtn.style.background='#4a8a60';
+  submitBtn.style.color='#e8ede4';
+  setTimeout(()=>{ submitBtn.textContent='Send Inquiry ›'; submitBtn.style.background=''; submitBtn.style.color=''; urgentBox.checked=false; }, 3000);
 }
 
-function goTo(n){
-  current = Math.max(0,Math.min(TOTAL-1,n));
-  track.style.transform = `translateX(-${current * 100}vw)`;
-  counterEl.textContent = String(current+1).padStart(2,'0') + ' / ' + String(TOTAL).padStart(2,'0');
-  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
-}
-function next(){goTo(current+1)}
-function prev(){goTo(current-1)}
+/* ── CHARTS ── */
+const chartDefaults = {
+  font: { family: "'Jost', sans-serif", size: 11 },
+  color: 'rgba(232,237,228,0.45)',
+};
+Chart.defaults.font.family = "'Jost', sans-serif";
+Chart.defaults.color = 'rgba(232,237,228,0.45)';
 
-document.getElementById('next-btn').addEventListener('click', next);
-document.getElementById('prev-btn').addEventListener('click', prev);
-
-document.querySelectorAll('.nav-slide').forEach(a=>{
-  a.addEventListener('click',e=>{
-    e.preventDefault();
-    goTo(parseInt(a.dataset.slide));
-    document.getElementById('main-nav').classList.remove('open');
+// ── RADAR CHART ──
+const radarData = {
+  all:        [92, 88, 85, 90, 83, 87, 80],
+  governance: [95, 60, 40, 88, 45, 92, 70],
+  health:     [60, 95, 90, 55, 35, 60, 85],
+  energy:     [50, 45, 40, 92, 35, 55, 45],
+  agriculture:[88, 65, 55, 60, 96, 70, 65],
+  finance:    [70, 45, 40, 65, 78, 82, 55],
+};
+const radarCtx = document.getElementById('radarChart').getContext('2d');
+const radarChart = new Chart(radarCtx, {
+  type: 'radar',
+  data: {
+    labels: ['Quantitative Methods','Qualitative Methods','Surveys & Fieldwork','Results Frameworks','Economic Analysis','Stakeholder Engagement','Capacity Building'],
+    datasets: [{
+      label: 'Competency Score',
+      data: radarData.all,
+      backgroundColor: 'rgba(138,171,120,0.12)',
+      borderColor: 'rgba(138,171,120,0.7)',
+      borderWidth: 1.5,
+      pointBackgroundColor: '#8aab78',
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      r: {
+        min: 0, max: 100,
+        ticks: { display: false, stepSize: 25 },
+        grid: { color: 'rgba(138,171,120,0.1)' },
+        angleLines: { color: 'rgba(138,171,120,0.1)' },
+        pointLabels: { font: { size: 10, family: "'Jost', sans-serif" }, color: 'rgba(232,237,228,0.55)' }
+      }
+    },
+    plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(15,21,16,0.95)', borderColor: 'rgba(138,171,120,0.3)', borderWidth: 1, padding: 10, titleFont: { size: 11 }, bodyFont: { size: 11 } } },
+    animation: { duration: 600, easing: 'easeInOutQuart' }
+  }
+});
+document.querySelectorAll('.sector-pill').forEach(pill => {
+  pill.addEventListener('click', function(){
+    document.querySelectorAll('.sector-pill').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    const s = this.dataset.sector;
+    radarChart.data.datasets[0].data = radarData[s];
+    radarChart.update();
   });
 });
 
-document.getElementById('burger').addEventListener('click',()=>{
-  document.getElementById('main-nav').classList.toggle('open');
+// ── BAR CHART ──
+const barCtx = document.getElementById('barChart').getContext('2d');
+new Chart(barCtx, {
+  type: 'bar',
+  data: {
+    labels: ['DACH/Europe','East Africa','West Africa','Central Asia','Balkans','Latin America','MENA','SE Asia'],
+    datasets: [{
+      label: 'Projects',
+      data: [28, 24, 18, 16, 14, 12, 8, 6],
+      backgroundColor: [
+        'rgba(138,171,120,0.7)','rgba(138,171,120,0.6)','rgba(138,171,120,0.5)',
+        'rgba(201,168,76,0.6)','rgba(201,168,76,0.5)','rgba(201,168,76,0.4)',
+        'rgba(196,107,74,0.5)','rgba(196,107,74,0.4)'
+      ],
+      borderColor: 'transparent',
+      borderRadius: 1,
+      hoverBackgroundColor: 'rgba(180,210,160,0.85)',
+    }]
+  },
+  options: {
+    responsive: true, indexAxis: 'y',
+    scales: {
+      x: { grid: { color: 'rgba(138,171,120,0.07)' }, border: { display: false }, ticks: { font: { size: 10 } } },
+      y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 } } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { backgroundColor: 'rgba(15,21,16,0.95)', borderColor: 'rgba(138,171,120,0.3)', borderWidth: 1, padding: 10 }
+    },
+    animation: { duration: 900, easing: 'easeOutQuart' }
+  }
 });
 
-// Keyboard
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'||e.key==='ArrowDown') next();
-  if(e.key==='ArrowLeft'||e.key==='ArrowUp') prev();
-});
-
-// Touch / swipe
-let tx=0;
-document.querySelector('.carousel-outer').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
-document.querySelector('.carousel-outer').addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-tx;
-  if(Math.abs(dx)>50){dx<0?next():prev()}
-},{passive:true});
-
-// Hover gallery toggle
-document.querySelectorAll('.gallery-item').forEach(item=>{
-  item.addEventListener('click',()=>item.classList.toggle('open'));
+// ── LINE CHART ──
+const lineCtx = document.getElementById('lineChart').getContext('2d');
+const years = ['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+const volumes = [3,4,5,5,6,7,8,9,10,11,9,12,14,15,13,8];
+const gradient = lineCtx.createLinearGradient(0, 0, 0, 160);
+gradient.addColorStop(0, 'rgba(138,171,120,0.25)');
+gradient.addColorStop(1, 'rgba(138,171,120,0)');
+new Chart(lineCtx, {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [{
+      label: 'Engagements',
+      data: volumes,
+      borderColor: 'rgba(138,171,120,0.8)',
+      borderWidth: 1.5,
+      backgroundColor: gradient,
+      fill: true,
+      tension: 0.4,
+      pointRadius: 3,
+      pointBackgroundColor: '#8aab78',
+      pointHoverRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { grid: { color: 'rgba(138,171,120,0.06)' }, border: { display: false }, ticks: { font: { size: 10 } } },
+      y: { grid: { color: 'rgba(138,171,120,0.06)' }, border: { display: false }, ticks: { font: { size: 10 }, stepSize: 3 }, min: 0 }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { backgroundColor: 'rgba(15,21,16,0.95)', borderColor: 'rgba(138,171,120,0.3)', borderWidth: 1, padding: 10 }
+    },
+    animation: { duration: 1200, easing: 'easeOutQuart' }
+  }
 });
 </script>
 </body>
