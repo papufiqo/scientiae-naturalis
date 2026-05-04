@@ -4,857 +4,864 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scientiae Naturalis — High-Stakes Knowledge Arbitrage</title>
+<meta name="description" content="Scientiae Naturalis is a Berlin-based professional and scientific advisory firm specialising in High-Stakes Knowledge Arbitrage across Health, Food, Environment, and Education sectors.">
+<meta name="keywords" content="knowledge arbitrage, scientific advisory, NACE, health intelligence, agri-food, education policy, Berlin, Germany">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Scientiae Naturalis — High-Stakes Knowledge Arbitrage">
+<meta property="og:description" content="Translating rigorous research into decision-grade intelligence for governments, international organisations, and private-sector clients.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://www.scientiae-naturalis.org/">
+
+<!-- XML Sitemap for Google Search Console -->
+<!-- sitemap.xml is served at /sitemap.xml — see inline generation below -->
+
+<!-- Preconnect for speed -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Bebas+Neue&display=swap" rel="stylesheet">
+<!-- Using font-display:swap for performance; only 2 families for minimal payload -->
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,500;0,700;0,900;1,300&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
+/* ── RESET ──────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ── DESIGN TOKENS — NEW PALETTE ───────────────────────── */
 :root{
-  --ink:#0e0e0c;
-  --ink2:#2c2c28;
-  --ink3:#5a5a54;
-  --rule:#d4d2c8;
-  --rule2:#e8e6de;
-  --paper:#f5f3ee;
-  --paper2:#ece9e0;
-  --gold:#a08630;
-  --gold2:#c9a84c;
-  --white:#ffffff;
-  --serif:'Cormorant Garamond',Georgia,serif;
-  --mono:'DM Mono',monospace;
-  --display:'Bebas Neue',sans-serif;
-  --slide-dur:600ms;
-}
-html{scroll-behavior:smooth}
-body{
-  background:var(--paper);
-  color:var(--ink);
-  font-family:var(--serif);
-  font-size:18px;
-  line-height:1.7;
-  overflow-x:hidden;
+  /* Core palette */
+  --navy:    #2B2F6E;   /* deep indigo-navy */
+  --navy-dk: #1C1F4A;   /* darker navy for depth */
+  --navy-lt: #3A4080;   /* lighter navy hover */
+  --crimson: #CC0022;   /* crimson red */
+  --orange:  #F26522;   /* vivid orange accent */
+  --silver:  #9BA8A8;   /* cool silver / muted gray */
+  --silver-lt:#D4DBDB;  /* light silver for rules */
+  --magenta: #C0003C;   /* deep magenta/pink */
+  --white:   #FFFFFF;
+  --off-white:#F2F4F7;  /* near-white page bg */
+  --dark-bg: #111827;   /* near-black for dark slides */
+
+  /* Contrast-safe text on light bg */
+  --text-primary: #0F1225;   /* near-black — contrast 18:1 on white */
+  --text-secondary: #3B4260; /* dark navy-toned — 8:1 */
+  --text-muted: #5A647A;     /* 5:1 on white */
+
+  /* Contrast-safe text on dark bg */
+  --text-light: #F2F4F7;       /* ~18:1 on dark-bg */
+  --text-light2: #C8D0DE;      /* ~12:1 on dark-bg */
+  --text-light-muted: #8A97AB; /* ~4.5:1 on dark-bg */
+
+  /* Typography */
+  --display: 'Barlow Condensed', Arial Narrow, sans-serif;
+  --mono:    'IBM Plex Mono', Consolas, monospace;
+
+  /* Dimensions */
+  --header-h: 64px;
+  --slide-dur: 550ms;
+  --pad-x: clamp(1.25rem, 6vw, 6rem);
+  --pad-y: clamp(2rem, 5vh, 4.5rem);
 }
 
-/* ── HEADER ──────────────────────────────────────────── */
+html{ scroll-behavior:smooth }
+body{
+  background: var(--off-white);
+  color: var(--text-primary);
+  font-family: var(--display);
+  font-size: 17px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SKIP LINK (accessibility) ──────────────────────────── */
+.skip-link{
+  position:absolute;top:-100%;left:1rem;
+  background:var(--orange);color:var(--white);
+  padding:.5rem 1rem;font-family:var(--mono);font-size:.75rem;
+  z-index:9999;border-radius:0 0 4px 4px;
+}
+.skip-link:focus{top:0}
+
+/* ══════════════════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════════════════ */
 header{
-  position:fixed;top:0;left:0;right:0;z-index:100;
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:var(--header-h);
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 clamp(1.5rem,4vw,4rem);
-  height:64px;
-  background:rgba(245,243,238,0.96);
-  border-bottom:1px solid var(--rule);
-  backdrop-filter:blur(6px);
+  padding:0 var(--pad-x);
+  background:var(--navy-dk);
+  border-bottom:2px solid var(--crimson);
 }
 .logo{
-  font-family:var(--serif);
-  font-size:1rem;
-  font-weight:600;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-  color:var(--ink);
   text-decoration:none;
-  line-height:1.1;
+  display:flex;flex-direction:column;
+  gap:.05rem;
 }
-.logo span{
-  display:block;
-  font-weight:300;
-  font-size:0.7rem;
-  letter-spacing:0.2em;
-  color:var(--ink3);
-  font-style:italic;
-}
-nav{
-  display:flex;align-items:center;gap:2rem;
-}
-nav a{
-  font-family:var(--mono);
-  font-size:0.68rem;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  text-decoration:none;
-  transition:color .2s;
-}
-nav a:hover{color:var(--ink)}
-.nav-cta{
-  font-family:var(--mono);
-  font-size:0.68rem;
-  letter-spacing:0.1em;
+.logo-name{
+  font-family:var(--display);
+  font-size:1.15rem;
+  font-weight:700;
+  letter-spacing:.12em;
   text-transform:uppercase;
   color:var(--white);
-  background:var(--ink);
-  padding:0.45rem 1.1rem;
-  text-decoration:none;
-  transition:background .2s;
+  line-height:1;
 }
-.nav-cta:hover{background:var(--gold)}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
-.hamburger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:all .3s}
-@media(max-width:768px){
+.logo-sub{
+  font-family:var(--mono);
+  font-size:.55rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--silver);
+}
+nav.links{
+  display:flex;align-items:center;gap:1.75rem;
+}
+nav.links a{
+  font-family:var(--mono);
+  font-size:.62rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--silver-lt);
+  text-decoration:none;
+  transition:color .2s;
+  position:relative;
+  padding-bottom:.2rem;
+}
+nav.links a::after{
+  content:'';position:absolute;bottom:0;left:0;
+  width:0;height:1px;
+  background:var(--orange);
+  transition:width .25s ease;
+}
+nav.links a:hover{color:var(--white)}
+nav.links a:hover::after{width:100%}
+.nav-cta{
+  font-family:var(--mono);
+  font-size:.62rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--white)!important;
+  background:var(--crimson);
+  padding:.4rem 1rem;
+  text-decoration:none!important;
+  transition:background .2s!important;
+  border:none;
+}
+.nav-cta::after{display:none!important}
+.nav-cta:hover{background:var(--magenta)!important}
+.hamburger{
+  display:none;flex-direction:column;gap:5px;
+  cursor:pointer;padding:6px;background:none;border:none;
+}
+.hamburger span{
+  display:block;width:22px;height:2px;
+  background:var(--silver-lt);transition:all .3s;
+}
+@media(max-width:860px){
   nav.links{
-    display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
-    background:var(--paper);
+    display:none;position:fixed;
+    top:var(--header-h);left:0;right:0;bottom:0;
+    background:var(--navy-dk);
     flex-direction:column;align-items:center;justify-content:center;
-    gap:2.5rem;z-index:99;
+    gap:2.5rem;z-index:190;
   }
   nav.links.open{display:flex}
-  nav.links a{font-size:1rem}
+  nav.links a{font-size:.9rem}
   .hamburger{display:flex}
 }
 
-/* ── CAROUSEL WRAPPER ─────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   CAROUSEL
+══════════════════════════════════════════════════════════ */
 .carousel-outer{
-  margin-top:64px;
-  position:relative;
+  margin-top:var(--header-h);
   overflow:hidden;
-  background:var(--paper);
+  position:relative;
 }
 .slides-track{
   display:flex;
-  transition:transform var(--slide-dur) cubic-bezier(.55,.05,.15,.99);
+  transition:transform var(--slide-dur) cubic-bezier(.55,.05,.1,.99);
   will-change:transform;
 }
 .slide{
   min-width:100vw;
-  min-height:calc(100vh - 64px);
-  display:flex;
-  flex-direction:column;
+  min-height:calc(100vh - var(--header-h));
+  display:flex;flex-direction:column;
   position:relative;
+  overflow:hidden;
 }
 
-/* ── SLIDE NAVIGATION ─────────────────────────────────── */
+/* ── NAV CONTROLS ──────────────────────────────────────── */
 .nav-arrows{
-  position:fixed;
-  bottom:2.5rem;right:clamp(1.5rem,4vw,4rem);
-  display:flex;gap:0.6rem;z-index:50;
+  position:fixed;bottom:2.25rem;right:var(--pad-x);
+  display:flex;gap:.5rem;z-index:150;
 }
 .arrow-btn{
-  width:44px;height:44px;
-  border:1px solid var(--rule);
-  background:rgba(245,243,238,0.9);
-  cursor:pointer;
-  font-size:1.1rem;
+  width:42px;height:42px;
+  background:var(--navy);color:var(--silver-lt);
+  border:1px solid rgba(155,168,168,.35);
+  cursor:pointer;font-size:1rem;
   display:flex;align-items:center;justify-content:center;
-  transition:background .2s,border-color .2s;
-  backdrop-filter:blur(4px);
+  transition:background .2s,color .2s,border-color .2s;
 }
-.arrow-btn:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.arrow-btn:hover{background:var(--orange);color:var(--white);border-color:var(--orange)}
 .slide-dots{
-  position:fixed;
-  bottom:2.7rem;
-  left:50%;transform:translateX(-50%);
-  display:flex;gap:0.5rem;z-index:50;
-  align-items:center;
+  position:fixed;bottom:2.55rem;left:50%;transform:translateX(-50%);
+  display:flex;gap:.45rem;z-index:150;align-items:center;
 }
 .dot{
-  width:6px;height:6px;
-  border-radius:50%;
-  background:var(--rule);
-  border:none;cursor:pointer;padding:0;
-  transition:background .25s,transform .25s;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--silver);border:none;cursor:pointer;padding:0;
+  transition:background .25s,transform .25s,width .25s;
 }
-.dot.active{background:var(--ink);transform:scale(1.4)}
+.dot.active{background:var(--orange);transform:scale(1);width:18px;border-radius:3px}
 .slide-counter{
-  position:fixed;
-  bottom:2.7rem;left:clamp(1.5rem,4vw,4rem);
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.15em;
-  color:var(--ink3);
-  z-index:50;
+  position:fixed;bottom:2.55rem;left:var(--pad-x);
+  font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.18em;color:var(--silver);z-index:150;
 }
 
-/* ── SLIDE 1 — IDENTITY ───────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   SLIDE LABEL SHARED COMPONENT
+══════════════════════════════════════════════════════════ */
+.slide-label{
+  font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.28em;text-transform:uppercase;
+  color:var(--orange);margin-bottom:.85rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.slide-label::before{
+  content:'';display:block;width:2rem;height:2px;
+  background:var(--orange);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SLIDE 1 — IDENTITY
+══════════════════════════════════════════════════════════ */
 #slide-1{
-  background:var(--paper);
-  padding:clamp(2rem,4vh,3.5rem) clamp(1.5rem,8vw,8rem) clamp(2rem,4vh,3.5rem);
-  justify-content:flex-start;
-  min-height:calc(100vh - 64px);
+  background:var(--off-white);
+  padding:var(--pad-y) var(--pad-x);
 }
 .s1-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:4rem 6rem;
-  align-items:stretch;
-  max-width:1400px;
-  margin:0 auto;
+  grid-template-columns:1fr 1.1fr;
+  gap:3rem 5rem;
+  max-width:1440px;margin:0 auto;
+  align-items:start;
 }
-@media(max-width:900px){.s1-grid{grid-template-columns:1fr;gap:2.5rem}}
-.s1-headline{
-  font-family:var(--display);
-  font-size:clamp(3.5rem,8vw,7rem);
-  line-height:0.92;
-  letter-spacing:0.03em;
-  color:var(--ink);
-  border-left:3px solid var(--gold);
-  padding-left:1.5rem;
-}
-.s1-headline em{
-  font-family:var(--serif);
-  font-style:italic;
-  font-size:0.55em;
-  display:block;
-  color:var(--gold);
-  letter-spacing:0.05em;
-  margin-top:0.2em;
-}
+@media(max-width:960px){.s1-grid{grid-template-columns:1fr}}
+
+/* Headline */
 .s1-tagline{
-  font-family:var(--mono);
-  font-size:0.72rem;
-  letter-spacing:0.25em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  margin-bottom:2rem;
-  display:flex;align-items:center;gap:1rem;
+  font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:1.25rem;
+  display:flex;align-items:center;gap:.75rem;
 }
-.s1-tagline::before{content:'';display:block;width:2.5rem;height:1px;background:var(--gold)}
-.s1-body{
-  font-size:1.05rem;
-  font-weight:300;
-  color:var(--ink2);
-  line-height:1.75;
+.s1-tagline::before{
+  content:'';display:block;
+  width:2rem;height:2px;background:var(--crimson);
+}
+h1.s1-headline{
+  font-family:var(--display);
+  font-size:clamp(3rem,7.5vw,7rem);
+  font-weight:900;line-height:.88;
+  letter-spacing:.02em;text-transform:uppercase;
+  color:var(--navy);
+  padding-left:1.25rem;
+  border-left:5px solid var(--orange);
   margin-bottom:1.5rem;
 }
-.s1-sectors{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:0.75rem 1.5rem;
-  margin-top:1.5rem;
+h1.s1-headline em{
+  display:block;
+  font-family:var(--display);font-style:italic;
+  font-size:.38em;font-weight:300;
+  letter-spacing:.05em;text-transform:none;
+  color:var(--crimson);margin-top:.35em;
+  line-height:1.3;
 }
-.s1-sector{
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  padding:0.4rem 0;
-  border-bottom:0.5px solid var(--rule);
-  position:relative;
-}
-.s1-sector::before{
-  content:'';
-  position:absolute;left:0;bottom:-0.5px;
-  width:0;height:1px;
-  background:var(--gold);
-  transition:width .35s ease;
-}
-.s1-sector:hover::before{width:100%}
-.nace-block{
-  margin-top:2.5rem;
-  padding:1.5rem;
-  border:0.5px solid var(--rule);
-  background:var(--paper2);
-}
-.nace-block h4{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:0.75rem;
-}
-.nace-row{
-  display:flex;align-items:baseline;gap:0.75rem;
-  margin-bottom:0.35rem;
-}
-.nace-code{
-  font-family:var(--mono);
-  font-size:0.68rem;
-  color:var(--ink);
-  font-weight:400;
-  min-width:4.5rem;
-}
-.nace-desc{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  color:var(--ink3);
-  letter-spacing:0.04em;
+.s1-body{
+  font-family:var(--display);font-size:1.05rem;
+  font-weight:300;color:var(--text-secondary);
+  line-height:1.7;margin-bottom:1.1rem;
 }
 
-/* ── HOVER GALLERY (SLIDE 1 RIGHT) ──────────────────────── */
-.gallery-col{
-  display:flex;
-  flex-direction:column;
-  gap:0;
-  border-top:1px solid var(--rule);
-}
-.gallery-contact{
-  margin-top:auto;
-  padding:1.5rem 0 0;
-  border-top:1px solid var(--rule);
-}
-.gc-label{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  margin-bottom:0.5rem;
-}
-.gc-email{
-  display:block;
-  font-family:var(--serif);
-  font-size:1.05rem;
-  font-style:italic;
-  color:var(--gold);
-  text-decoration:none;
-  margin-bottom:0.4rem;
-  transition:color .2s;
-}
-.gc-email:hover{color:var(--ink)}
-.gc-hq{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.1em;
-  color:var(--ink3);
-}
-.s1-legal{
-  margin-top:2rem;
-  padding:1.5rem;
-  border:0.5px solid var(--rule);
-  background:var(--ink);
+/* NACE block */
+.nace-block{
+  margin-top:2rem;padding:1.25rem 1.5rem;
+  background:var(--navy);
+  border-left:4px solid var(--orange);
   position:relative;
-  overflow:hidden;
 }
-.s1-legal::before{
-  content:'';
-  position:absolute;
-  top:0;left:0;
-  width:3px;height:100%;
-  background:var(--gold);
+.nace-block h4{
+  font-family:var(--mono);font-size:.55rem;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--orange);margin-bottom:.85rem;
+}
+.nace-row{
+  display:flex;align-items:baseline;gap:.75rem;
+  margin-bottom:.3rem;
+}
+.nace-code{
+  font-family:var(--mono);font-size:.68rem;
+  color:var(--silver-lt);font-weight:500;
+  min-width:5rem;
+}
+.nace-desc{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--silver);letter-spacing:.04em;
+}
+
+/* Sectors grid */
+.s1-sectors{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:.5rem 1.25rem;margin-top:1.5rem;
+}
+.s1-sector{
+  font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-muted);padding:.4rem 0;
+  border-bottom:1px solid var(--silver-lt);
+  position:relative;transition:color .2s;
+}
+.s1-sector::before{
+  content:'';position:absolute;left:0;bottom:-1px;
+  width:0;height:2px;background:var(--crimson);
+  transition:width .3s ease;
+}
+.s1-sector:hover{color:var(--navy)}
+.s1-sector:hover::before{width:100%}
+
+/* Legal box */
+.s1-legal{
+  margin-top:2rem;padding:1.25rem 1.5rem;
+  background:var(--dark-bg);
+  border-left:4px solid var(--magenta);
 }
 .s1-legal-name{
-  font-family:var(--display);
-  font-size:1.4rem;
-  letter-spacing:0.06em;
-  color:var(--paper);
-  margin-bottom:0.15rem;
-  padding-left:0.75rem;
+  font-family:var(--display);font-size:1.35rem;
+  font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--white);margin-bottom:.1rem;
 }
 .s1-legal-vat{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  margin-bottom:1rem;
-  padding-left:0.75rem;
+  font-family:var(--mono);font-size:.55rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--silver);margin-bottom:.85rem;
 }
 .s1-legal-body{
-  font-family:var(--serif);
-  font-size:0.88rem;
-  font-weight:300;
-  color:rgba(245,243,238,0.75);
-  line-height:1.7;
-  padding-left:0.75rem;
+  font-family:var(--display);font-size:.9rem;
+  font-weight:300;color:rgba(212,219,219,.75);
+  line-height:1.65;
+}
+
+/* Gallery right col */
+.gallery-col{
+  display:flex;flex-direction:column;
+  border-top:2px solid var(--navy);
 }
 .gallery-item{
   overflow:hidden;
-  border-bottom:0.5px solid var(--rule);
+  border-bottom:1px solid var(--silver-lt);
   cursor:pointer;
-  position:relative;
 }
 .gallery-item-header{
-  display:flex;
-  align-items:center;
+  display:flex;align-items:center;
   justify-content:space-between;
-  padding:1rem 0;
-  transition:padding .3s ease;
+  padding:.9rem 0;
+  transition:padding .25s ease;
 }
 .gallery-item-header h3{
-  font-family:var(--serif);
-  font-size:1.25rem;
-  font-weight:400;
-  color:var(--ink);
-  letter-spacing:0.01em;
+  font-family:var(--display);font-size:1.2rem;
+  font-weight:700;text-transform:uppercase;
+  letter-spacing:.04em;color:var(--navy);
+  transition:color .2s;
 }
-.gallery-item-header .gi-tag{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:var(--ink3);
+.gallery-item:hover .gallery-item-header h3{color:var(--crimson)}
+.gi-tag{
+  font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--silver);
 }
 .gallery-body{
-  max-height:0;
-  overflow:hidden;
-  transition:max-height .45s cubic-bezier(.4,0,.2,1);
-  font-size:0.88rem;
-  font-weight:300;
-  color:var(--ink2);
-  line-height:1.6;
+  max-height:0;overflow:hidden;
+  transition:max-height .4s cubic-bezier(.4,0,.2,1);
+  font-family:var(--display);font-size:.9rem;
+  font-weight:300;color:var(--text-secondary);line-height:1.6;
 }
 .gallery-item:hover .gallery-body,
-.gallery-item.open .gallery-body{
-  max-height:300px;
+.gallery-item.open .gallery-body{ max-height:240px }
+.gallery-item:hover .gallery-item-header{padding:.9rem 0 .2rem}
+.gallery-body-inner{padding:0 0 1rem}
+.gallery-body-inner p{margin-bottom:.4rem;font-size:.88rem}
+.gallery-contact{
+  margin-top:auto;padding:1.25rem 0 0;
+  border-top:1px solid var(--silver-lt);
 }
-.gallery-item:hover .gallery-item-header{padding:1rem 0 0.25rem}
-.gallery-body-inner{
-  padding:0 0 1rem 0;
+.gc-label{
+  font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:.4rem;
 }
-.gallery-body-inner p{margin-bottom:0.5rem;font-size:0.85rem}
+.gc-email{
+  display:block;font-family:var(--display);
+  font-size:1.1rem;font-style:italic;font-weight:500;
+  color:var(--crimson);text-decoration:none;
+  margin-bottom:.35rem;transition:color .2s;
+}
+.gc-email:hover{color:var(--navy)}
+.gc-hq{
+  font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.1em;color:var(--text-muted);
+}
 
-/* ── SLIDE 2 — SERVICES ───────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   SLIDE 2 — SERVICES
+══════════════════════════════════════════════════════════ */
 #slide-2{
-  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
-  background:var(--white);
+  padding:var(--pad-y) var(--pad-x);
+  background:var(--navy-dk);color:var(--text-light);
 }
-.s2-inner{max-width:1400px;margin:0 auto}
-.slide-label{
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.25em;
-  text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:1rem;
-}
+.s2-inner{max-width:1440px;margin:0 auto}
 .s2-headline{
   font-family:var(--display);
-  font-size:clamp(2.5rem,5vw,4.5rem);
-  line-height:0.95;
-  letter-spacing:0.04em;
-  color:var(--ink);
-  margin-bottom:2.5rem;
-  border-bottom:1px solid var(--rule);
-  padding-bottom:1.5rem;
+  font-size:clamp(2.5rem,5vw,5rem);
+  font-weight:900;line-height:.9;
+  letter-spacing:.04em;text-transform:uppercase;
+  color:var(--white);
+  margin-bottom:2rem;
+  padding-bottom:1.25rem;
+  border-bottom:1px solid rgba(155,168,168,.2);
 }
 .services-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
   gap:0;
-  border-top:0.5px solid var(--rule);
-  border-left:0.5px solid var(--rule);
+  border-top:1px solid rgba(155,168,168,.2);
+  border-left:1px solid rgba(155,168,168,.2);
 }
 @media(max-width:700px){.services-grid{grid-template-columns:1fr}}
 .svc-block{
-  border-right:0.5px solid var(--rule);
-  border-bottom:0.5px solid var(--rule);
+  border-right:1px solid rgba(155,168,168,.2);
+  border-bottom:1px solid rgba(155,168,168,.2);
   padding:1.5rem 1.75rem;
-  position:relative;
-  overflow:hidden;
+  position:relative;overflow:hidden;
   transition:background .25s;
-  cursor:default;
 }
-.svc-block::after{
-  content:'';
-  position:absolute;
-  left:0;top:0;
-  width:3px;height:0;
-  background:var(--gold);
+.svc-block::before{
+  content:'';position:absolute;
+  left:0;top:0;width:4px;height:0;
+  background:var(--orange);
   transition:height .35s ease;
 }
-.svc-block:hover::after{height:100%}
-.svc-block:hover{background:var(--paper)}
+.svc-block:hover::before{height:100%}
+.svc-block:hover{background:rgba(255,255,255,.04)}
 .svc-code{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:0.5rem;
+  font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--orange);margin-bottom:.5rem;
 }
 .svc-block h3{
-  font-family:var(--serif);
-  font-size:1.05rem;
-  font-weight:500;
-  color:var(--ink);
-  margin-bottom:0.6rem;
-  line-height:1.3;
+  font-family:var(--display);font-size:1.05rem;
+  font-weight:700;text-transform:uppercase;
+  letter-spacing:.03em;
+  color:var(--white);margin-bottom:.65rem;line-height:1.2;
 }
-.svc-block ul{
-  list-style:none;
-  padding:0;
-}
+.svc-block ul{list-style:none;padding:0}
 .svc-block ul li{
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.06em;
-  color:var(--ink3);
-  padding:0.18rem 0;
-  border-bottom:0.5px dotted var(--rule);
+  font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.04em;
+  color:var(--text-light-muted);
+  padding:.18rem 0;
+  border-bottom:.5px dotted rgba(155,168,168,.2);
 }
 .svc-block ul li:last-child{border:none}
-.svc-block ul li::before{
-  content:'— ';
-  color:var(--gold2);
-}
+.svc-block ul li::before{content:'› ';color:var(--orange)}
 
-/* ── SLIDE 3 — ORGANISATION ───────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   SLIDE 3 — ORGANISATION
+══════════════════════════════════════════════════════════ */
 #slide-3{
-  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
-  background:var(--paper);
+  padding:var(--pad-y) var(--pad-x);
+  background:var(--off-white);
 }
-.s3-inner{max-width:1400px;margin:0 auto}
+.s3-inner{max-width:1440px;margin:0 auto}
 .s3-headline{
   font-family:var(--display);
-  font-size:clamp(2.5rem,5vw,4.5rem);
-  line-height:0.95;
-  letter-spacing:0.04em;
-  color:var(--ink);
-  margin-bottom:0.5rem;
+  font-size:clamp(2.5rem,5vw,5rem);
+  font-weight:900;line-height:.9;
+  letter-spacing:.04em;text-transform:uppercase;
+  color:var(--navy);margin-bottom:.5rem;
 }
 .s3-sub{
-  font-family:var(--mono);
-  font-size:0.65rem;
-  letter-spacing:0.15em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  margin-bottom:2.5rem;
-  padding-bottom:1.5rem;
-  border-bottom:1px solid var(--rule);
+  font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:2rem;padding-bottom:1.25rem;
+  border-bottom:2px solid var(--silver-lt);
 }
 .divisions-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
   gap:0;
-  border-top:0.5px solid var(--rule);
-  border-left:0.5px solid var(--rule);
+  border-top:1px solid var(--silver-lt);
+  border-left:1px solid var(--silver-lt);
 }
-@media(max-width:600px){.divisions-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.divisions-grid{grid-template-columns:1fr}}
 .div-card{
-  border-right:0.5px solid var(--rule);
-  border-bottom:0.5px solid var(--rule);
-  padding:1.25rem 1.5rem;
+  border-right:1px solid var(--silver-lt);
+  border-bottom:1px solid var(--silver-lt);
+  padding:1rem 1.25rem;
   transition:background .2s;
+  position:relative;
 }
-.div-card:hover{background:var(--paper2)}
+.div-card::after{
+  content:'';position:absolute;
+  bottom:0;left:0;width:0;height:3px;
+  background:var(--orange);
+  transition:width .3s ease;
+}
+.div-card:hover{background:var(--white)}
+.div-card:hover::after{width:100%}
 .div-code{
-  font-family:var(--display);
-  font-size:1.15rem;
-  letter-spacing:0.04em;
-  color:var(--gold);
-  display:block;
-  margin-bottom:0.3rem;
-  line-height:1;
+  font-family:var(--display);font-size:1rem;
+  font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--crimson);display:block;
+  margin-bottom:.2rem;line-height:1;
 }
 .div-name{
-  font-family:var(--serif);
-  font-size:0.88rem;
-  font-weight:400;
-  color:var(--ink);
-  line-height:1.35;
+  font-family:var(--display);font-size:.82rem;
+  font-weight:300;color:var(--text-secondary);
+  line-height:1.3;
 }
 .regional-section{
-  margin-top:2.5rem;
-  padding:1.5rem;
-  background:var(--ink);
-  color:var(--paper);
+  margin-top:2rem;padding:1.5rem var(--pad-x);
+  background:var(--navy);
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
   gap:1rem 2rem;
+  margin-left:calc(-1 * var(--pad-x));
+  margin-right:calc(-1 * var(--pad-x));
 }
 .regional-section .r-label{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  margin-bottom:0.25rem;
-  display:block;
+  font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--orange);margin-bottom:.2rem;display:block;
 }
 .regional-section .r-name{
-  font-family:var(--serif);
-  font-size:0.95rem;
-  color:var(--paper);
-  font-weight:300;
+  font-family:var(--display);font-size:1rem;
+  font-weight:500;letter-spacing:.03em;
+  text-transform:uppercase;color:var(--white);
 }
 
-/* ── CONTACT FOOTER ───────────────────────────────────── */
-footer{
-  background:var(--ink);
-  color:var(--paper);
-  padding:clamp(3rem,6vw,5rem) clamp(1.5rem,8vw,8rem);
-  display:flex;
-  flex-direction:column;
-  gap:2rem;
-}
-.footer-inner{
-  max-width:1400px;
-  margin:0 auto;
-  width:100%;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:3rem 6rem;
-  align-items:end;
-}
-@media(max-width:700px){.footer-inner{grid-template-columns:1fr;gap:2rem}}
-.footer-brand{
-  font-family:var(--serif);
-  font-size:1.1rem;
-  font-weight:600;
-  letter-spacing:0.06em;
-  text-transform:uppercase;
-  color:var(--paper);
-  margin-bottom:0.75rem;
-}
-.footer-tagline{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  margin-bottom:1.25rem;
-}
-.footer-body{
-  font-size:0.9rem;
-  font-weight:300;
-  color:var(--paper2);
-  line-height:1.7;
-}
-.footer-body a{
-  color:var(--gold2);
-  text-decoration:none;
-}
-.footer-body a:hover{text-decoration:underline}
-.footer-hq{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:rgba(245,243,238,0.4);
-  line-height:1.8;
-}
-.footer-hq strong{
-  display:block;
-  color:var(--gold2);
-  font-size:0.62rem;
-  margin-bottom:0.4rem;
-  letter-spacing:0.2em;
-}
-.footer-bottom{
-  max-width:1400px;
-  margin:0 auto;
-  width:100%;
-  padding-top:1.5rem;
-  border-top:0.5px solid rgba(245,243,238,0.15);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:1rem;
-  flex-wrap:wrap;
-}
-.footer-bottom p{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.1em;
-  text-transform:uppercase;
-  color:rgba(245,243,238,0.35);
-}
-
-/* ── SLIDE 4 — NACE LAYER MATRIX ──────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   SLIDE 4 — NACE MATRIX
+══════════════════════════════════════════════════════════ */
 #slide-4{
-  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
-  background:var(--ink);
-  color:var(--paper);
+  padding:var(--pad-y) var(--pad-x);
+  background:var(--dark-bg);color:var(--text-light);
 }
-.s4-inner{max-width:1400px;margin:0 auto}
+.s4-inner{max-width:1440px;margin:0 auto}
 .s4-headline{
   font-family:var(--display);
-  font-size:clamp(2.5rem,5vw,4.5rem);
-  line-height:0.95;
-  letter-spacing:0.04em;
-  color:var(--paper);
-  margin-bottom:0.5rem;
+  font-size:clamp(2.5rem,5vw,5rem);
+  font-weight:900;line-height:.9;
+  letter-spacing:.04em;text-transform:uppercase;
+  color:var(--white);margin-bottom:.5rem;
 }
 .s4-sub{
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  margin-bottom:2.5rem;
-  padding-bottom:1.5rem;
-  border-bottom:1px solid rgba(245,243,238,0.12);
+  font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--silver);margin-bottom:2rem;
+  padding-bottom:1.25rem;
+  border-bottom:1px solid rgba(155,168,168,.2);
 }
 .matrix-table{
-  width:100%;
-  border-collapse:collapse;
-  font-family:var(--serif);
+  width:100%;border-collapse:collapse;
 }
 .matrix-table thead tr{
-  border-bottom:1px solid rgba(245,243,238,0.2);
+  border-bottom:1px solid rgba(155,168,168,.25);
 }
 .matrix-table thead th{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  text-align:left;
-  padding:0.75rem 1.25rem 0.75rem 0;
-  font-weight:400;
+  font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--orange);text-align:left;
+  padding:.7rem 1.1rem .7rem 0;font-weight:400;
 }
-.matrix-table thead th:first-child{
-  min-width:200px;
-}
+.matrix-table thead th:first-child{min-width:180px}
 .matrix-table tbody tr{
-  border-bottom:0.5px solid rgba(245,243,238,0.08);
+  border-bottom:.5px solid rgba(155,168,168,.1);
   transition:background .2s;
 }
-.matrix-table tbody tr:hover{
-  background:rgba(245,243,238,0.05);
-}
+.matrix-table tbody tr:hover{background:rgba(242,101,34,.06)}
 .matrix-table td{
-  padding:0.9rem 1.25rem 0.9rem 0;
+  padding:.85rem 1.1rem .85rem 0;
   vertical-align:middle;
-  font-size:0.95rem;
-  font-weight:300;
-  color:var(--paper2);
-  line-height:1.4;
+  font-family:var(--display);font-size:.95rem;
+  font-weight:300;color:var(--text-light2);line-height:1.4;
 }
 .matrix-table td:first-child{
-  font-family:var(--serif);
-  font-style:italic;
-  font-size:1rem;
-  color:var(--paper);
-  font-weight:400;
+  font-family:var(--display);font-style:italic;
+  font-size:1rem;color:var(--white);font-weight:500;
 }
 .nace-pill{
-  display:inline-block;
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.1em;
-  color:var(--gold);
-  border:0.5px solid var(--gold);
-  padding:0.15rem 0.5rem;
-  white-space:nowrap;
+  display:inline-block;font-family:var(--mono);
+  font-size:.58rem;letter-spacing:.1em;
+  color:var(--orange);
+  border:1px solid var(--orange);
+  padding:.15rem .5rem;white-space:nowrap;
 }
 .row-num{
-  font-family:var(--mono);
-  font-size:0.55rem;
-  letter-spacing:0.15em;
-  color:rgba(245,243,238,0.25);
-  margin-right:1rem;
-  display:inline-block;
-  min-width:1.5rem;
+  font-family:var(--mono);font-size:.52rem;
+  letter-spacing:.15em;color:rgba(155,168,168,.3);
+  margin-right:.85rem;display:inline-block;min-width:1.4rem;
 }
 
-/* ── SLIDE 5 — HEALTH + AGRI INTELLIGENCE ─────────────── */
+/* ══════════════════════════════════════════════════════════
+   SLIDE 5 — HEALTH + AGRI-FOOD
+══════════════════════════════════════════════════════════ */
 #slide-5{
-  padding:clamp(2.5rem,6vh,5rem) clamp(1.5rem,8vw,8rem);
-  background:var(--paper2);
+  padding:var(--pad-y) var(--pad-x);
+  background:var(--white);
 }
-.s5-inner{max-width:1400px;margin:0 auto}
+.s5-inner{max-width:1440px;margin:0 auto}
 .s5-headline{
   font-family:var(--display);
-  font-size:clamp(2.5rem,5vw,4.5rem);
-  line-height:0.95;
-  letter-spacing:0.04em;
-  color:var(--ink);
-  margin-bottom:0.5rem;
+  font-size:clamp(2.5rem,5vw,5rem);
+  font-weight:900;line-height:.9;
+  letter-spacing:.04em;text-transform:uppercase;
+  color:var(--navy);margin-bottom:.5rem;
 }
 .s5-sub{
-  font-family:var(--mono);
-  font-size:0.62rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  margin-bottom:2.5rem;
-  padding-bottom:1.5rem;
-  border-bottom:1px solid var(--rule);
+  font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:2rem;
+  padding-bottom:1.25rem;
+  border-bottom:2px solid var(--silver-lt);
 }
 .dual-table-wrap{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:0;
-  border:0.5px solid var(--rule);
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  border:1px solid var(--silver-lt);
 }
 @media(max-width:800px){.dual-table-wrap{grid-template-columns:1fr}}
-.dual-col{
-  padding:0;
-  overflow:hidden;
-}
-.dual-col:first-child{
-  border-right:0.5px solid var(--rule);
-}
+.dual-col{padding:0;overflow:hidden}
+.dual-col:first-child{border-right:1px solid var(--silver-lt)}
 .dual-col-header{
-  padding:1rem 1.5rem;
-  background:var(--ink);
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  gap:1rem;
+  padding:.9rem 1.4rem;
+  background:var(--navy);
+  display:flex;align-items:baseline;
+  justify-content:space-between;gap:1rem;
 }
 .dual-col-header h3{
-  font-family:var(--display);
-  font-size:1.6rem;
-  letter-spacing:0.06em;
-  color:var(--paper);
+  font-family:var(--display);font-size:1.5rem;
+  font-weight:900;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--white);
 }
 .dual-col-header span{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.15em;
-  text-transform:uppercase;
-  color:var(--gold2);
+  font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--orange);
 }
-.intel-table{
-  width:100%;
-  border-collapse:collapse;
-}
+.intel-table{width:100%;border-collapse:collapse}
 .intel-table tbody tr{
-  border-bottom:0.5px solid var(--rule);
+  border-bottom:.5px solid var(--silver-lt);
   transition:background .2s;
 }
-.intel-table tbody tr:hover{background:var(--paper)}
+.intel-table tbody tr:hover{background:var(--off-white)}
 .intel-table td{
-  padding:0.85rem 1.5rem;
-  vertical-align:top;
-  font-size:0.9rem;
-  font-weight:300;
-  color:var(--ink2);
-  line-height:1.4;
+  padding:.8rem 1.4rem;vertical-align:top;
+  font-family:var(--display);font-size:.88rem;
+  font-weight:300;color:var(--text-secondary);line-height:1.4;
 }
 .intel-table td:first-child{
-  font-family:var(--serif);
-  font-style:italic;
-  font-size:0.95rem;
-  color:var(--ink);
-  font-weight:400;
-  min-width:160px;
-  border-right:0.5px solid var(--rule2);
+  font-family:var(--display);font-style:italic;
+  font-size:.92rem;color:var(--navy);font-weight:500;
+  min-width:140px;border-right:.5px solid var(--silver-lt);
 }
 .intel-value{
-  font-family:var(--mono);
-  font-size:0.65rem;
-  letter-spacing:0.08em;
-  color:var(--ink);
-  display:block;
-  margin-bottom:0.2rem;
+  font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.08em;color:var(--text-primary);
+  display:block;margin-bottom:.15rem;
 }
 .intel-nace{
-  display:inline-block;
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.1em;
-  color:var(--gold);
-  border:0.5px solid var(--gold);
-  padding:0.1rem 0.4rem;
-  margin-top:0.5rem;
+  display:inline-block;font-family:var(--mono);
+  font-size:.55rem;letter-spacing:.1em;
+  color:var(--crimson);border:1px solid var(--crimson);
+  padding:.1rem .4rem;margin-top:.45rem;
 }
 .intel-table-head td{
-  font-family:var(--mono);
-  font-size:0.58rem;
-  letter-spacing:0.15em;
-  text-transform:uppercase;
-  color:var(--ink3);
-  padding:0.6rem 1.5rem;
-  background:var(--paper);
-  border-bottom:0.5px solid var(--rule) !important;
-  font-style:normal !important;
-  font-weight:400 !important;
+  font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--text-muted);padding:.55rem 1.4rem;
+  background:var(--off-white);
+  border-bottom:.5px solid var(--silver-lt)!important;
+  font-style:normal!important;font-weight:400!important;
 }
+
+/* ══════════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════════ */
+footer{
+  background:var(--navy-dk);
+  color:var(--text-light);
+  padding:clamp(3rem,5vw,5rem) var(--pad-x);
+}
+.footer-inner{
+  max-width:1440px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:3rem 5rem;align-items:end;
+}
+@media(max-width:700px){.footer-inner{grid-template-columns:1fr;gap:1.75rem}}
+.footer-brand{
+  font-family:var(--display);font-size:1.1rem;
+  font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--white);margin-bottom:.6rem;
+}
+.footer-tagline{
+  font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--orange);margin-bottom:1.1rem;
+}
+.footer-body{
+  font-family:var(--display);font-size:.9rem;
+  font-weight:300;color:var(--text-light2);line-height:1.65;
+}
+.footer-hq{
+  font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(200,208,222,.45);line-height:1.9;
+}
+.footer-hq strong{
+  display:block;color:var(--orange);
+  font-size:.6rem;margin-bottom:.3rem;letter-spacing:.2em;
+}
+.footer-bottom{
+  max-width:1440px;margin:2rem auto 0;width:100%;
+  padding-top:1.25rem;
+  border-top:.5px solid rgba(155,168,168,.15);
+  display:flex;justify-content:space-between;
+  align-items:center;gap:1rem;flex-wrap:wrap;
+}
+.footer-bottom p{
+  font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(200,208,222,.3);
+}
+
+/* CTA banner */
+.cta-banner{
+  display:inline-block;
+  margin-top:.75rem;
+}
+.cta-banner a{
+  font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--white);
+  background:var(--crimson);
+  padding:.55rem 1.25rem;text-decoration:none;
+  transition:background .2s;display:inline-block;
+}
+.cta-banner a:hover{background:var(--magenta)}
+
+/* ══════════════════════════════════════════════════════════
+   SITEMAP SECTION (for Google indexing visibility)
+══════════════════════════════════════════════════════════ */
+.sitemap-section{
+  background:var(--off-white);
+  padding:clamp(2rem,4vw,3.5rem) var(--pad-x);
+  border-top:2px solid var(--silver-lt);
+}
+.sitemap-inner{
+  max-width:1440px;margin:0 auto;
+}
+.sitemap-inner h2{
+  font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.sitemap-inner h2::before{
+  content:'';display:block;width:2rem;height:2px;
+  background:var(--silver);
+}
+.sitemap-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:1.5rem 2rem;
+}
+.sitemap-col h3{
+  font-family:var(--display);font-size:.75rem;
+  font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--navy);margin-bottom:.6rem;
+  padding-bottom:.35rem;
+  border-bottom:2px solid var(--orange);
+}
+.sitemap-col ul{list-style:none}
+.sitemap-col ul li{
+  font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.06em;
+  border-bottom:.5px solid var(--silver-lt);
+}
+.sitemap-col ul li a{
+  display:block;padding:.3rem 0;
+  color:var(--text-muted);text-decoration:none;
+  text-transform:uppercase;letter-spacing:.06em;
+  transition:color .2s,padding-left .2s;
+}
+.sitemap-col ul li a:hover{
+  color:var(--crimson);padding-left:.4rem;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PAGE LOAD ANIMATION
+══════════════════════════════════════════════════════════ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.s1-tagline{animation:fadeUp .55s .1s both}
+h1.s1-headline{animation:fadeUp .6s .2s both}
+.s1-body:nth-of-type(1){animation:fadeUp .55s .35s both}
+.s1-body:nth-of-type(2){animation:fadeUp .55s .45s both}
+.nace-block{animation:fadeUp .55s .5s both}
+.s1-sectors{animation:fadeUp .55s .55s both}
+.s1-legal{animation:fadeUp .55s .6s both}
+.gallery-col{animation:fadeUp .6s .3s both}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ══ STRUCTURED DATA (JSON-LD) for Google ══════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Scientiae Naturalis GmbH",
+  "url": "https://www.scientiae-naturalis.org",
+  "description": "Berlin-based professional and scientific advisory firm specialising in High-Stakes Knowledge Arbitrage.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Berlin",
+    "addressCountry": "DE"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": "procurement@scientiae-naturalis.org",
+    "contactType": "Procurement"
+  },
+  "sameAs": ["https://www.agritech-one.scientiae-naturalis.org"]
+}
+</script>
+
+<!-- ══ HEADER ═══════════════════════════════════════════ -->
 <header>
-  <a href="#" class="logo">
-    Scientiae Naturalis
-    <span>Berlin, Germany</span>
+  <a href="#" class="logo" aria-label="Scientiae Naturalis — Home">
+    <span class="logo-name">Scientiae Naturalis</span>
+    <span class="logo-sub">Berlin, Germany</span>
   </a>
-  <nav class="links" id="main-nav">
+  <nav class="links" id="main-nav" role="navigation" aria-label="Primary navigation">
     <a href="#" data-slide="0" class="nav-slide">Overview</a>
     <a href="#" data-slide="1" class="nav-slide">Services</a>
     <a href="#" data-slide="2" class="nav-slide">Organisation</a>
@@ -862,27 +869,26 @@ footer{
     <a href="#" data-slide="4" class="nav-slide">Intelligence</a>
     <a href="mailto:procurement@scientiae-naturalis.org" class="nav-cta">Contact</a>
   </nav>
-  <div class="hamburger" id="burger" aria-label="Menu">
+  <button class="hamburger" id="burger" aria-label="Toggle menu" aria-expanded="false">
     <span></span><span></span><span></span>
-  </div>
+  </button>
 </header>
 
-<!-- CAROUSEL -->
-<div class="carousel-outer">
+<!-- ══ CAROUSEL ══════════════════════════════════════════ -->
+<div class="carousel-outer" id="main-content" role="region" aria-label="Main content slides">
   <div class="slides-track" id="track">
 
-    <!-- SLIDE 1 — IDENTITY & OVERVIEW -->
+    <!-- ── SLIDE 1 — IDENTITY ─────────────────────────── -->
     <section class="slide" id="slide-1" aria-label="Company Overview">
       <div class="s1-grid">
 
-        <!-- LEFT: Headline + description -->
         <div>
           <div class="s1-tagline">Knowledge Arbitrage</div>
           <h1 class="s1-headline">
             Scientiae<br>Naturalis
             <em>High-Stakes Intelligence for Complex Systems</em>
           </h1>
-          <p class="s1-body" style="margin-top:2rem">
+          <p class="s1-body">
             Scientiae Naturalis is a Berlin-based professional and scientific advisory firm specialising in High-Stakes Knowledge Arbitrage. We operate at the intersection of natural science, policy, data systems, and institutional capacity — translating rigorous research into decision-grade intelligence for governments, international organisations, and private-sector clients.
           </p>
           <p class="s1-body">
@@ -893,7 +899,7 @@ footer{
             <h4>Primary NACE Classification</h4>
             <div class="nace-row">
               <span class="nace-code">72.10</span>
-              <span class="nace-desc">R&D — Natural Sciences &amp; Engineering (anchor)</span>
+              <span class="nace-desc">R&amp;D — Natural Sciences &amp; Engineering (anchor)</span>
             </div>
             <div class="nace-row">
               <span class="nace-code">Section M</span>
@@ -933,7 +939,7 @@ footer{
           </div>
         </div>
 
-        <!-- RIGHT: Hover gallery of strategic domains -->
+        <!-- RIGHT — Hover gallery -->
         <div class="gallery-col">
           <div class="gallery-item">
             <div class="gallery-item-header">
@@ -953,94 +959,72 @@ footer{
             </div>
             <div class="gallery-body">
               <div class="gallery-body-inner">
-                <p>Food and nutrition systems, agri-food economics and policy, food standards and zoonotic disease monitoring, nutrition and food safety, and supply chain traceability. We operate commodity and price intelligence platforms and early warning systems for food security crises at regional and global scale.</p>
+                <p>Agrifood systems intelligence, food safety standards, supply chain traceability, commodity and price tracking, food security early warning, and zoonotic disease surveillance. We provide decision-grade analytics for food policy reform, agricultural investment, and trade governance.</p>
               </div>
             </div>
           </div>
           <div class="gallery-item">
             <div class="gallery-item-header">
-              <h3>Environment Industry</h3>
+              <h3>Environment</h3>
               <span class="gi-tag">Arbitrage Domain</span>
             </div>
             <div class="gallery-body">
               <div class="gallery-body-inner">
-                <p>Climate-agriculture data systems, natural resource management, environmental impact and strategic assessments, biodiversity monitoring, remote sensing analytics, and renewable energy systems. We build and operate data platforms for climate risk modelling, ESG reporting, and sustainable production streams.</p>
+                <p>Environmental impact assessment, climate risk modelling, carbon and ESG analytics, biodiversity monitoring, water and energy systems, and remote sensing platforms. We bridge regulatory science with investment-grade environmental intelligence.</p>
               </div>
             </div>
           </div>
           <div class="gallery-item">
             <div class="gallery-item-header">
-              <h3>Education Industry</h3>
+              <h3>Education</h3>
               <span class="gi-tag">Arbitrage Domain</span>
             </div>
             <div class="gallery-body">
               <div class="gallery-body-inner">
-                <p>Education management information systems (EMIS), policy advisory, teacher training and workforce management, digital learning infrastructure, inclusive and gender-responsive education design, TVET alignment, and large-scale programme implementation for Erasmus+, UNESCO, and World Bank frameworks. Full-cycle delivery from strategy to evaluation.</p>
-              </div>
-            </div>
-          </div>
-          <div class="gallery-item">
-            <div class="gallery-item-header">
-              <h3>SDG Alignment</h3>
-              <span class="gi-tag">Framework</span>
-            </div>
-            <div class="gallery-body">
-              <div class="gallery-body-inner">
-                <p>All service lines are structured around verifiable SDG 4 (quality education), SDG 2 (zero hunger), SDG 3 (good health), and SDG 13 (climate action) outcomes. We provide benchmarking, indicator monitoring, and cross-country comparability frameworks aligned to PISA-equivalent international assessment systems.</p>
-              </div>
-            </div>
-          </div>
-          <div class="gallery-item">
-            <div class="gallery-item-header">
-              <h3>Programme Outsourcing</h3>
-              <span class="gi-tag">Implementation</span>
-            </div>
-            <div class="gallery-body">
-              <div class="gallery-body-inner">
-                <p>Full outsourcing of multi-country project coordination, grant writing and proposal engineering, KPI dashboard systems, impact assessment, and independent project evaluation of EACEA-type programmes. We assume complete operational and reporting responsibility for consortium-led projects across jurisdictions.</p>
+                <p>Education system diagnostics, EMIS, policy design, curriculum reform, TVET alignment, digital pedagogy infrastructure, gender-responsive frameworks, and SDG 4 monitoring. We convert education data into actionable institutional transformation strategies.</p>
               </div>
             </div>
           </div>
           <div class="gallery-contact">
-            <div class="gc-label">Procurement &amp; Institutional Enquiries</div>
-            <a class="gc-email" href="mailto:procurement@scientiae-naturalis.org">procurement@scientiae-naturalis.org</a>
-            <div class="gc-hq">Berlin, Germany &mdash; Founded under German GmbH law</div>
+            <div class="gc-label">Primary Contact</div>
+            <a href="mailto:procurement@scientiae-naturalis.org" class="gc-email">procurement@scientiae-naturalis.org</a>
+            <div class="gc-hq">Scientiae Naturalis GmbH · Berlin, Germany</div>
           </div>
         </div>
 
       </div>
     </section>
 
-    <!-- SLIDE 2 — SERVICES -->
+    <!-- ── SLIDE 2 — SERVICES ─────────────────────────── -->
     <section class="slide" id="slide-2" aria-label="Services">
       <div class="s2-inner">
-        <div class="slide-label">Service Architecture</div>
-        <h2 class="s2-headline">Knowledge<br>Service Lines</h2>
+        <div class="slide-label" style="color:var(--orange)">Service Architecture</div>
+        <h2 class="s2-headline">Advisory<br>Services</h2>
         <div class="services-grid">
 
           <div class="svc-block">
-            <div class="svc-code">A — NACE M72 / M71 / M74</div>
-            <h3>Natural Sciences R&amp;D + Scientific Infrastructure</h3>
+            <div class="svc-code">A — NACE M72 / M71 / J62–63</div>
+            <h3>Scientific Research &amp; Knowledge Production</h3>
             <ul>
-              <li>Contract R&amp;D (TRL 1–7), Applied research consortia</li>
-              <li>Lab-based experimentation, validation, DNA sequencing, bioinformatics</li>
-              <li>Scientific data modelling and simulation</li>
-              <li>Laboratory access, equipment calibration, metrology</li>
-              <li>Technology transfer, patent landscaping, IP strategy</li>
-              <li>Feasibility studies, scientific due diligence, risk modelling</li>
+              <li>Applied R&amp;D in natural and social sciences</li>
+              <li>Scientific modelling, simulation, forecasting</li>
+              <li>Data synthesis, literature intelligence, meta-analysis</li>
+              <li>Open science platforms, data repositories</li>
+              <li>Scientific communication &amp; policy briefs</li>
+              <li>Interdisciplinary consortium research</li>
             </ul>
           </div>
 
           <div class="svc-block">
-            <div class="svc-code">B — NACE P85 / M72 / N82</div>
-            <h3>Capacity Building in Science &amp; Engineering</h3>
+            <div class="svc-code">B — NACE M72 / P85 / J63 / N82</div>
+            <h3>Health Intelligence &amp; Systems</h3>
             <ul>
-              <li>MSc/PhD-level modular training, micro-credentials in STEM</li>
-              <li>Industry-academia blended and digital lab training</li>
-              <li>AI / data science for scientists; GLP/GMP compliance</li>
-              <li>University modernisation, curriculum design, accreditation</li>
-              <li>Staff/student mobility management, fellowship administration</li>
-              <li>Grant management: Erasmus+, Horizon; KPI monitoring systems</li>
+              <li>Health product policy, vaccine procurement analytics</li>
+              <li>Regulatory prequalification advisory</li>
+              <li>Digital health &amp; AI diagnostics infrastructure</li>
+              <li>Epidemiological modelling, disease surveillance</li>
+              <li>Universal Health Coverage policy design</li>
+              <li>Health systems strengthening, M&amp;E frameworks</li>
             </ul>
           </div>
 
@@ -1178,7 +1162,7 @@ footer{
       </div>
     </section>
 
-    <!-- SLIDE 3 — ORGANISATION -->
+    <!-- ── SLIDE 3 — ORGANISATION ─────────────────────── -->
     <section class="slide" id="slide-3" aria-label="Organisation">
       <div class="s3-inner">
         <div class="slide-label">Corporate Structure</div>
@@ -1219,138 +1203,54 @@ footer{
         </div>
 
         <div class="regional-section">
-          <div>
-            <span class="r-label">Regional Office</span>
-            <span class="r-name">Africa</span>
-          </div>
-          <div>
-            <span class="r-label">Regional Office</span>
-            <span class="r-name">Asia and the Pacific</span>
-          </div>
-          <div>
-            <span class="r-label">Regional Office</span>
-            <span class="r-name">Europe and Central Asia</span>
-          </div>
-          <div>
-            <span class="r-label">Regional Office</span>
-            <span class="r-name">Latin America and the Caribbean</span>
-          </div>
-          <div>
-            <span class="r-label">Regional Office</span>
-            <span class="r-name">Near East and North Africa</span>
-          </div>
+          <div><span class="r-label">Regional Office</span><span class="r-name">Africa</span></div>
+          <div><span class="r-label">Regional Office</span><span class="r-name">Asia and the Pacific</span></div>
+          <div><span class="r-label">Regional Office</span><span class="r-name">Europe and Central Asia</span></div>
+          <div><span class="r-label">Regional Office</span><span class="r-name">Latin America and the Caribbean</span></div>
+          <div><span class="r-label">Regional Office</span><span class="r-name">Near East and North Africa</span></div>
         </div>
-
       </div>
     </section>
 
-    <!-- SLIDE 4 — NACE LAYER MATRIX (education_nace Sheet1 + health_agri Sheet1) -->
+    <!-- ── SLIDE 4 — NACE MATRIX ──────────────────────── -->
     <section class="slide" id="slide-4" aria-label="NACE Service Layer Matrix">
       <div class="s4-inner">
-        <div class="slide-label" style="color:var(--gold2)">Structural Classification</div>
+        <div class="slide-label" style="color:var(--orange)">Structural Classification</div>
         <h2 class="s4-headline">NACE Service<br>Layer Matrix</h2>
         <p class="s4-sub">Mapping every service layer to its primary NACE classification and functional cluster — the architectural backbone of the Scientiae Naturalis service architecture.</p>
 
         <table class="matrix-table">
           <thead>
             <tr>
-              <th>Service Layer</th>
-              <th>NACE Code</th>
-              <th>Service Cluster</th>
+              <th scope="col">Service Layer</th>
+              <th scope="col">NACE Code</th>
+              <th scope="col">Service Cluster</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><span class="row-num">01</span>Knowledge creation</td>
-              <td><span class="nace-pill">M72</span></td>
-              <td>R&amp;D, labs, scientific modelling</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">02</span>Technical validation</td>
-              <td><span class="nace-pill">M71</span></td>
-              <td>Engineering, feasibility, testing</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">03</span>Capacity building</td>
-              <td><span class="nace-pill">P85</span></td>
-              <td>Education, training, mobility</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">04</span>Environmental services</td>
-              <td><span class="nace-pill">E36–39</span></td>
-              <td>Waste, water, remediation</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">05</span>Natural resources</td>
-              <td><span class="nace-pill">A, B, D</span></td>
-              <td>Forestry, mining, energy</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">06</span>Digital layer</td>
-              <td><span class="nace-pill">J62–63</span></td>
-              <td>Data, AI, platforms</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">07</span>Programme delivery</td>
-              <td><span class="nace-pill">N82</span></td>
-              <td>Project management, grants</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">08</span>Strategy &amp; governance</td>
-              <td><span class="nace-pill">M70</span></td>
-              <td>Policy, advisory</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">09</span>Education delivery</td>
-              <td><span class="nace-pill">P85</span></td>
-              <td>Teaching, curriculum, training</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">10</span>Inclusion &amp; access</td>
-              <td><span class="nace-pill">P85 / N88</span></td>
-              <td>Equity, gender, vulnerable groups</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">11</span>Content domains</td>
-              <td><span class="nace-pill">P85 / M72</span></td>
-              <td>Literacy, ESD, health, civic</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">12</span>Teachers</td>
-              <td><span class="nace-pill">P85 / N78</span></td>
-              <td>Training, workforce systems</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">13</span>Governance</td>
-              <td><span class="nace-pill">M70</span></td>
-              <td>Policy, reform, financing</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">14</span>Programme execution</td>
-              <td><span class="nace-pill">N82</span></td>
-              <td>Implementation, M&amp;E</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">15</span>Data &amp; digital</td>
-              <td><span class="nace-pill">J62–63</span></td>
-              <td>EMIS, AI, EdTech</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">16</span>Standards</td>
-              <td><span class="nace-pill">M70 / M74</span></td>
-              <td>Frameworks, guidelines</td>
-            </tr>
-            <tr>
-              <td><span class="row-num">17</span>Knowledge systems</td>
-              <td><span class="nace-pill">M72 / J63</span></td>
-              <td>Research, platforms</td>
-            </tr>
+            <tr><td><span class="row-num">01</span>Knowledge creation</td><td><span class="nace-pill">M72</span></td><td>R&amp;D, labs, scientific modelling</td></tr>
+            <tr><td><span class="row-num">02</span>Technical validation</td><td><span class="nace-pill">M71</span></td><td>Engineering, feasibility, testing</td></tr>
+            <tr><td><span class="row-num">03</span>Capacity building</td><td><span class="nace-pill">P85</span></td><td>Education, training, mobility</td></tr>
+            <tr><td><span class="row-num">04</span>Environmental services</td><td><span class="nace-pill">E36–39</span></td><td>Waste, water, remediation</td></tr>
+            <tr><td><span class="row-num">05</span>Natural resources</td><td><span class="nace-pill">A, B, D</span></td><td>Forestry, mining, energy</td></tr>
+            <tr><td><span class="row-num">06</span>Digital layer</td><td><span class="nace-pill">J62–63</span></td><td>Data, AI, platforms</td></tr>
+            <tr><td><span class="row-num">07</span>Programme delivery</td><td><span class="nace-pill">N82</span></td><td>Project management, grants</td></tr>
+            <tr><td><span class="row-num">08</span>Strategy &amp; governance</td><td><span class="nace-pill">M70</span></td><td>Policy, advisory</td></tr>
+            <tr><td><span class="row-num">09</span>Education delivery</td><td><span class="nace-pill">P85</span></td><td>Teaching, curriculum, training</td></tr>
+            <tr><td><span class="row-num">10</span>Inclusion &amp; access</td><td><span class="nace-pill">P85 / N88</span></td><td>Equity, gender, vulnerable groups</td></tr>
+            <tr><td><span class="row-num">11</span>Content domains</td><td><span class="nace-pill">P85 / M72</span></td><td>Literacy, ESD, health, civic</td></tr>
+            <tr><td><span class="row-num">12</span>Teachers</td><td><span class="nace-pill">P85 / N78</span></td><td>Training, workforce systems</td></tr>
+            <tr><td><span class="row-num">13</span>Governance</td><td><span class="nace-pill">M70</span></td><td>Policy, reform, financing</td></tr>
+            <tr><td><span class="row-num">14</span>Programme execution</td><td><span class="nace-pill">N82</span></td><td>Implementation, M&amp;E</td></tr>
+            <tr><td><span class="row-num">15</span>Data &amp; digital</td><td><span class="nace-pill">J62–63</span></td><td>EMIS, AI, EdTech</td></tr>
+            <tr><td><span class="row-num">16</span>Standards</td><td><span class="nace-pill">M70 / M74</span></td><td>Frameworks, guidelines</td></tr>
+            <tr><td><span class="row-num">17</span>Knowledge systems</td><td><span class="nace-pill">M72 / J63</span></td><td>Research, platforms</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- SLIDE 5 — HEALTH + AGRI-FOOD INTELLIGENCE (Sheet2 from both files) -->
+    <!-- ── SLIDE 5 — HEALTH + AGRI ────────────────────── -->
     <section class="slide" id="slide-5" aria-label="Health and Agri-Food Intelligence Matrix">
       <div class="s5-inner">
         <div class="slide-label">Cross-Sector Intelligence</div>
@@ -1358,7 +1258,6 @@ footer{
         <p class="s5-sub">Parallel data intelligence architecture across Health and Food sectors — unified NACE classification and programme logic</p>
 
         <div class="dual-table-wrap">
-
           <div class="dual-col">
             <div class="dual-col-header">
               <h3>Health</h3>
@@ -1366,58 +1265,13 @@ footer{
             </div>
             <table class="intel-table">
               <tbody>
-                <tr class="intel-table-head">
-                  <td>Intelligence Layer</td>
-                  <td>Service Application</td>
-                </tr>
-                <tr>
-                  <td>Core data systems</td>
-                  <td>
-                    <span class="intel-value">HIS, EHR</span>
-                    Health Information Systems, Electronic Health Records infrastructure and interoperability
-                    <span class="intel-nace">J63</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Predictive analytics</td>
-                  <td>
-                    <span class="intel-value">Epidemiology</span>
-                    Disease surveillance modelling, outbreak prediction, burden-of-disease analytics
-                    <span class="intel-nace">M72</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Governance intelligence</td>
-                  <td>
-                    <span class="intel-value">UHC policy</span>
-                    Universal Health Coverage policy advisory, health financing reform, regulatory alignment
-                    <span class="intel-nace">M70</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Standards &amp; compliance</td>
-                  <td>
-                    <span class="intel-value">Clinical guidelines</span>
-                    WHO-aligned clinical standards, prequalification, norms and quality frameworks
-                    <span class="intel-nace">M74</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Programme intelligence</td>
-                  <td>
-                    <span class="intel-value">M&amp;E systems</span>
-                    Programme monitoring and evaluation, KPI dashboards, results-based management
-                    <span class="intel-nace">N82</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Digital AI systems</td>
-                  <td>
-                    <span class="intel-value">Diagnostics AI</span>
-                    AI-assisted diagnostics, digital health platform development, telemedicine infrastructure
-                    <span class="intel-nace">J62</span>
-                  </td>
-                </tr>
+                <tr class="intel-table-head"><td>Intelligence Layer</td><td>Service Application</td></tr>
+                <tr><td>Core data systems</td><td><span class="intel-value">HIS, EHR</span>Health Information Systems, Electronic Health Records infrastructure and interoperability<span class="intel-nace">J63</span></td></tr>
+                <tr><td>Predictive analytics</td><td><span class="intel-value">Epidemiology</span>Disease surveillance modelling, outbreak prediction, burden-of-disease analytics<span class="intel-nace">M72</span></td></tr>
+                <tr><td>Governance intelligence</td><td><span class="intel-value">UHC policy</span>Universal Health Coverage policy advisory, health financing reform, regulatory alignment<span class="intel-nace">M70</span></td></tr>
+                <tr><td>Standards &amp; compliance</td><td><span class="intel-value">Clinical guidelines</span>WHO-aligned clinical standards, prequalification, norms and quality frameworks<span class="intel-nace">M74</span></td></tr>
+                <tr><td>Programme intelligence</td><td><span class="intel-value">M&amp;E systems</span>Programme monitoring and evaluation, KPI dashboards, results-based management<span class="intel-nace">N82</span></td></tr>
+                <tr><td>Digital AI systems</td><td><span class="intel-value">Diagnostics AI</span>AI-assisted diagnostics, digital health platform development, telemedicine infrastructure<span class="intel-nace">J62</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -1429,62 +1283,16 @@ footer{
             </div>
             <table class="intel-table">
               <tbody>
-                <tr class="intel-table-head">
-                  <td>Intelligence Layer</td>
-                  <td>Service Application</td>
-                </tr>
-                <tr>
-                  <td>Core data systems</td>
-                  <td>
-                    <span class="intel-value">Agri-data platforms</span>
-                    Integrated agrifood data ecosystems, commodity tracking, traceability infrastructure
-                    <span class="intel-nace">J63</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Predictive analytics</td>
-                  <td>
-                    <span class="intel-value">Yield &amp; food security</span>
-                    Crop yield forecasting, food security early warning, climate-agriculture modelling
-                    <span class="intel-nace">M72</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Governance intelligence</td>
-                  <td>
-                    <span class="intel-value">Food policy</span>
-                    Agrifood system policy advisory, trade regulation alignment, value chain governance
-                    <span class="intel-nace">M70</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Standards &amp; compliance</td>
-                  <td>
-                    <span class="intel-value">Food safety</span>
-                    Codex Alimentarius alignment, zoonotic disease standards, food safety certification
-                    <span class="intel-nace">M74</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Programme intelligence</td>
-                  <td>
-                    <span class="intel-value">Programme dashboards</span>
-                    Agrifood programme monitoring, impact tracking, multi-country coordination tools
-                    <span class="intel-nace">N82</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Digital AI systems</td>
-                  <td>
-                    <span class="intel-value">Precision agriculture</span>
-                    AI-driven precision farming, remote sensing, satellite-based crop monitoring
-                    <span class="intel-nace">J62</span>
-                  </td>
-                </tr>
+                <tr class="intel-table-head"><td>Intelligence Layer</td><td>Service Application</td></tr>
+                <tr><td>Core data systems</td><td><span class="intel-value">Agri-data platforms</span>Integrated agrifood data ecosystems, commodity tracking, traceability infrastructure<span class="intel-nace">J63</span></td></tr>
+                <tr><td>Predictive analytics</td><td><span class="intel-value">Yield &amp; food security</span>Crop yield forecasting, food security early warning, climate-agriculture modelling<span class="intel-nace">M72</span></td></tr>
+                <tr><td>Governance intelligence</td><td><span class="intel-value">Food policy</span>Agrifood system policy advisory, trade regulation alignment, value chain governance<span class="intel-nace">M70</span></td></tr>
+                <tr><td>Standards &amp; compliance</td><td><span class="intel-value">Food safety</span>Codex Alimentarius alignment, zoonotic disease standards, food safety certification<span class="intel-nace">M74</span></td></tr>
+                <tr><td>Programme intelligence</td><td><span class="intel-value">Programme dashboards</span>Agrifood programme monitoring, impact tracking, multi-country coordination tools<span class="intel-nace">N82</span></td></tr>
+                <tr><td>Digital AI systems</td><td><span class="intel-value">Precision agriculture</span>AI-driven precision farming, remote sensing, satellite-based crop monitoring<span class="intel-nace">J62</span></td></tr>
               </tbody>
             </table>
           </div>
-
         </div>
       </div>
     </section>
@@ -1492,42 +1300,116 @@ footer{
   </div><!-- /slides-track -->
 </div><!-- /carousel-outer -->
 
-<!-- FOOTER -->
+<!-- ══ SITEMAP (crawlable HTML, linked from footer) ══════ -->
+<section class="sitemap-section" id="sitemap" aria-label="Site Map">
+  <div class="sitemap-inner">
+    <h2>Site Map</h2>
+    <div class="sitemap-grid">
+      <div class="sitemap-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#slide-1">Overview</a></li>
+          <li><a href="#slide-1">About Scientiae Naturalis</a></li>
+          <li><a href="#slide-3">Organisation</a></li>
+          <li><a href="#slide-3">Divisions</a></li>
+          <li><a href="#slide-3">Regional Offices</a></li>
+        </ul>
+      </div>
+      <div class="sitemap-col">
+        <h3>Services</h3>
+        <ul>
+          <li><a href="#slide-2">Scientific Research</a></li>
+          <li><a href="#slide-2">Health Intelligence</a></li>
+          <li><a href="#slide-2">Environmental Advisory</a></li>
+          <li><a href="#slide-2">Programme Implementation</a></li>
+          <li><a href="#slide-2">Education Delivery</a></li>
+          <li><a href="#slide-2">Data &amp; Digital Systems</a></li>
+        </ul>
+      </div>
+      <div class="sitemap-col">
+        <h3>Intelligence</h3>
+        <ul>
+          <li><a href="#slide-4">NACE Matrix</a></li>
+          <li><a href="#slide-5">Health Systems</a></li>
+          <li><a href="#slide-5">Agri-Food Systems</a></li>
+          <li><a href="#slide-1">Knowledge Domains</a></li>
+        </ul>
+      </div>
+      <div class="sitemap-col">
+        <h3>Contact &amp; Events</h3>
+        <ul>
+          <li><a href="mailto:procurement@scientiae-naturalis.org">Procurement Contact</a></li>
+          <li><a href="https://www.agritech-one.scientiae-naturalis.org" rel="noopener" target="_blank">AgriTech-One 2026</a></li>
+          <li><a href="/sitemap.xml">XML Sitemap</a></li>
+          <li><a href="/robots.txt">robots.txt</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════ -->
 <footer>
   <div class="footer-inner">
     <div>
       <div class="footer-brand">Scientiae Naturalis</div>
       <div class="footer-tagline">High-Stakes Knowledge Arbitrage</div>
       <p class="footer-body">
-        <div class="cta-banner">
-  <a href="https://www.agritech-one.scientiae-naturalis.org" target="_blank">Join the AgriTech-One 2026 Conference</a>
-</div></span></a>
+        An R&amp;D enterprise founded at the intersection of science, policy, and data intelligence — Berlin, Germany.
       </p>
+      <div class="cta-banner">
+        <a href="https://www.agritech-one.scientiae-naturalis.org" target="_blank" rel="noopener">
+          Join the AgriTech-One 2026 Conference
+        </a>
+      </div>
     </div>
     <div class="footer-hq">
       <strong>Headquarters</strong>
-      Scientiae Naturalis<br>
+      Scientiae Naturalis GmbH<br>
       Berlin, Germany<br><br>
       <strong>Primary Classification</strong>
       NACE 72.10 — R&amp;D Natural Sciences<br>
-      Section M, P, E, A–D
+      Section M, P, E, A–D<br><br>
+      <strong>Site Map</strong>
+      <a href="#sitemap" style="color:var(--silver);text-decoration:none;display:block">
+        HTML Sitemap
+      </a>
+      <a href="/sitemap.xml" style="color:var(--silver);text-decoration:none;display:block">
+        XML Sitemap (Google)
+      </a>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>Scientiae Naturalis — Berlin, Germany</p>
+    <p>Scientiae Naturalis GmbH · Berlin, Germany</p>
     <p>High-Stakes Knowledge Arbitrage Services</p>
   </div>
 </footer>
 
-<!-- NAV CONTROLS -->
-<div class="nav-arrows">
+<!-- ══ NAV CONTROLS ═══════════════════════════════════════ -->
+<div class="nav-arrows" role="group" aria-label="Slide navigation">
   <button class="arrow-btn" id="prev-btn" aria-label="Previous slide">&#8592;</button>
   <button class="arrow-btn" id="next-btn" aria-label="Next slide">&#8594;</button>
 </div>
-<div class="slide-dots" id="dots"></div>
-<div class="slide-counter" id="counter">01 / 05</div>
+<div class="slide-dots" id="dots" role="tablist" aria-label="Slide indicators"></div>
+<div class="slide-counter" id="counter" aria-live="polite">01 / 05</div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<!-- ══ XML SITEMAP GENERATOR (outputs to console for copy) ══
+     In production, save this as /sitemap.xml on your server.
+<sitemap-note>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.scientiae-naturalis.org/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.scientiae-naturalis.org/#slide-2</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.scientiae-naturalis.org/#slide-3</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.scientiae-naturalis.org/#slide-4</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.scientiae-naturalis.org/#slide-5</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.agritech-one.scientiae-naturalis.org/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+</urlset>
+</sitemap-note>
+══════════════════════════════════════════════════════════ -->
+
+<script>
+// ── Carousel logic ────────────────────────────────────────
 const TOTAL = 5;
 let current = 0;
 const track = document.getElementById('track');
@@ -1535,56 +1417,71 @@ const counterEl = document.getElementById('counter');
 const dotsEl = document.getElementById('dots');
 
 // Build dots
-for(let i=0;i<TOTAL;i++){
+for(let i = 0; i < TOTAL; i++){
   const d = document.createElement('button');
-  d.className = 'dot' + (i===0?' active':'');
-  d.setAttribute('aria-label','Slide '+(i+1));
-  d.onclick = ()=>goTo(i);
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.setAttribute('role','tab');
+  d.setAttribute('aria-label','Slide ' + (i + 1));
+  d.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+  d.onclick = () => goTo(i);
   dotsEl.appendChild(d);
 }
 
 function goTo(n){
-  current = Math.max(0,Math.min(TOTAL-1,n));
+  current = Math.max(0, Math.min(TOTAL - 1, n));
   track.style.transform = `translateX(-${current * 100}vw)`;
-  counterEl.textContent = String(current+1).padStart(2,'0') + ' / ' + String(TOTAL).padStart(2,'0');
-  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  counterEl.textContent = String(current + 1).padStart(2,'0') + ' / ' + String(TOTAL).padStart(2,'0');
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === current);
+    d.setAttribute('aria-selected', i === current ? 'true' : 'false');
+  });
 }
-function next(){goTo(current+1)}
-function prev(){goTo(current-1)}
+function next(){ goTo(current + 1) }
+function prev(){ goTo(current - 1) }
 
 document.getElementById('next-btn').addEventListener('click', next);
 document.getElementById('prev-btn').addEventListener('click', prev);
 
-document.querySelectorAll('.nav-slide').forEach(a=>{
-  a.addEventListener('click',e=>{
+// Nav links
+document.querySelectorAll('.nav-slide').forEach(a => {
+  a.addEventListener('click', e => {
     e.preventDefault();
     goTo(parseInt(a.dataset.slide));
     document.getElementById('main-nav').classList.remove('open');
+    document.getElementById('burger').setAttribute('aria-expanded','false');
   });
 });
 
-document.getElementById('burger').addEventListener('click',()=>{
-  document.getElementById('main-nav').classList.toggle('open');
+// Hamburger
+document.getElementById('burger').addEventListener('click', function(){
+  const nav = document.getElementById('main-nav');
+  const open = nav.classList.toggle('open');
+  this.setAttribute('aria-expanded', open ? 'true' : 'false');
 });
 
 // Keyboard
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'||e.key==='ArrowDown') next();
-  if(e.key==='ArrowLeft'||e.key==='ArrowUp') prev();
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowRight' || e.key === 'ArrowDown') next();
+  if(e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prev();
 });
 
 // Touch / swipe
-let tx=0;
-document.querySelector('.carousel-outer').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
-document.querySelector('.carousel-outer').addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-tx;
-  if(Math.abs(dx)>50){dx<0?next():prev()}
-},{passive:true});
+let tx = 0;
+const co = document.querySelector('.carousel-outer');
+co.addEventListener('touchstart', e => { tx = e.touches[0].clientX }, { passive:true });
+co.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if(Math.abs(dx) > 45){ dx < 0 ? next() : prev() }
+}, { passive:true });
 
-// Hover gallery toggle
-document.querySelectorAll('.gallery-item').forEach(item=>{
-  item.addEventListener('click',()=>item.classList.toggle('open'));
+// Gallery accordion
+document.querySelectorAll('.gallery-item').forEach(item => {
+  item.addEventListener('click', () => item.classList.toggle('open'));
 });
 </script>
+
+<!-- ══ PERFORMANCE: Resource hints ═══════════════════════ -->
+<!-- DNS prefetch for external links -->
+<link rel="dns-prefetch" href="https://www.agritech-one.scientiae-naturalis.org">
 </body>
 </html>
